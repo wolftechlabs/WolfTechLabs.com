@@ -5,89 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wolf Tech Labs | Under Construction</title>
     <style>
-      /* Update your main container styles */
-:root {
-    --bg-color: #0b0e14;       /* Deep obsidian/dark grey */
-    --text-primary: #f0f0f0;    /* Soft off-white to prevent eye strain */
-    --accent-color: #9b4dff;   /* Matches the purple in your logo */
-}
+        :root {
+            --bg-color: #0b0e14;
+            --text-primary: #f0f0f0;
+            --accent-color: #9b4dff;
+        }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden; /* Prevents horizontal scroll on zoom */
+        }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100dvh; 
-    padding: 2rem;
-    box-sizing: border-box;
-    text-align: center;
-}
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh; 
+            padding: 2rem;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-img {
-    max-width: 300px;    /* Keeps logo professional size */
-    width: 80%;          /* Responsive for smaller screens */
-    max-height: 40vh;    /* Never lets logo push contact info off-screen */
-    height: auto;
-    margin-bottom: 2rem;
-    /* Optional: subtle glow to make the logo pop against the dark background */
-    filter: drop-shadow(0 0 10px rgba(155, 77, 255, 0.2));
-}
-
-.logo {
-    /* This makes the logo "Fluid" */
-    width: 100%; 
-    max-width: 300px; /* It will be 300px unless the screen is smaller */
-    height: auto;
-    margin-bottom: 20px;
-}
+        .logo {
+            width: 80%;
+            max-width: 300px;
+            max-height: 35vh; /* Prevents logo from pushing text off-screen */
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 10px rgba(155, 77, 255, 0.2));
+            flex-shrink: 1; /* Allows logo to shrink before text gets cut off */
         }
 
         h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
+            font-size: clamp(1.5rem, 8vw, 2.5rem); /* Scales text fluidly */
+            margin-bottom: 0.5rem;
+        }
 
-p {
-    color: #888; /* Dimmer text for "Under Construction" message */
-    max-width: 600px;
-}
+        p {
+            color: #888;
+            max-width: 600px;
+            margin: 0.5rem 0;
+        }
 
-a {
-    color: var(--accent-color);
-    text-decoration: none;
-    font-weight: bold;
-}
+        .contact-box {
+            margin-top: 1rem;
+        }
 
-a:hover {
-    text-decoration: underline;
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- Replace 'logo.png' with your actual logo file name later -->
         <img src="logo.svg" alt="Wolf Tech Labs Logo" class="logo">
-        
         <h1>Wolf Tech Labs</h1>
         <p class="status">SITE UNDER CONSTRUCTION</p>
-        
         <p>We are currently building our digital workshop.</p>
-        
         <div class="contact-box">
             <p>For custom 3D printing orders and inquiries:</p>
             <p>Email: <a href="mailto:your-wolftechlabs@gmail.com">your-email@example.com</a></p>
         </div>
     </div>
-
 </body>
 </html>
