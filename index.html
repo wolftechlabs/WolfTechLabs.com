@@ -5,30 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wolf Tech Labs | Under Construction</title>
     <style>
-        body {
-    background-color: #121212;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* Changed min-height so it doesn't "lock" the screen size */
-    min-height: 100vh; 
+      /* Update your main container styles */
+body, html {
     margin: 0;
-    padding: 20px; /* Adds a "safety buffer" around the edges */
-    box-sizing: border-box;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden; /* Prevents horizontal shift */
 }
 
 .container {
-    width: 100%;
-    max-width: 600px; /* Keeps it from getting too wide on desktop */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh; /* Use dynamic viewport height for mobile browsers */
     padding: 20px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    background-color: #1e1e1e;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     box-sizing: border-box;
+    text-align: center;
+}
+
+img {
+    max-width: 80%;      /* Ensures logo doesn't overflow horizontally */
+    max-height: 50vh;    /* Prevents logo from pushing text off-screen */
+    height: auto;        /* Maintains aspect ratio */
+    margin-bottom: 2rem;
 }
 
 .logo {
