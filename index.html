@@ -8,7 +8,9 @@
         :root {
             --bg-color: #0b0e14;
             --text-primary: #f0f0f0;
-            --accent-color: #9b4dff;
+            /* Exact match from your logo.svg */
+            --accent-color: #630d8a; 
+            --accent-hover: #7b11aa;
         }
 
         body, html {
@@ -18,7 +20,7 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden; /* Prevents horizontal scroll on zoom */
+            overflow-x: hidden;
         }
 
         .container {
@@ -27,7 +29,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100dvh; 
-            padding: 2rem;
+            /* Added safety padding at the bottom for high-scaling screens */
+            padding: 2rem 2rem 5rem 2rem;
             box-sizing: border-box;
             text-align: center;
         }
@@ -35,32 +38,82 @@
         .logo {
             width: 80%;
             max-width: 300px;
-            max-height: 35vh; /* Prevents logo from pushing text off-screen */
+            max-height: 35vh;
             height: auto;
             margin-bottom: 2rem;
-            filter: drop-shadow(0 0 10px rgba(155, 77, 255, 0.2));
-            flex-shrink: 1; /* Allows logo to shrink before text gets cut off */
+            /* Logo glow matches your brand purple */
+            filter: drop-shadow(0 0 15px rgba(99, 13, 138, 0.4));
+            flex-shrink: 1;
         }
 
         h1 {
-            font-size: clamp(1.5rem, 8vw, 2.5rem); /* Scales text fluidly */
+            font-size: clamp(1.8rem, 8vw, 2.5rem);
             margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .status {
+            color: var(--accent-color);
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
         }
 
         p {
-            color: #888;
+            color: #aaa;
             max-width: 600px;
             margin: 0.5rem 0;
         }
 
         .contact-box {
-            margin-top: 1rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: #1a1f26;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 5px;
+            border: none;
+            background: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         a {
             color: var(--accent-color);
             text-decoration: none;
-            font-weight: bold;
         }
 
         a:hover {
@@ -69,36 +122,27 @@
     </style>
 </head>
 <body>
-   <div class="container">
+    <div class="container">
         <img src="logo.svg" alt="WolfTechLabs Logo" class="logo">
-        
         <h1>WolfTechLabs</h1>
         <p class="status">SITE UNDER CONSTRUCTION</p>
-        
         <p>We are currently building our digital workshop.</p>
         
         <div class="contact-box">
-    <p>For custom 3D printing orders and inquiries:</p>
-    
-    <form action="https://api.web3forms.com/submit" method="POST" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto;">
-        
-        <input type="hidden" name="access_key" value="c0c6138a-e33b-46d5-bc5d-37b34c79f907">
-        
-        <input type="text" name="name" placeholder="Your Name" required 
-            style="padding: 12px; border-radius: 5px; border: 1px solid #333; background: #1a1f26; color: white; font-size: 1rem;">
-        
-        <input type="email" name="email" placeholder="Your Email" required 
-            style="padding: 12px; border-radius: 5px; border: 1px solid #333; background: #1a1f26; color: white; font-size: 1rem;">
-        
-        <textarea name="message" placeholder="Describe your 3D printing project..." rows="4" required 
-            style="padding: 12px; border-radius: 5px; border: 1px solid #333; background: #1a1f26; color: white; font-size: 1rem; resize: none;"></textarea>
-        
-        <button type="submit" 
-            style="padding: 15px; border-radius: 5px; border: none; background: var(--accent-color); color: white; font-weight: bold; cursor: pointer; font-size: 1rem; transition: transform 0.2s;">
-            Send WolfTechLabs Inquiry
-        </button>
-    </form>
-</div>
+            <p style="margin-bottom: 1.5rem;">For custom 3D printing orders and inquiries:</p>
+            <form action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="c0c6138a-e33b-46d5-bc5d-37b34c79f907">
+                
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" placeholder="Describe your 3D printing project..." rows="4" required></textarea>
+                
+                <button type="submit">Send WolfTechLabs Inquiry</button>
+            </form>
+            <p style="font-size: 0.8rem; margin-top: 1.5rem;">
+                Or email directly: <a href="mailto:wolftechlabs@gmail.com">wolftechlabs@gmail.com</a>
+            </p>
+        </div>
     </div>
 </body>
 </html>
