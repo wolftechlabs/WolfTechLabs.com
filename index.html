@@ -6,11 +6,19 @@
     <title>Wolf Tech Labs | Under Construction</title>
     <style>
       /* Update your main container styles */
+:root {
+    --bg-color: #0b0e14;       /* Deep obsidian/dark grey */
+    --text-primary: #f0f0f0;    /* Soft off-white to prevent eye strain */
+    --accent-color: #9b4dff;   /* Matches the purple in your logo */
+}
+
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow-x: hidden; /* Prevents horizontal shift */
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .container {
@@ -18,17 +26,20 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100dvh; /* Use dynamic viewport height for mobile browsers */
-    padding: 20px;
+    min-height: 100dvh; 
+    padding: 2rem;
     box-sizing: border-box;
     text-align: center;
 }
 
 img {
-    max-width: 80%;      /* Ensures logo doesn't overflow horizontally */
-    max-height: 50vh;    /* Prevents logo from pushing text off-screen */
-    height: auto;        /* Maintains aspect ratio */
+    max-width: 300px;    /* Keeps logo professional size */
+    width: 80%;          /* Responsive for smaller screens */
+    max-height: 40vh;    /* Never lets logo push contact info off-screen */
+    height: auto;
     margin-bottom: 2rem;
+    /* Optional: subtle glow to make the logo pop against the dark background */
+    filter: drop-shadow(0 0 10px rgba(155, 77, 255, 0.2));
 }
 
 .logo {
@@ -41,30 +52,23 @@ img {
         }
 
         h1 {
-            color: #ffffff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
 
-        .status {
-            color: #ff9800; /* Construction Orange */
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
+p {
+    color: #888; /* Dimmer text for "Under Construction" message */
+    max-width: 600px;
+}
 
-        .contact-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-top: 1px solid #444;
-        }
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+}
 
-        a {
-            color: #03a9f4;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
+a:hover {
+    text-decoration: underline;
         }
     </style>
 </head>
