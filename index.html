@@ -6,30 +6,38 @@
     <title>Wolf Tech Labs | Under Construction</title>
     <style>
         body {
-            background-color: #121212; /* Deep Black/Grey */
-            color: #e0e0e0; /* Off-white text for readability */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Changed min-height so it doesn't "lock" the screen size */
+    min-height: 100vh; 
+    margin: 0;
+    padding: 20px; /* Adds a "safety buffer" around the edges */
+    box-sizing: border-box;
+}
 
-        .container {
-            padding: 20px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
+.container {
+    width: 100%;
+    max-width: 600px; /* Keeps it from getting too wide on desktop */
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
 
-        .logo {
-            max-width: 250px;
-            margin-bottom: 20px;
-            border: 2px solid #444; /* Placeholder border */
+.logo {
+    /* This makes the logo "Fluid" */
+    width: 100%; 
+    max-width: 300px; /* It will be 300px unless the screen is smaller */
+    height: auto;
+    margin-bottom: 20px;
+}
         }
 
         h1 {
