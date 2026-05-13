@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfTechLabs | Under Construction</title>
+    
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="shortcut icon" href="logo.svg">
+
     <style>
         :root {
             --bg-color: #0b0e14;
             --text-primary: #f0f0f0;
-            /* Exact match from your logo.svg */
             --accent-color: #630d8a; 
             --accent-hover: #7b11aa;
         }
@@ -29,7 +32,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100dvh; 
-            /* Added safety padding at the bottom for high-scaling screens */
             padding: 2rem 2rem 5rem 2rem;
             box-sizing: border-box;
             text-align: center;
@@ -41,7 +43,6 @@
             max-height: 35vh;
             height: auto;
             margin-bottom: 2rem;
-            /* Logo glow matches your brand purple */
             filter: drop-shadow(0 0 15px rgba(99, 13, 138, 0.4));
             flex-shrink: 1;
         }
@@ -82,7 +83,6 @@
             font-size: 1rem;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.3s;
         }
 
         input:focus, textarea:focus {
@@ -105,10 +105,6 @@
         button:hover {
             background-color: var(--accent-hover);
             transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
         }
 
         a {
