@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfTechLabs | Precision 3D Printing & Prototyping</title>
-    
     <link rel="icon" type="image/svg+xml" href="logo.svg">
-
     <style>
         :root {
-            /* UPDATED: Deeper midnight background */
             --bg-color: #020203; 
             --text-color: #c9d1d9;
             --wolf-purple: #390039;
@@ -29,7 +26,6 @@
             padding: 40px 20px;
         }
 
-        /* Logo Scaling & Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -50,7 +46,6 @@
             font-size: 0.9rem;
         }
 
-        /* FLEXBOX SCALING: Boxes shrink proportionally with the window */
         .content-grid {
             max-width: 1200px;
             width: 100%;
@@ -77,54 +72,29 @@
 
         .card h3 { color: var(--highlight); margin-top: 0; }
 
-        /* Inquiry Form */
-        .form-container {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 550px;
-            border: 2px solid var(--wolf-purple);
-            box-sizing: border-box;
+        .cta-container {
+            text-align: center;
+            margin-top: 20px;
         }
 
-        .form-container h2 { color: #ffffff; margin-bottom: 20px; text-align: center; }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            margin: 12px 0;
-            background: var(--bg-color);
-            border: 1px solid #30363d;
-            color: white;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
+        .btn {
+            display: inline-block;
+            padding: 18px 40px;
             background-color: var(--wolf-purple);
             color: white;
+            text-decoration: none;
             border: 1px solid var(--highlight);
             border-radius: 8px;
             font-weight: bold;
-            cursor: pointer;
+            font-size: 1.1rem;
             transition: 0.2s;
         }
 
-        button:hover { background-color: var(--highlight); }
+        .btn:hover { background-color: var(--highlight); transform: translateY(-3px); }
 
-        /* REORIENT FOR PHONE VIEWING (600px Breakpoint) */
         @media (max-width: 600px) {
-            .content-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .card {
-                width: 100%;
-                flex: none;
-            }
+            .content-grid { flex-direction: column; align-items: center; }
+            .card { width: 100%; flex: none; }
         }
     </style>
 </head>
@@ -152,17 +122,8 @@
         </div>
     </div>
 
-    <div class="form-container">
-        <h2>Start a Project</h2>
-        <form action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-            
-            <input type="text" name="name" placeholder="Full Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            <textarea name="message" rows="5" placeholder="Project details..." required></textarea>
-            
-            <button type="submit">Submit WolfTechLabs Inquiry</button>
-        </form>
+    <div class="cta-container">
+        <a href="contact.html" class="btn">Start a Project Inquiry</a>
     </div>
 
 </body>
