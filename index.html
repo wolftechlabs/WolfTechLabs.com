@@ -9,13 +9,13 @@
 
     <style>
         :root {
-            /* EXACT COLOR: #390039 */
+            /* PERMANENT COLORS - NO CHANGES */
             --bg-color: #0d1117; 
             --text-color: #c9d1d9;
             --wolf-purple: #390039;
-            --wolf-glow: rgba(57, 0, 57, 0.9);
+            --wolf-glow: rgba(57, 0, 57, 1);
             --card-bg: #161b22;
-            --highlight: #b666d2; /* Lighter tint for text/hover visibility */
+            --highlight: #b666d2; /* Used for text readability only */
         }
 
         body {
@@ -29,7 +29,7 @@
             padding: 40px 20px;
         }
 
-        /* Logo Scaling & Glow */
+        /* Logo Scaling & Neon Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -50,7 +50,7 @@
             font-size: 0.9rem;
         }
 
-        /* FLEXBOX SCALING: Shrinks until mobile breakpoint */
+        /* FLEXBOX SCALING: Boxes shrink proportionally with the window */
         .content-grid {
             max-width: 1200px;
             width: 100%;
@@ -65,7 +65,7 @@
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #30363d;
-            /* Allow boxes to shrink equally */
+            /* Box scaling logic: shrink proportionally */
             flex: 1 1 0; 
             min-width: 0; 
             transition: all 0.3s ease;
@@ -85,9 +85,11 @@
             border-radius: 16px;
             width: 100%;
             max-width: 550px;
-            border: 1px solid var(--wolf-purple);
+            border: 2px solid var(--wolf-purple);
             box-sizing: border-box;
         }
+
+        .form-container h2 { color: #ffffff; margin-bottom: 20px; text-align: center; }
 
         input, textarea {
             width: 100%;
@@ -114,7 +116,7 @@
 
         button:hover { background-color: var(--highlight); }
 
-        /* REORIENT FOR PHONE VIEWING */
+        /* REORIENT FOR PHONE VIEWING (600px Breakpoint) */
         @media (max-width: 600px) {
             .content-grid {
                 flex-direction: column;
@@ -152,11 +154,14 @@
     </div>
 
     <div class="form-container">
+        <h2>Start a Project</h2>
         <form action="https://api.web3forms.com/submit" method="POST">
             <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+            
             <input type="text" name="name" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email Address" required>
             <textarea name="message" rows="5" placeholder="Project details..." required></textarea>
+            
             <button type="submit">Submit WolfTechLabs Inquiry</button>
         </form>
     </div>
