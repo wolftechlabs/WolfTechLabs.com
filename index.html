@@ -3,98 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WolfTechLabs | Precision 3D Printing & Prototyping</title>
+    <title>WolfTechLabs | Custom 3D Printing & Prototyping</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --text-color: #c9d1d9;
-            --accent-purple: #6a0dad; /* Matches your logo purple */
-            --dark-purple: #2d0a4e;
+            /* EXACT COLOR MATCH FROM LOGO */
+            --bg-color: #0b0e14;
+            --text-color: #d1d5db;
+            --wolf-purple: #a855f7;    /* The specific vibrant purple from your branding */
+            --wolf-glow: #c084fc;
+            --card-bg: #161b22;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
-        /* LOGO SCALING FIX */
+        /* LOGO SCALING: Fixed for PC, fluid for Mobile */
         .logo-container img {
-            width: 80%;          /* Responsive for mobile */
-            max-width: 300px;    /* Prevents "huge" appearance on PC */
+            width: 100%;
+            max-width: 250px;    /* Prevents the "huge" look on large screens */
             height: auto;
-            margin-top: 40px;
-            display: block;
+            margin-bottom: 20px;
         }
 
-        h1 { margin-bottom: 5px; color: #ffffff; }
-        .tagline { color: var(--accent-purple); font-weight: bold; margin-bottom: 40px; }
+        h1 { color: #ffffff; margin: 10px 0; font-size: 2.2rem; }
+        .tagline { 
+            color: var(--wolf-purple); 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            margin-bottom: 50px; 
+        }
 
         .content-grid {
-            max-width: 900px;
+            max-width: 1000px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 50px;
         }
 
         .card {
-            background-color: #161b22;
-            padding: 20px;
-            border-radius: 8px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
             border: 1px solid #30363d;
-            transition: transform 0.2s;
+            text-align: left;
         }
 
-        .card:hover { transform: translateY(-5px); border-color: var(--accent-purple); }
-        .card h3 { color: var(--accent-purple); margin-top: 0; }
+        .card h3 { color: var(--wolf-purple); margin-top: 0; }
 
         /* INQUIRY FORM */
         form {
-            background-color: #161b22;
-            padding: 30px;
-            border-radius: 12px;
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
             width: 100%;
             max-width: 500px;
-            border: 1px solid var(--accent-purple);
+            border: 1px solid var(--wolf-purple);
         }
 
         input, textarea {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 14px;
+            margin: 12px 0;
             background: #0d1117;
             border: 1px solid #30363d;
             color: white;
-            border-radius: 4px;
+            border-radius: 8px;
             box-sizing: border-box;
         }
 
         button {
             width: 100%;
-            padding: 15px;
-            background-color: var(--accent-purple);
+            padding: 16px;
+            background-color: var(--wolf-purple);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
         }
-
-        button:hover { background-color: var(--dark-purple); }
     </style>
 </head>
 <body>
 
     <div class="logo-container">
-        <img src="logo.svg" alt="WolfTechLabs Cyberwolf Logo">
+        <img src="logo.svg" alt="WolfTechLabs Logo">
     </div>
 
     <h1>WolfTechLabs</h1>
@@ -103,27 +105,25 @@
     <div class="content-grid">
         <div class="card">
             <h3>Functional Prototyping</h3>
-            <p>High-precision mechanical parts and custom tools optimized for the <strong>Prusa MK4S</strong>. We handle abrasive materials like Carbon Fiber using hardened steel nozzles.</p>
+            <p>High-precision mechanical parts and custom tools optimized for durability. Our fleet utilizes hardened hardware to handle advanced materials and abrasive filaments.</p>
         </div>
         <div class="card">
-            <h3>Multi-Color Artistry</h3>
-            <p>From articulating "Leaf Dragons" to custom gaming gear. Expert multi-layer color switching using OrcaSlicer workflows.</p>
+            <h3>Custom Artistry</h3>
+            <p>Specializing in detailed multi-color prints, including articulating dragons and custom gaming accessories with seamless color transitions.</p>
         </div>
         <div class="card">
-            <h3>Assistive Technology</h3>
-            <p>Dedicated to developing software and 3D-printed hardware solutions that improve accessibility and independence.</p>
+            <h3>Assistive Solutions</h3>
+            <p>Focused on utilizing 3D printing technology to create custom hardware solutions that improve accessibility and independence for individuals with disabilities.</p>
         </div>
     </div>
 
     <form action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-        
-        <h2>Project Inquiry</h2>
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <textarea name="message" rows="5" placeholder="Project details (e.g. Mechanical use, Carbon Fiber, or link to your STL)..." required></textarea>
-        
-        <button type="submit">Submit WolfTechLabs Inquiry</button>
+        <h2>Start a Project</h2>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Tell us about your project requirements..." required></textarea>
+        <button type="submit">Submit Inquiry</button>
     </form>
 
 </body>
