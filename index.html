@@ -7,6 +7,8 @@
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
 
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-color: #020203; 
@@ -20,31 +22,31 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Inter', -apple-system, sans-serif;
+            /* BODY FONT APPLIED HERE */
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
-            position: relative; /* Needed for the corner note positioning */
+            position: relative;
         }
 
-        /* UNDER CONSTRUCTION NOTE */
         .construction-note {
             position: absolute;
             top: 15px;
             right: 20px;
             font-size: 0.75rem;
             color: var(--text-color);
-            background: rgba(57, 0, 57, 0.2); /* Light purple tint */
+            background: rgba(57, 0, 57, 0.2);
             padding: 6px 12px;
             border: 1px solid var(--wolf-purple);
             border-radius: 4px;
             opacity: 0.8;
-            pointer-events: none; /* User can click through it if needed */
+            pointer-events: none;
+            letter-spacing: 1px;
         }
 
-        /* Logo Scaling & Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -54,18 +56,26 @@
             margin-bottom: 20px;
         }
 
-        h1 { color: #ffffff; margin-bottom: 5px; font-size: 2.5rem; }
+        /* HEADING FONT APPLIED HERE */
+        h1, h3 { 
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff; 
+            margin-bottom: 5px; 
+            letter-spacing: 2px;
+        }
+
+        h1 { font-size: 2.5rem; }
         
         .tagline { 
+            font-family: 'Orbitron', sans-serif;
             color: var(--highlight); 
             font-weight: bold; 
             text-transform: uppercase; 
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             margin-bottom: 50px; 
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
-        /* FLEXBOX SCALING: Boxes shrink proportionally with the window */
         .content-grid {
             max-width: 1200px;
             width: 100%;
@@ -90,7 +100,8 @@
             box-shadow: 0 0 15px var(--wolf-glow);
         }
 
-        .card h3 { color: var(--highlight); margin-top: 0; }
+        .card h3 { color: var(--highlight); font-size: 1.1rem; }
+        .card p { font-size: 1.1rem; line-height: 1.4; }
 
         .cta-container {
             text-align: center;
@@ -98,6 +109,7 @@
         }
 
         .btn {
+            font-family: 'Orbitron', sans-serif;
             display: inline-block;
             padding: 18px 40px;
             background-color: var(--wolf-purple);
@@ -106,23 +118,17 @@
             border: 1px solid var(--highlight);
             border-radius: 8px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            letter-spacing: 2px;
             transition: 0.2s;
         }
 
         .btn:hover { background-color: var(--highlight); transform: translateY(-3px); }
 
-        /* REORIENT FOR PHONE VIEWING (600px Breakpoint) */
         @media (max-width: 600px) {
             .construction-note { font-size: 0.65rem; top: 10px; right: 10px; }
-            .content-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .card {
-                width: 100%;
-                flex: none;
-            }
+            .content-grid { flex-direction: column; align-items: center; }
+            .card { width: 100%; flex: none; }
         }
     </style>
 </head>
