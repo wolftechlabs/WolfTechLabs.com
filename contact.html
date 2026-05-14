@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | WolfTechLabs</title>
+    
     <link rel="icon" type="image/svg+xml" href="logo.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-color: #020203; 
@@ -18,7 +24,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -28,13 +34,24 @@
 
         .logo-container img {
             width: 100%;
-            max-width: 180px; /* Smaller for sub-pages */
+            max-width: 180px;
             height: auto;
             filter: drop-shadow(0 0 10px var(--wolf-glow));
             margin-bottom: 20px;
+            transition: transform 0.3s ease;
         }
 
-        h1 { color: #ffffff; margin-bottom: 30px; }
+        .logo-container img:hover {
+            transform: scale(1.05);
+        }
+
+        h1 { 
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff; 
+            margin-bottom: 30px; 
+            letter-spacing: 2px;
+            font-size: 2rem;
+        }
 
         .form-container {
             background-color: var(--card-bg);
@@ -44,6 +61,7 @@
             max-width: 550px;
             border: 2px solid var(--wolf-purple);
             box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         input, textarea {
@@ -54,52 +72,4 @@
             border: 1px solid #30363d;
             color: white;
             border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            background-color: var(--wolf-purple);
-            color: white;
-            border: 1px solid var(--highlight);
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover { background-color: var(--highlight); }
-
-        .back-link {
-            margin-top: 30px;
-            color: var(--highlight);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .back-link:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-
-    <div class="logo-container">
-        <a href="index.html"><img src="logo.svg" alt="WolfTechLabs Logo"></a>
-    </div>
-
-    <h1>Project Inquiry</h1>
-
-    <div class="form-container">
-        <form action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-            <input type="text" name="name" placeholder="Full Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            <textarea name="message" rows="8" placeholder="Tell us about your project (Materials, dimensions, or STL links)..." required></textarea>
-            <button type="submit">Submit Inquiry</button>
-        </form>
-    </div>
-
-    <a href="index.html" class="back-link">← Return to Homepage</a>
-
-</body>
-</html>
+            box-sizing: border-
