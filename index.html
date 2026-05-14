@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfTechLabs | Precision 3D Printing & Prototyping</title>
+    
     <link rel="icon" type="image/svg+xml" href="logo.svg">
+
     <style>
         :root {
             --bg-color: #020203; 
@@ -24,8 +26,25 @@
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
+            position: relative; /* Needed for the corner note positioning */
         }
 
+        /* UNDER CONSTRUCTION NOTE */
+        .construction-note {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: var(--text-color);
+            background: rgba(57, 0, 57, 0.2); /* Light purple tint */
+            padding: 6px 12px;
+            border: 1px solid var(--wolf-purple);
+            border-radius: 4px;
+            opacity: 0.8;
+            pointer-events: none; /* User can click through it if needed */
+        }
+
+        /* Logo Scaling & Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -46,6 +65,7 @@
             font-size: 0.9rem;
         }
 
+        /* FLEXBOX SCALING: Boxes shrink proportionally with the window */
         .content-grid {
             max-width: 1200px;
             width: 100%;
@@ -92,13 +112,25 @@
 
         .btn:hover { background-color: var(--highlight); transform: translateY(-3px); }
 
+        /* REORIENT FOR PHONE VIEWING (600px Breakpoint) */
         @media (max-width: 600px) {
-            .content-grid { flex-direction: column; align-items: center; }
-            .card { width: 100%; flex: none; }
+            .construction-note { font-size: 0.65rem; top: 10px; right: 10px; }
+            .content-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                width: 100%;
+                flex: none;
+            }
         }
     </style>
 </head>
 <body>
+
+    <div class="construction-note">
+        UNDER CONSTRUCTION - SUBJECT TO CHANGE
+    </div>
 
     <div class="logo-container">
         <img src="logo.svg" alt="WolfTechLabs Logo">
