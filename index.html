@@ -7,10 +7,13 @@
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
+            /* LOCKED BASELINE COLORS */
             --bg-color: #020203; 
             --text-color: #c9d1d9;
             --wolf-purple: #390039;
@@ -22,7 +25,6 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            /* BODY FONT APPLIED HERE */
             font-family: 'Rajdhani', sans-serif;
             margin: 0;
             display: flex;
@@ -32,21 +34,23 @@
             position: relative;
         }
 
+        /* UNDER CONSTRUCTION NOTE */
         .construction-note {
             position: absolute;
             top: 15px;
             right: 20px;
             font-size: 0.75rem;
+            font-family: 'Rajdhani', sans-serif;
             color: var(--text-color);
             background: rgba(57, 0, 57, 0.2);
             padding: 6px 12px;
             border: 1px solid var(--wolf-purple);
             border-radius: 4px;
             opacity: 0.8;
-            pointer-events: none;
             letter-spacing: 1px;
         }
 
+        /* Logo Scaling & Neon Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -56,9 +60,9 @@
             margin-bottom: 20px;
         }
 
-        /* HEADING FONT APPLIED HERE */
+        /* FONT APPLICATION: Orbitron for all Headings */
         h1, h3 { 
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Orbitron', sans-serif !important;
             color: #ffffff; 
             margin-bottom: 5px; 
             letter-spacing: 2px;
@@ -76,6 +80,7 @@
             font-size: 0.8rem;
         }
 
+        /* FLEXBOX SCALING: Shrinks proportionally */
         .content-grid {
             max-width: 1200px;
             width: 100%;
@@ -125,6 +130,7 @@
 
         .btn:hover { background-color: var(--highlight); transform: translateY(-3px); }
 
+        /* Mobile Breakpoint */
         @media (max-width: 600px) {
             .construction-note { font-size: 0.65rem; top: 10px; right: 10px; }
             .content-grid { flex-direction: column; align-items: center; }
