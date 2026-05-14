@@ -4,41 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfTechLabs | Custom 3D Printing & Prototyping</title>
+    
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+
     <style>
         :root {
             /* EXACT COLOR MATCH FROM LOGO */
             --bg-color: #0b0e14;
             --text-color: #d1d5db;
-            --wolf-purple: #a855f7;    /* The specific vibrant purple from your branding */
-            --wolf-glow: #c084fc;
+            --wolf-purple: #9d4edd;    /* Electric Purple */
+            --wolf-glow: #c77dff;      /* Highlight Purple */
             --card-bg: #161b22;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
+            line-height: 1.6;
         }
 
         /* LOGO SCALING: Fixed for PC, fluid for Mobile */
         .logo-container img {
             width: 100%;
-            max-width: 250px;    /* Prevents the "huge" look on large screens */
+            max-width: 280px;    /* Prevents the "huge" look on large screens */
             height: auto;
             margin-bottom: 20px;
+            display: block;
         }
 
-        h1 { color: #ffffff; margin: 10px 0; font-size: 2.2rem; }
+        h1 { 
+            color: #ffffff; 
+            margin: 10px 0; 
+            font-size: 2.2rem; 
+            letter-spacing: -1px;
+        }
+
         .tagline { 
             color: var(--wolf-purple); 
             font-weight: bold; 
             text-transform: uppercase; 
             letter-spacing: 2px;
+            font-size: 0.9rem;
             margin-bottom: 50px; 
         }
 
@@ -48,6 +60,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 50px;
+            width: 100%;
         }
 
         .card {
@@ -55,10 +68,18 @@
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #30363d;
-            text-align: left;
+            transition: border-color 0.3s ease;
         }
 
-        .card h3 { color: var(--wolf-purple); margin-top: 0; }
+        .card:hover {
+            border-color: var(--wolf-purple);
+        }
+
+        .card h3 { 
+            color: var(--wolf-purple); 
+            margin-top: 0; 
+            font-size: 1.2rem;
+        }
 
         /* INQUIRY FORM */
         form {
@@ -68,7 +89,10 @@
             width: 100%;
             max-width: 500px;
             border: 1px solid var(--wolf-purple);
+            box-sizing: border-box;
         }
+
+        h2 { color: #ffffff; margin-bottom: 20px; }
 
         input, textarea {
             width: 100%;
@@ -79,6 +103,12 @@
             color: white;
             border-radius: 8px;
             box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--wolf-purple);
         }
 
         button {
@@ -89,7 +119,14 @@
             border: none;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 1rem;
             cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -105,26 +142,8 @@
     <div class="content-grid">
         <div class="card">
             <h3>Functional Prototyping</h3>
-            <p>High-precision mechanical parts and custom tools optimized for durability. Our fleet utilizes hardened hardware to handle advanced materials and abrasive filaments.</p>
+            <p>High-precision mechanical parts and custom tools optimized for durability. Our hardware is configured to handle advanced materials and abrasive filaments for industrial-grade results.</p>
         </div>
         <div class="card">
             <h3>Custom Artistry</h3>
-            <p>Specializing in detailed multi-color prints, including articulating dragons and custom gaming accessories with seamless color transitions.</p>
-        </div>
-        <div class="card">
-            <h3>Assistive Solutions</h3>
-            <p>Focused on utilizing 3D printing technology to create custom hardware solutions that improve accessibility and independence for individuals with disabilities.</p>
-        </div>
-    </div>
-
-    <form action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-        <h2>Start a Project</h2>
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <textarea name="message" rows="5" placeholder="Tell us about your project requirements..." required></textarea>
-        <button type="submit">Submit Inquiry</button>
-    </form>
-
-</body>
-</html>
+            <p>Specializing in detailed multi-color prints, including articulating dragons and custom gaming accessories with professional
