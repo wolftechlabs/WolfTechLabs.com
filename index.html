@@ -3,160 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WolfTechLabs | Under Construction</title>
+    <title>WolfTechLabs | High-Performance 3D Printing</title>
     
+    <meta property="og:title" content="WolfTechLabs | Custom 3D Printing">
+    <meta property="og:description" content="High-performance digital workshop for custom functional prototypes and 3D projects.">
+    <meta property="og:image" content="https://www.wolftechlabs.com/logo.svg">
     <link rel="icon" type="image/svg+xml" href="logo.svg">
-    <link rel="shortcut icon" href="logo.svg">
 
     <style>
-        :root {
-            --bg-color: #0b0e14;
-            --text-primary: #f0f0f0;
-            --accent-color: #630d8a; /* Exact logo purple */
-            --accent-hover: #7b11aa;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100dvh; 
-            /* Extra bottom padding for scroll comfort on large screens */
-            padding: 4rem 2rem 6rem 2rem;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
-        .logo {
-            width: 90%;
-            /* Increased sizes for high-scaling monitors */
-            max-width: 450px; 
-            max-height: 45vh;
-            height: auto;
-            margin-bottom: 2.5rem;
-            filter: drop-shadow(0 0 20px rgba(99, 13, 138, 0.5));
-            flex-shrink: 1;
-        }
-
-        h1 {
-            /* Increased font size scaling */
-            font-size: clamp(2.5rem, 10vw, 4.5rem);
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-            font-weight: 800;
-        }
-
-        .status {
-            color: var(--accent-color);
-            font-weight: bold;
-            letter-spacing: 3px;
-            margin-bottom: 2rem;
-            font-size: 1.2rem;
-        }
-
-        p {
-            color: #aaa;
-            max-width: 700px;
-            margin: 0.8rem 0;
-            font-size: 1.2rem; /* Larger base text */
-        }
-
-        .contact-box {
-            margin-top: 3rem;
-            width: 100%;
-            /* Wider form for better visual balance on wide screens */
-            max-width: 550px; 
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 18px; /* Beefier inputs */
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #1a1f26;
-            color: white;
-            font-size: 1.1rem;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            border-color: var(--accent-color);
-        }
-
-        button {
-            width: 100%;
-            padding: 20px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent-color);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-        }
-
-        button:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(99, 13, 138, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .direct-email {
-            font-size: 1rem;
-            margin-top: 2rem;
-        }
-
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
+        :root { --bg-color: #0b0e14; --text-primary: #f0f0f0; --accent-color: #630d8a; --accent-hover: #7b11aa; }
+        body, html { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-primary); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        .container { display: flex; flex-direction: column; align-items: center; min-height: 100dvh; padding: 4rem 2rem 6rem 2rem; box-sizing: border-box; text-align: center; }
+        .logo { width: 95%; max-width: 480px; height: auto; margin-bottom: 2.5rem; filter: drop-shadow(0 0 30px rgba(99, 13, 138, 0.6)); }
+        h1 { font-size: clamp(2.8rem, 12vw, 5rem); margin-bottom: 0.5rem; letter-spacing: -2px; font-weight: 800; }
+        .status { color: var(--accent-color); font-weight: bold; letter-spacing: 4px; margin-bottom: 2rem; text-transform: uppercase; }
+        .capabilities { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin: 2rem 0; }
+        .cap-tag { background: #1a1f26; border: 1px solid #333; padding: 10px 20px; border-radius: 20px; font-size: 0.9rem; }
+        .contact-box { width: 100%; max-width: 600px; margin-top: 2rem; }
+        input, textarea { width: 100%; padding: 20px; margin-bottom: 1rem; border-radius: 10px; border: 1px solid #333; background: #1a1f26; color: white; font-size: 1.2rem; box-sizing: border-box; outline: none; }
+        button { width: 100%; padding: 22px; border-radius: 10px; border: none; background: var(--accent-color); color: white; font-weight: bold; cursor: pointer; font-size: 1.3rem; transition: all 0.3s ease; }
+        button:hover { background-color: var(--accent-hover); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(99, 13, 138, 0.5); }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="logo.svg" alt="WolfTechLabs Logo" class="logo">
         <h1>WolfTechLabs</h1>
-        <p class="status">SITE UNDER CONSTRUCTION</p>
-        <p>We are currently building our digital workshop.</p>
+        <p class="status">Workshop Online</p>
         
+        <div class="capabilities">
+            <div class="cap-tag">Custom Prototyping</div>
+            <div class="cap-tag">Multi-Color Prints</div>
+            <div class="cap-tag">Leaf Dragons & Toys</div>
+            <div class="cap-tag">Gaming Accessories</div>
+        </div>
+
         <div class="contact-box">
-            <p style="margin-bottom: 2rem;">For custom 3D printing orders and inquiries:</p>
             <form action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="c0c6138a-e33b-46d5-bc5d-37b34c79f907">
+                <input type="hidden" name="redirect" value="https://www.wolftechlabs.com/thanks.html">
                 
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" placeholder="Describe your 3D printing project..." rows="5" required></textarea>
-                
-                <button type="submit">Send WolfTechLabs Inquiry</button>
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <textarea name="message" placeholder="Project details (material, size, or STL link)..." rows="5" required></textarea>
+                <button type="submit">Submit WolfTechLabs Inquiry</button>
             </form>
-            <p class="direct-email">
-                Or email directly: <a href="mailto:wolftechlabs@gmail.com">wolftechlabs@gmail.com</a>
-            </p>
         </div>
     </div>
 </body>
