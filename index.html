@@ -9,12 +9,12 @@
 
     <style>
         :root {
-            /* RESTORED TO STARTING BACKGROUND - DO NOT CHANGE */
-            --bg-color: #0d1117; 
+            /* RE-LOCKED BACKGROUND: Deeper midnight shade */
+            --bg-color: #05070a; 
             --text-color: #c9d1d9;
             --wolf-purple: #390039;
             --wolf-glow: rgba(57, 0, 57, 1);
-            --card-bg: #161b22;
+            --card-bg: #0d1117; /* Contrast for the info boxes */
             --highlight: #b666d2; 
         }
 
@@ -29,7 +29,7 @@
             padding: 40px 20px;
         }
 
-        /* Logo Scaling & Neon Glow */
+        /* Logo Scaling & Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -65,7 +65,6 @@
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #30363d;
-            /* Box scaling logic: shrink proportionally */
             flex: 1 1 0; 
             min-width: 0; 
             transition: all 0.3s ease;
@@ -95,7 +94,7 @@
             width: 100%;
             padding: 15px;
             margin: 12px 0;
-            background: #0d1117;
+            background: var(--bg-color);
             border: 1px solid #30363d;
             color: white;
             border-radius: 8px;
@@ -147,7 +146,7 @@
             <h3>Custom Artistry</h3>
             <p>Specializing in detailed multi-color prints, articulating dragons, and custom gaming accessories.</p>
         </div>
-        <div class="card :">
+        <div class="card">
             <h3>Assistive Solutions</h3>
             <p>Tailored 3D-printed hardware solutions focused on improving accessibility and independence.</p>
         </div>
