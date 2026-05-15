@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WolfTechLabs | Precision 3D Printing & Prototyping</title>
+    <title>WolfTechLabs | Precision 3D Printing & Custom Gifts</title>
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
 
@@ -33,7 +33,6 @@
             position: relative;
         }
 
-        /* UNDER CONSTRUCTION NOTE */
         .construction-note {
             position: absolute;
             top: 15px;
@@ -48,7 +47,6 @@
             letter-spacing: 1px;
         }
 
-        /* Logo Scaling & Neon Glow */
         .logo-container img {
             width: 100%;
             max-width: 280px;
@@ -58,14 +56,15 @@
             margin-bottom: 20px;
         }
 
-        h1, h3 { 
+        h1, h2, h3 { 
             font-family: 'Orbitron', sans-serif !important;
             color: #ffffff; 
-            margin-bottom: 5px; 
+            margin-bottom: 15px; 
             letter-spacing: 2px;
         }
 
-        h1 { font-size: 2.5rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 5px; }
+        h2 { font-size: 1.5rem; margin-top: 50px; text-align: center; color: var(--highlight); border-bottom: 1px solid var(--wolf-purple); padding-bottom: 10px; width: 100%; max-width: 800px; }
         
         .tagline { 
             font-family: 'Orbitron', sans-serif;
@@ -77,14 +76,13 @@
             font-size: 0.8rem;
         }
 
-        /* FLEXBOX SCALING: Shrinks proportionally */
         .content-grid {
             max-width: 1200px;
             width: 100%;
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
         }
 
         .card {
@@ -105,9 +103,24 @@
         .card h3 { color: var(--highlight); font-size: 1.1rem; }
         .card p { font-size: 1.1rem; line-height: 1.4; }
 
-        .cta-container {
-            text-align: center;
-            margin-top: 20px;
+        .material-item {
+            padding: 20px;
+            background: rgba(13, 17, 23, 0.6);
+            border-left: 4px solid var(--wolf-purple);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .material-item span {
+            color: var(--highlight);
+            font-weight: bold;
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
 
         .btn {
@@ -123,21 +136,14 @@
             font-size: 1rem;
             letter-spacing: 2px;
             transition: 0.2s;
+            margin-top: 50px;
         }
 
         .btn:hover { background-color: var(--highlight); transform: translateY(-3px); }
 
-        /* REORIENT FOR PHONE VIEWING (600px Breakpoint) */
-        @media (max-width: 600px) {
-            .construction-note { font-size: 0.65rem; top: 10px; right: 10px; }
-            .content-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .card {
-                width: 100%;
-                flex: none;
-            }
+        @media (max-width: 800px) {
+            .content-grid { flex-direction: column; align-items: center; }
+            .card { width: 100%; flex: none; }
         }
     </style>
 </head>
@@ -156,12 +162,12 @@
 
     <div class="content-grid">
         <div class="card">
-            <h3>Functional Prototyping</h3>
-            <p>High-precision mechanical parts and custom tools. Optimized for durability with advanced material capabilities.</p>
+            <h3>Custom Gifting</h3>
+            <p>Bespoke creations for any occasion. From personalized apparel to unique 3D-printed keepsakes and decor.</p>
         </div>
         <div class="card">
-            <h3>Custom Artistry</h3>
-            <p>Specializing in detailed multi-color prints, articulating dragons, and custom gaming accessories.</p>
+            <h3>Functional Prototyping</h3>
+            <p>High-precision mechanical parts and custom tools. Optimized for durability with advanced hardware calibration.</p>
         </div>
         <div class="card">
             <h3>Assistive Solutions</h3>
@@ -169,9 +175,33 @@
         </div>
     </div>
 
-    <div class="cta-container">
-        <a href="contact.html" class="btn">Start a Project Inquiry</a>
+    <h2>Creative Capabilities</h2>
+    <div class="material-item">
+        <span>Apparel & Vinyl</span>
+        **Custom T-Shirts & Decor** – Professional grade heat-press vinyl and precision cutting for personalized gifts.
     </div>
+    <div class="material-item">
+        <span>3D Artistry</span>
+        **Intricate Models** – Detailed multi-color prints, articulating dragons, and geometric aesthetic pieces.
+    </div>
+    <div class="material-item">
+        <span>Future Tech</span>
+        **Laser Engraving** – Upcoming capability for high-detail wood, acrylic, and metal marking.
+    </div>
+
+    <h2>The Equipment Fleet</h2>
+    <div class="content-grid">
+        <div class="card">
+            <h3>Prusa MK4S & Snapmaker U1</h3>
+            <p>Industrial 3D printing units equipped with hardened steel for consistent, high-detail production.</p>
+        </div>
+        <div class="card">
+            <h3>Cricut Precision</h3>
+            <p>Advanced cutting for custom vinyl, apparel, and intricate paper-craft gifting solutions.</p>
+        </div>
+    </div>
+
+    <a href="contact.html" class="btn">Start a Project Inquiry</a>
 
 </body>
 </html>
