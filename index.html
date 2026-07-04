@@ -12,154 +12,105 @@
         }
 
         body {
-            background-color: #0b0c0e;
-            color: #d1d5db;
-            font-family: "Consolas", "Courier New", Courier, monospace;
+            background-color: #000000; /* Pure Black Base */
+            color: #e0e0e0; /* Clean Silver/Grey Text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            min-height: 100vh; /* Scaling safety fix */
+            margin: 0;
             padding: 20px;
         }
 
-        .window-pane {
+        .container {
             width: 100%;
-            max-width: 800px;
-            background-color: #121418;
-            border: 2px solid #262930;
+            max-width: 750px; /* Centered block width */
             padding: 30px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            border: 2px solid #4a154b; /* Deep Purple Border Accent */
+            border-radius: 8px;
+            background-color: #121212; /* Dark Charcoal Container */
+            box-shadow: 0 4px 20px rgba(74, 21, 75, 0.3); /* Subtle Purple Glow */
         }
 
         header {
             text-align: center;
-            border-bottom: 2px dashed #262930;
-            padding-bottom: 25px;
             margin-bottom: 30px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 20px;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff; /* Crisp White */
+            letter-spacing: 1px;
         }
 
         .logo span {
-            color: #e66015;
+            color: #8b5cf6; /* Metallic Violet/Purple Accent */
         }
 
         header p {
-            color: #8a94a6;
-            font-size: 0.9rem;
+            color: #a0aec0; /* Silver Secondary Text */
+            font-size: 0.95rem;
             margin-top: 10px;
-            line-height: 1.5;
         }
 
         .section-block {
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
-        .section-header {
+        .section-title {
             font-size: 1.1rem;
-            color: #e66015;
+            font-weight: 600;
+            color: #8b5cf6; /* Purple Section Header */
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #262930;
-            padding-bottom: 5px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
-        .tech-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+        .item-list {
+            list-style-type: none;
+            padding-left: 0;
         }
 
-        .tech-card {
-            background-color: #16191f;
-            border: 1px solid #262930;
-            padding: 20px;
-        }
-
-        .tech-card h3 {
-            color: #ffffff;
-            font-size: 1rem;
+        .item-list li {
             margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .tech-card p {
-            color: #8a94a6;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             line-height: 1.5;
-            margin-bottom: 10px;
+            color: #cbd5e1; /* Silver Text */
         }
 
-        .spec-list {
-            list-style: none;
-            padding-left: 5px;
-        }
-
-        .spec-list li {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #b3b9c4;
-            margin-bottom: 6px;
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .spec-list li::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #e66015;
-            font-weight: bold;
-        }
-
-        .spec-list li strong {
-            color: #ffffff;
+        .item-list strong {
+            color: #ffffff; /* Highlighting values in white */
+            border-bottom: 1px solid #4a154b;
         }
 
         .shop-status {
-            background-color: #1a1412;
-            border: 1px solid #4a2716;
+            background-color: #0a0510; /* Very deep purple/black tint */
+            border: 1px solid #4a154b;
+            border-radius: 6px;
             padding: 20px;
-            margin-top: 20px;
             text-align: center;
+            margin-top: 30px;
         }
 
-        .shop-status h4 {
-            color: #e66015;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+        .shop-status h3 {
+            color: #8b5cf6;
+            font-size: 1rem;
+            margin-bottom: 6px;
         }
 
         .shop-status p {
-            font-size: 0.85rem;
-            color: #b3b9c4;
-            line-height: 1.4;
-        }
-
-        .shop-status .queue-tag {
-            display: inline-block;
-            margin-top: 10px;
-            background-color: #e66015;
-            color: #0b0c0e;
-            font-weight: bold;
-            padding: 4px 10px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: #a0aec0;
         }
 
         @media (max-width: 600px) {
-            .window-pane {
-                padding: 15px;
+            .container {
+                padding: 20px;
             }
             body {
                 padding: 10px;
@@ -169,84 +120,43 @@
 </head>
 <body>
 
-<div class="window-pane">
+<div class="container">
     <header>
         <div class="logo">WolfTech<span>Labs</span></div>
-        <p>Bespoke Small-Batch Manufacturing & Custom Project Fabrication. We engineer specific cross-machine workflows to bring your exact vision to life.</p>
+        <p>Bespoke Small-Batch Manufacturing & Custom Project Fabrication. Bringing your unique vision to life through engineered cross-machine workflows.</p>
     </header>
 
-    <!-- SECTION 1: XTOOL M1 ULTRA WORKFLOWS -->
     <div class="section-block">
-        <div class="section-header">// SYSTEM_01: SMART COLOR LASER & PRINT-CUT MEDIA</div>
-        <div class="tech-grid">
-            <div class="tech-card">
-                <h3>Full-Color Contour Media</h3>
-                <p>Utilizing high-resolution CMYK printing combined with dual-camera registration for perfect path cutting:</p>
-                <ul class="spec-list">
-                    <li><strong>Temporary Tattoo Sheets:</strong> Full-color illustrations precision-sliced to custom shapes. High-margin items perfect for event promotion or Kickstarter backer tiers.</li>
-                    <li><strong>Die-Cut Sticker Packs:</strong> Complete retail-ready custom aesthetic graphic sets delivered in sealed packaging.</li>
-                    <li><strong>Printable Iron-On Transfers:</strong> Vibrant, durable apparel graphics processed on specialty carrier paper, ready to transfer to garments.</li>
-                    <li><strong>Custom Gift Tags:</strong> Intricately shaped and color-printed custom tags for event organizers and bespoke box sets.</li>
-                </ul>
-            </div>
-
-            <div class="tech-card">
-                <h3>Rotary & Mixed-Media Fabrication</h3>
-                <p>Subtractive laser processing and multi-axis cylindrical detailing:</p>
-                <ul class="spec-list">
-                    <li><strong>Powder-Coated Tumblers & Glassware:</strong> Clean metal-exposed logos on steel tumblers and frosted finishes on custom event glassware.</li>
-                    <li><strong>Packaging Vessels & Tins:</strong> Direct surface monogramming on raw metallic candle and component boxes.</li>
-                    <li><strong>Layered Wood Art & Signage:</strong> Multi-ply structural portraits, local maps, and wood boards backed with full-color inkjet printing directly onto the grain.</li>
-                    <li><strong>Industrial Leather Blanks:</strong> Deeply etched wholesale leather hat patches and bag tags for regional organizations.</li>
-                </ul>
-            </div>
-        </div>
+        <h2 class="section-title">Smart Color Laser & Print-Cut Media</h2>
+        <ul class="item-list">
+            <li><strong>Temporary Tattoo Sheets:</strong> Full-color custom illustrations precision-sliced to unique outlines. Perfect for event promotion or high-tier Kickstarter backer levels.</li>
+            <li><strong>Die-Cut Sticker Packs:</strong> Themed, matching graphic sets delivered retail-ready in sealed packages.</li>
+            <li><strong>Printable Iron-On Transfers:</strong> Vibrant, high-resolution apparel graphics processed on specialty paper, ready to bond to garments.</li>
+            <li><strong>Custom Graphic Gift Tags:</strong> Intricately shaped and color-printed custom tags for custom packaging and events.</li>
+            <li><strong>Rotary & Mixed-Media Detailing:</strong> Clean metal-exposed engraving on stainless steel tumblers, custom-frosted event glassware, laser-etched leather patches, and multi-layered wood art backed with direct grain printing.</li>
+        </ul>
     </div>
 
-    <!-- SECTION 2: 3D PRINTING WORKFLOWS -->
     <div class="section-block">
-        <div class="section-header">// SYSTEM_02: MULTI-MATERIAL & ADVANCED 3D PRINTING</div>
-        <div class="tech-grid">
-            <div class="tech-card">
-                <h3>Snapmaker U1 (Toolchanger Core)</h3>
-                <p>4 independent physical toolheads optimized for multi-material scaling and custom hardware inserts:</p>
-                <ul class="spec-list">
-                    <li><strong>Embedded Magnets & Hardware:</strong> Non-magnetic brass nozzles allow us to pause prints and seal rare-earth magnets inside structures safely with zero pullout risk mid-print.</li>
-                    <li><strong>Dissimilar Material Pairing:</strong> Fuses rigid PETG frameworks to rubberized TPU grips or water-soluble PVA support lattices for scar-free mechanical surfaces.</li>
-                </ul>
-            </div>
-
-            <div class="tech-card">
-                <h3>Prusa Mark 4S (Abrasive Core)</h3>
-                <p>Dedicated exclusively to extreme single-material tolerances and destructive composite filaments:</p>
-                <ul class="spec-list">
-                    <li><strong>Armored Hardened Nozzle:</strong> Formulated to run aggressive materials like Glow-in-the-Dark polymers, Carbon Fiber fills, and metal-infused composites without nozzle erosion.</li>
-                    <li><strong>Mechanical Synchronization:</strong> High-precision manufacturing for interlocking components, gears, and structural casings.</li>
-                </ul>
-            </div>
-        </div>
+        <h2 class="section-title">Advanced Multi-Material 3D Printing</h2>
+        <ul class="item-list">
+            <li><strong>Snapmaker U1 (Toolchanger Core):</strong> Built for zero-waste multi-color files and multi-material pairing (like rigid PETG structural panels bonded to flexible TPU rubber grips). Non-magnetic brass nozzles allow us to pause prints mid-run and seal permanent rare-earth magnets cleanly inside components with zero pullout risk.</li>
+            <li><strong>Prusa Mark 4S (Abrasive Core):</strong> Dedicated exclusively to tight single-material tolerances and hostile composite filaments. Equipped with an armored hardened steel nozzle to process abrasive layers like Glow-in-the-Dark polymers, Carbon Fiber fills, and metal-infused matrices.</li>
+        </ul>
     </div>
 
-    <!-- SECTION 3: TEXTILES -->
     <div class="section-block">
-        <div class="section-header">// SYSTEM_03: APPAREL & TEXTILE CRAFTING</div>
-        <div class="tech-grid">
-            <div class="tech-card">
-                <h3>Cricut & Industrial Heat Press</h3>
-                <p>Textile embellishment and soft-goods branding to support product launches:</p>
-                <ul class="spec-list">
-                    <li><strong>Layered Premium Apparel:</strong> Multi-textured custom t-shirts, hoodies, and workshop aprons utilizing matte, flocked, and metallic HTV layouts.</li>
-                    <li><strong>Custom Component Pouches:</strong> Branded velvet, canvas, or felt drawstring storage sleeves to package our custom board games and desk gear.</li>
-                </ul>
-            </div>
-        </div>
+        <h2 class="section-title">Apparel & Textile Crafting</h2>
+        <ul class="item-list">
+            <li><strong>Layered Premium Apparel:</strong> High-end custom t-shirts, hoodies, and shop aprons using precision-cut matte, metallic, and flocked heat transfer vinyls (HTV).</li>
+            <li><strong>Custom Component Pouches:</strong> Branded velvet, canvas, or heavy felt storage sleeves to package our manufactured board games and desktop gear.</li>
+        </ul>
     </div>
 
-    <!-- SHOP POLICIES -->
     <div class="shop-status">
-        <h4>// BOUTIQUE STUDIO QUEUE NOTICE</h4>
-        <p>We do not use mass-market factory tooling. Every run is small-batch, hand-inspected, and calibrated for tight tolerances. Orders are locked into our active workshop schedule sequentially.</p>
-        <div class="queue-tag">Current Lead Time: [X] Weeks</div>
+        <h3>Boutique Studio Production</h3>
+        <p>We choose calibration over mass factory volume. Every project run is small-batch, hand-inspected, and locked into our workshop schedule sequentially.</p>
+        <p style="margin-top: 10px; font-weight: bold; color: #ffffff;">Current General Lead Time: [X] Weeks</p>
     </div>
 </div>
 
