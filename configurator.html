@@ -1,0 +1,29 @@
+<div class="wtl-configurator-card" style="background-color: #121214; border: 1px solid #4a4a4f; padding: 2rem; border-radius: 8px; color: #f4f4f6; max-width: 600px; margin: 0 auto; font-family: 'Inter', sans-serif;">
+    <h2 style="color: #9d4edd; margin-bottom: 1rem;">Project Inquiry & Intake</h2>
+    <form id="wtlIntakeForm">
+        <!-- Mandatory Fields -->
+        <div style="margin-bottom: 1.25rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email Address *</label>
+            <input type="email" name="clientEmail" required style="width: 100%; padding: 0.75rem; background-color: #1a1a1e; border: 1px solid #5a5a62; border-radius: 4px; color: #fff;">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Project Description *</label>
+            <textarea name="projectDesc" rows="4" required placeholder="Tell us what you're trying to build..." style="width: 100%; padding: 0.75rem; background-color: #1a1a1e; border: 1px solid #5a5a62; border-radius: 4px; color: #fff;"></textarea>
+        </div>
+
+        <!-- Optional Dropdown Details -->
+        <details style="margin-bottom: 1.5rem; background-color: #1a1a1e; padding: 0.75rem; border-radius: 4px; border: 1px solid #3a3a3e;">
+            <summary style="cursor: pointer; color: #c77dff; font-weight: 600;">Optional Specifications (Material, Budget, Timeline)</summary>
+            <div style="margin-top: 1rem;">
+                <label style="display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">Preferred Material / Medium</label>
+                <input type="text" name="optMaterial" placeholder="e.g., Basswood, PETG, Canvas, Leather" style="width: 100%; padding: 0.5rem; background-color: #121214; border: 1px solid #4a4a4f; border-radius: 4px; color: #fff; margin-bottom: 0.8rem;">
+                
+                <label style="display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">Target Timeline</label>
+                <input type="text" name="optTimeline" placeholder="e.g., 2 weeks, Flexible" style="width: 100%; padding: 0.5rem; background-color: #121214; border: 1px solid #4a4a4f; border-radius: 4px; color: #fff;">
+            </div>
+        </details>
+
+        <button type="submit" style="width: 100%; background-color: #7b2cbf; color: #fff; padding: 0.75rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Submit Project Request</button>
+    </form>
+</div>
