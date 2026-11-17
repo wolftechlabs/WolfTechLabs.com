@@ -235,7 +235,7 @@
         /* Inputs & Controls */
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
             gap: 16px;
         }
 
@@ -307,7 +307,7 @@
         .equip-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; list-style: none; }
         .equip-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid rgba(182,102,210,0.5); border-radius: 6px; background: rgba(6,4,12,0.9); color: var(--highlight); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; }
         a.equip-btn:hover { border-color: var(--highlight); color: #ffffff; box-shadow: 0 0 10px var(--wolf-glow); }
-        .equip-btn.plain { cursor: default; color: var(--text-color); border-color: rgba(48,54,61,0.9); }
+        .equip-btn.plain { cursor: default; color: var(--text-color); border-color: transparent; background: transparent; }
         .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
         .affiliate-note { font-size: 0.8rem; opacity: 0.75; margin-top: 8px; letter-spacing: 0.02em; }
         .swatch-chip { position: relative; }
@@ -323,7 +323,10 @@
         .swatch-pop-title { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--highlight); margin-bottom: 8px; }
         .swatch-pop-grid { display: flex; flex-wrap: wrap; gap: 8px; }
         .swatch-opt { width: 30px; height: 30px; border-radius: 4px; border: 1px solid #30363d; cursor: pointer; padding: 0; }
-        .swatch-opt:hover, .swatch-opt:focus-visible { border-color: #fff; box-shadow: 0 0 8px var(--highlight); outline: none; }
+        .swatch-opt:hover { border-color: #fff; box-shadow: 0 0 8px var(--highlight); }
+        .swatch-opt:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+        .swatch-opt.on { position: relative; }
+        .swatch-opt.on::after { content: '\2713'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 5px #000; }
         .swatch-opt.on { border: 2px solid #fff; }
         /* ---- Themed dropdowns (replace the phone's default menus) ---- */
         .dd { position: relative; width: 100%; }
@@ -341,6 +344,10 @@
         .dd-opt:hover, .dd-opt:focus-visible { background: rgba(57,0,57,0.55); color: #fff; outline: none; }
         .dd-opt[aria-selected="true"] { background: rgba(57,0,57,0.85); color: #fff; box-shadow: inset 3px 0 0 var(--highlight); }
         .swatch-pop-done { display: none; width: 100%; margin-top: 12px; padding: 12px; background: var(--wolf-purple); border: 1px solid var(--highlight); border-radius: 6px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 0.12em; cursor: pointer; }
+        #modal-summary, .queue-table td { overflow-wrap: anywhere; }
+        .qty-msg { color: #ffb3b3; font-size: 0.85rem; min-height: 1.2em; margin-top: 6px; }
+        @media (max-width: 360px) { .input-grid { grid-template-columns: 1fr; } .card-header { flex-wrap: wrap; gap: 8px; } .dd, .field-group, .chip { min-width: 0; } .top-bar-controls { flex-wrap: wrap; gap: 8px; } .audio-pill, .nav-back-link { white-space: nowrap; } }
+        @media (pointer: coarse) { .swatch-chip { min-width: 36px; min-height: 36px; } }
         @media (max-width: 600px) {
             .construction-note { position: static; margin: 0 auto 12px; text-align: center; max-width: 100%; }
             .swatch-pop { position: fixed !important; left: 10px !important; right: 10px !important; top: auto !important; bottom: 10px; width: auto; max-width: none; max-height: 62vh; overflow-y: auto; z-index: 200; padding: 14px; }
@@ -554,7 +561,7 @@
         /* ===== HOME SECTIONS (below the inquiry form) ===== */
         .home-section { max-width: 860px; width: 100%; margin-top: 40px; }
         .home-section > h2 { font-size: 1.3rem; margin-bottom: 18px; }
-        .what-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .what-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px; }
         .what-grid .card h3 { text-align: left; font-size: 1.05rem; }
         .what-grid .card p { font-size: 1rem; line-height: 1.4; }
         .make-list { display: flex; flex-direction: column; gap: 14px; }
@@ -673,7 +680,8 @@
                 <!-- Quantity -->
                 <div class="field-group">
                     <label class="field-label" for="inp-qty">QUANTITY / UNITS</label>
-                    <input type="number" id="inp-qty" class="custom-input" min="1" max="500" value="1">
+                    <input type="number" id="inp-qty" class="custom-input" min="1" max="500" step="1" value="1" onfocus="this.select()">
+                    <div class="qty-msg" id="qty-msg" role="status" aria-live="polite"></div>
                 </div>
 
                 <!-- Material Sourcing -->
@@ -753,7 +761,7 @@
 
                     <div class="field-group">
                         <label class="field-label" for="cust-email">CONTACT EMAIL</label>
-                        <input type="email" id="cust-email" class="custom-input" placeholder="you@example.com" required maxlength="120" autocomplete="email">
+                        <input type="email" id="cust-email" class="custom-input" placeholder="you@example.com" required maxlength="120" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" title="Please enter a full email address, like you@example.com" autocomplete="email">
                     </div>
 
                     <div class="field-group" style="grid-column: 1 / -1;">
@@ -1130,18 +1138,24 @@
                 nt.textContent = c.note;
                 pop.appendChild(nt);
             }
-            const host = document.getElementById('swatch-ribbon').parentNode;
             const done = document.createElement('button'); done.type = 'button'; done.className = 'swatch-pop-done'; done.textContent = 'DONE';
             done.onclick = () => { closeSwatchPop(); playPip(); };
             pop.appendChild(done);
-            host.style.position = 'relative';
-            host.appendChild(pop);
-            pop.style.left = Math.max(0, Math.min(chip.offsetLeft, host.clientWidth - 260)) + 'px';
-            pop.style.top = (chip.offsetTop + chip.offsetHeight + 8) + 'px';
+            document.body.appendChild(pop);
+            if (window.innerWidth > 600) {
+                const r = chip.getBoundingClientRect();
+                const w = pop.offsetWidth || 250;
+                pop.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 8)) + 'px';
+                pop.style.top = (r.bottom + window.scrollY + 8) + 'px';
+            }
+            pop._chip = chip;
+            pop.addEventListener('focusout', (ev) => {
+                if (ev.relatedTarget && !pop.contains(ev.relatedTarget)) closeSwatchPop();
+            });
             const f = pop.querySelector('.swatch-opt'); if (f) f.focus();
         }
         document.addEventListener('click', closeSwatchPop);
-        document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeSwatchPop(); });
+        document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') { const p = document.getElementById('swatch-pop'); const c = p && p._chip; closeSwatchPop(); if (c && document.body.contains(c)) { try { c.focus(); } catch (e) {} } } });
 
 
         /* Themed dropdowns. The real <select> stays in the page (hidden) so the form logic is unchanged. */
@@ -1209,6 +1223,8 @@
 
         /* 4. Multi-Item Order Queue */
         let bundleQueue = [];
+        let queueIdCounter = 0;
+        function setQtyMsg(t) { const el = document.getElementById('qty-msg'); if (el) el.textContent = t || ''; }
 
         function esc(v) {
             return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -1217,15 +1233,24 @@
         function addItemToQueue() {
             playThump();
             const item = document.getElementById('sel-item').value;
-            const qty = Math.min(500, Math.max(1, parseInt(document.getElementById('inp-qty').value) || 1));
-            if (bundleQueue.length >= 25) { setColorMsg('That is the most items one inquiry can hold (25). Please send this one first, then start another.'); return; }
+            const qtyEl = document.getElementById('inp-qty');
+            const qtyRaw = Number(String(qtyEl.value).trim());
+            setQtyMsg('');
+            if (!Number.isInteger(qtyRaw) || qtyRaw < 1 || qtyRaw > 500) {
+                qtyEl.value = (Number.isFinite(qtyRaw) && qtyRaw > 500) ? 500 : 1;
+                setQtyMsg('Quantity must be a whole number from 1 to 500. Need more than 500? Say so in the notes. We changed it to ' + qtyEl.value + ' - check it, then press Add again.');
+                qtyEl.focus();
+                return;
+            }
+            const qty = qtyRaw;
+            if (bundleQueue.length >= 25) { setQtyMsg('That is the most items one inquiry can hold (25). Please send this one first, then start another.'); return; }
             const sourcing = document.getElementById('sel-sourcing').value;
             const build = document.getElementById('sel-build').value;
             const notes = document.getElementById('inp-item-notes').value.trim();
-            if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); return; }
+            if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); try { document.getElementById('swatch-ribbon').scrollIntoView({ block: 'center' }); } catch (e) {} return; }
 
             bundleQueue.push({
-                id: Date.now(),
+                id: ++queueIdCounter,
                 item,
                 color: colorString(),
                 qty,
@@ -1235,13 +1260,25 @@
             });
 
             document.getElementById('inp-item-notes').value = '';
+            /* Clear the choices so the next item starts fresh (nothing carries over by accident) */
+            selectedColors = [];
+            renderSelected();
+            qtyEl.value = 1;
+            document.getElementById('sel-build').value = 'Assembled';
+            try { document.getElementById('sel-build').dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+            setColorMsg('');
+            setQtyMsg('Item added. Colors, quantity and build format were reset for the next item.');
+            closeSwatchPop();
             renderQueue();
         }
 
         function removeItemFromQueue(id) {
             playPip();
             bundleQueue = bundleQueue.filter(i => i.id !== id);
+            setQtyMsg('');
             renderQueue();
+            const nextBtn = document.querySelector('#queue-tbody .remove-btn') || document.getElementById('submit-btn');
+            try { nextBtn.focus(); } catch (e) {}
         }
 
         function renderQueue() {
@@ -1280,14 +1317,23 @@
             m.style.display = text ? 'block' : 'none';
         }
 
+        let submitting = false;
         async function submitInquiry(e) {
             e.preventDefault();
             showFormMsg('');
             if (document.getElementById('botcheck').checked) return;
-            if (bundleQueue.length === 0) {
+            if (submitting || document.getElementById('confirmation-modal').style.display === 'flex') return;
+            const nameEl = document.getElementById('cust-name');
+            if (!nameEl.value.trim()) { showFormMsg('Please type your name.'); nameEl.focus(); return; }
+            if (bundleQueue.length === 0 && catalogOk) {
                 showFormMsg('Please add at least one item to your inquiry bundle before sending.');
                 return;
             }
+            if (bundleQueue.length === 0 && !document.getElementById('cust-notes').value.trim()) {
+                showFormMsg('Please describe your project in the notes box before sending.');
+                return;
+            }
+            submitting = true;
 
             playThump();
             const orderId = 'WFL-' + Date.now().toString().slice(-6);
@@ -1303,7 +1349,7 @@ TARGET DELIVERY BUFFER: 14 DAYS
 SCOPE: SEE BUILD FORMAT ON EACH ITEM
 ================================================================================
 INQUIRY ITEMS:
-${bundleQueue.map((item, idx) => `
+${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes below)\n'}${bundleQueue.map((item, idx) => `
 [ITEM ${idx + 1}]
 - Spec: ${item.item}
 - Color/Material: ${item.color}
@@ -1338,18 +1384,27 @@ ${notes}
                 const data = await res.json();
                 if (!res.ok || !data.success) throw new Error(data.message || 'Send failed');
 
+                const sent = bundleQueue.slice();
                 document.getElementById('modal-order-id').innerText = orderId;
+                document.getElementById('modal-order-id').style.whiteSpace = 'nowrap';
                 document.getElementById('modal-summary').innerHTML = `
                     <strong>CONTACT:</strong> ${esc(name)} (${esc(email)})<br>
-                    <strong>ITEMS IN BUNDLE:</strong> ${bundleQueue.length}<br>
+                    <strong>ITEMS IN BUNDLE:</strong> ${sent.length}<br>
                     <strong>LEAD TIME:</strong> Flat 14 Days<br><br>
-                    ${bundleQueue.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] (${esc(i.build)})`).join('<br>')}
+                    ${sent.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] - ${esc(i.build)}`).join('<br>')}
                 `;
+                /* Clear the form right away so nothing can be sent twice while the receipt is open */
+                bundleQueue = [];
+                renderQueue();
+                document.getElementById('inquiry-form').reset();
+                setQtyMsg('');
+                lockPage(true);
                 document.getElementById('confirmation-modal').style.display = 'flex';
                 try { document.querySelector('#confirmation-modal .btn').focus(); } catch (e) {}
             } catch (err) {
                 showFormMsg('Your inquiry could not be sent. Please check your connection and try again.');
             } finally {
+                submitting = false;
                 btn.disabled = false;
                 btn.textContent = btnLabel;
             }
@@ -1359,10 +1414,15 @@ ${notes}
 
         function closeModal() {
             document.getElementById('confirmation-modal').style.display = 'none';
-            try { document.getElementById('submit-btn').focus(); } catch (e) {}
-            bundleQueue = [];
-            renderQueue();
-            document.getElementById('inquiry-form').reset();
+            lockPage(false);
+            try { const nm = document.getElementById('cust-name'); nm.focus(); nm.scrollIntoView({ block: 'center' }); } catch (e) {}
+        }
+        /* While the receipt is open, nothing behind it can be reached by keyboard or screen reader */
+        function lockPage(on) {
+            Array.from(document.body.children).forEach(el => {
+                if (el.id === 'confirmation-modal' || el.tagName === 'SCRIPT') return;
+                if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+            });
         }
 
         // Initialize on Load

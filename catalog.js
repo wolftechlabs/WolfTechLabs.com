@@ -1,13 +1,13 @@
 /* ==========================================================================
    WolfTechLabs PRODUCT CATALOG  (catalog.js)
    This is the ONLY file you edit to change what the inquiry form offers.
-   The form (contact.html) reads it automatically. No form code to touch.
+   The form (index.html) reads it automatically. No form code to touch.
 
    HOW TO ADD A NEW MACHINE
    1. Copy the "NEW MACHINE TEMPLATE" block at the bottom of this list.
    2. Paste it just before the closing ] of "machines".
    3. Change the id, name, palette and items. Keep the commas and quotes.
-   4. Save. Reload contact.html to check it.
+   4. Save. Reload index.html to check it.
 
    HOW TO ADD A PRODUCT   -> add one line of text inside a group's "items".
    HOW TO ADD A SECTION   -> copy a { label: ..., items: [...] } block in "groups".
@@ -29,7 +29,7 @@ window.WTL_CATALOG = {
        available: false  hides a choice (e.g. things your laser cannot cut yet).
        Change false to true when you get a laser that can cut them. */
     laserMaterials: [
-      { name: 'Wood', kind: 'wood', match: ['wood','plywood','basswood'], hex: '#D2B48C', options: [
+      { name: 'Wood', kind: 'wood', match: ['wood','plywood','basswood','wooden','cutting board','serving tray','spoon','picture frame','engraved frame','phone stand'], hex: '#D2B48C', options: [
         { name: 'Basswood', hex: '#D2B48C' },
         { name: 'Birch Plywood', hex: '#E3C9A0' },
         { name: 'Maple', hex: '#E8D3A9' },
