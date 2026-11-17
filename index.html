@@ -302,11 +302,14 @@
 
 
         .machine-line { grid-column: 1 / -1; font-size: 0.95rem; letter-spacing: 0.04em; margin-top: -4px; }
-        .machine-line a, .equip-list a { color: var(--highlight); text-decoration: underline; }
-        .machine-line a:hover, .equip-list a:hover { color: #ffffff; }
+        .machines-notice { width: 100%; max-width: 860px; margin: 40px auto 0; text-align: center; font-size: 0.9rem; color: var(--text-color); opacity: 0.9; }
+        .machines-intro { margin-bottom: 12px; }
+        .equip-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; list-style: none; }
+        .equip-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid rgba(182,102,210,0.5); border-radius: 6px; background: rgba(6,4,12,0.9); color: var(--highlight); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; }
+        a.equip-btn:hover { border-color: var(--highlight); color: #ffffff; box-shadow: 0 0 10px var(--wolf-glow); }
+        .equip-btn.plain { cursor: default; color: var(--text-color); border-color: rgba(48,54,61,0.9); }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
         .affiliate-note { font-size: 0.8rem; opacity: 0.75; margin-top: 8px; letter-spacing: 0.02em; }
-        .equip-list { list-style: none; display: grid; gap: 8px; padding: 0; margin: 0; }
-        .equip-list li { border-left: 3px solid var(--highlight); padding: 4px 10px; }
         .swatch-chip { position: relative; }
         .swatch-ribbon.labeled { gap: 8px 26px; padding-bottom: 20px; }
         .swatch-chip .lbl { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; letter-spacing: 0.04em; white-space: nowrap; color: var(--text-color); pointer-events: none; }
@@ -773,13 +776,6 @@
             </form>
         </div>
 
-        <!-- Equipment list (filled from catalog.js) -->
-        <div class="card" id="equip-card" style="display:none;">
-            <div class="card-header"><h3>OUR EQUIPMENT</h3></div>
-            <ul class="equip-list" id="equip-list"></ul>
-            <p class="affiliate-note" id="equip-note" style="display:none;"></p>
-        </div>
-
     </div>
 
     <section class="home-section" id="what-we-do">
@@ -794,12 +790,12 @@
     <section class="home-section" id="what-we-make">
         <h2>WHAT WE MAKE</h2>
         <div class="make-list">
-            <details><summary>Industrial Tool-Changing Execution (Snapmaker U1)</summary><ul><li><strong>Encapsulated Magnetic Hardware</strong><span>Seamless insertion of rare-earth magnets inside solid plastic parts mid-print. Perfect for magnetic tool racks, quick-release mounting brackets, and snapping mechanical enclosures without any nozzle attraction interference.</span></li><li><strong>Overmolded Compliant Grips</strong><span>Direct multi-material fabrication combining a rock-solid structural core with soft, rubberized TPU outer skins. Ideal for custom hand grips, impact-resistant bumpers, and non-slip assistive utility designs.</span></li><li><strong>Complex Dissolvable Geometries</strong><span>Printing internal fluid channels, zero-clearance ball joints, and ultra-smooth internal screw threads utilizing dedicated soluble support modules that completely wash away in water.</span></li><li><strong>Heavy Workshop Tooling & Jigs</strong><span>Heavy-duty structural organizers, drill alignment guides, custom routing templates, and industrial component frames engineered out of chemical-resistant ABS and ASA.</span></li></ul></details>
-            <details><summary>High-Precision Multi-Material Crafting (Prusa MK4S)</summary><ul><li><strong>Custom Tabletop Gaming Elements</strong><span>High-detail multi-color board game components, resource tracking tokens, complex multi-toned tiles, and modular terrain pieces matched to explicit tolerances.</span></li><li><strong>Technical Composite Prints</strong><span>Rigid engineering parts, replacement mechanical gears, and high-wear cosmetic shields utilizing abrasive carbon fiber lines via a dedicated hardened steel nozzle system.</span></li><li><strong>Aesthetic Desk Sculptures</strong><span>Flawless, multi-filament switching for striking articulating dragons, geometric display pieces, and custom high-contrast interior decorative art lines.</span></li></ul></details>
-            <details><summary>Inline CMYK Print & Cut (xTool M2)</summary><ul><li><strong>Custom Sticker Sheets</strong><span>Precision laser kiss-cutting for personalized decorative sheets.</span></li><li><strong>Die-Cut Sticker Packs</strong><span>Deep outline contour cutting for custom theme packs securely sealed in-house.</span></li><li><strong>Printable Iron-On Transfer Decals</strong><span>Full-color customized apparel graphics prepared for client application.</span></li><li><strong>Print & Cut Gift Tags</strong><span>Custom-shaped, color-matched accent tags tailored for wedding and event planners.</span></li><li><strong>Temporary Tattoo Sheets</strong><span>Clean-cut custom full-color temporary body art perfect for event parties and corporate branding.</span></li></ul></details>
-            <details><summary>Cylindrical Rotary Processing (xTool M2)</summary><ul><li><strong>Powder-Coated Tumblers</strong><span>Permanent clean-etched graphics, monograms, and custom name branding.</span></li><li><strong>Champagne Flutes & Wine Glasses</strong><span>Frosted engraving effects on transparent glass surfaces utilizing specialized marking sprays.</span></li><li><strong>Candle Tins & Vessels</strong><span>Branded metal container customization and deep packaging etching for boutique manufacturers.</span></li><li><strong>Personalized Embossed Rolling Pins</strong><span>Deep-etched continuous repeating patterns on solid wood for baking and unique wall display pieces.</span></li></ul></details>
-            <details><summary>20W Diode Flatbed Fabrication (xTool M2)</summary><ul><li><strong>Custom Wood/Acrylic Keychains</strong><span>Blending precise inline color printing layouts over durable, high-speed laser-cut shapes.</span></li><li><strong>Felt Ornaments & Layered Decorations</strong><span>High-volume seasonal decorations and scrapbooking sets cut cleanly at extreme speeds.</span></li><li><strong>Leather Hat Patches</strong><span>Deep-burned high-contrast branding patches for apparel lines, local businesses, and sports teams with rapid 20W execution.</span></li><li><strong>Personalized Wood Signs</strong><span>High-power, clean-cut home accent signs and custom housewarming gifts.</span></li><li><strong>Layered Wood Portraits</strong><span>Multi-layered 3D relief art pieces, stylized pet illustrations, and clean landscape maps cut with heavy output efficiency.</span></li><li><strong>Engraved Slate Coasters</strong><span>High-contrast dark slate deep etching for premium hospitality gift sets and custom kitchen displays.</span></li></ul></details>
-            <details><summary>Precision Mechanical Cutting (Cricut)</summary><ul><li><strong>Apparel Heat-Press Graphics</strong><span>Sharp, fine-line vinyl decals, numbers, and lettering for customized t-shirts, activewear, and canvas tote bags.</span></li><li><strong>Custom Paint Stencils & Masks</strong><span>Low-tack adhesive vinyl masking templates for laying down crisp paint lines on wood signs, sheet metal, and custom enclosures.</span></li><li><strong>Intricate Paper Crafts & Cards</strong><span>Precision geometric cutouts, structural custom packaging gift boxes, and unique themed event invitations.</span></li><li><strong>Permanent Outdoor Decals</strong><span>High-durability weather-resistant window stickers, vehicle glass graphics, and commercial storefront labels.</span></li></ul></details>
+            <details><summary>Multi-Color 3D Printing</summary><ul><li><strong>Encapsulated Magnetic Hardware</strong><span>Seamless insertion of rare-earth magnets inside solid plastic parts mid-print. Perfect for magnetic tool racks, quick-release mounting brackets, and snapping mechanical enclosures without any nozzle attraction interference.</span></li><li><strong>Overmolded Compliant Grips</strong><span>Direct multi-material fabrication combining a rock-solid structural core with soft, rubberized TPU outer skins. Ideal for custom hand grips, impact-resistant bumpers, and non-slip assistive utility designs.</span></li><li><strong>Complex Dissolvable Geometries</strong><span>Printing internal fluid channels, zero-clearance ball joints, and ultra-smooth internal screw threads utilizing dedicated soluble support modules that completely wash away in water.</span></li><li><strong>Heavy Workshop Tooling & Jigs</strong><span>Heavy-duty structural organizers, drill alignment guides, custom routing templates, and industrial component frames engineered out of chemical-resistant ABS and ASA.</span></li></ul></details>
+            <details><summary>High-Precision Multi-Material Crafting</summary><ul><li><strong>Custom Tabletop Gaming Elements</strong><span>High-detail multi-color board game components, resource tracking tokens, complex multi-toned tiles, and modular terrain pieces matched to explicit tolerances.</span></li><li><strong>Technical Composite Prints</strong><span>Rigid engineering parts, replacement mechanical gears, and high-wear cosmetic shields utilizing abrasive carbon fiber lines via a dedicated hardened steel nozzle system.</span></li><li><strong>Aesthetic Desk Sculptures</strong><span>Flawless, multi-filament switching for striking articulating dragons, geometric display pieces, and custom high-contrast interior decorative art lines.</span></li></ul></details>
+            <details><summary>Stickers, Cards & Transfers</summary><ul><li><strong>Custom Sticker Sheets</strong><span>Precision laser kiss-cutting for personalized decorative sheets.</span></li><li><strong>Die-Cut Sticker Packs</strong><span>Deep outline contour cutting for custom theme packs securely sealed in-house.</span></li><li><strong>Printable Iron-On Transfer Decals</strong><span>Full-color customized apparel graphics prepared for client application.</span></li><li><strong>Print & Cut Gift Tags</strong><span>Custom-shaped, color-matched accent tags tailored for wedding and event planners.</span></li><li><strong>Temporary Tattoo Sheets</strong><span>Clean-cut custom full-color temporary body art perfect for event parties and corporate branding.</span></li></ul></details>
+            <details><summary>Drinkware & Round Items</summary><ul><li><strong>Powder-Coated Tumblers</strong><span>Permanent clean-etched graphics, monograms, and custom name branding.</span></li><li><strong>Champagne Flutes & Wine Glasses</strong><span>Frosted engraving effects on transparent glass surfaces utilizing specialized marking sprays.</span></li><li><strong>Candle Tins & Vessels</strong><span>Branded metal container customization and deep packaging etching for boutique manufacturers.</span></li><li><strong>Personalized Embossed Rolling Pins</strong><span>Deep-etched continuous repeating patterns on solid wood for baking and unique wall display pieces.</span></li></ul></details>
+            <details><summary>Laser Cut & Engrave</summary><ul><li><strong>Custom Wood/Acrylic Keychains</strong><span>Blending precise inline color printing layouts over durable, high-speed laser-cut shapes.</span></li><li><strong>Felt Ornaments & Layered Decorations</strong><span>High-volume seasonal decorations and scrapbooking sets cut cleanly at extreme speeds.</span></li><li><strong>Leather Hat Patches</strong><span>Deep-burned high-contrast branding patches for apparel lines, local businesses, and sports teams.</span></li><li><strong>Personalized Wood Signs</strong><span>High-power, clean-cut home accent signs and custom housewarming gifts.</span></li><li><strong>Layered Wood Portraits</strong><span>Multi-layered 3D relief art pieces, stylized pet illustrations, and clean landscape maps cut with heavy output efficiency.</span></li><li><strong>Engraved Slate Coasters</strong><span>High-contrast dark slate deep etching for premium hospitality gift sets and custom kitchen displays.</span></li></ul></details>
+            <details><summary>Vinyl, Apparel & Paper Cutting</summary><ul><li><strong>Apparel Heat-Press Graphics</strong><span>Sharp, fine-line vinyl decals, numbers, and lettering for customized t-shirts, activewear, and canvas tote bags.</span></li><li><strong>Custom Paint Stencils & Masks</strong><span>Low-tack adhesive vinyl masking templates for laying down crisp paint lines on wood signs, sheet metal, and custom enclosures.</span></li><li><strong>Intricate Paper Crafts & Cards</strong><span>Precision geometric cutouts, structural custom packaging gift boxes, and unique themed event invitations.</span></li><li><strong>Permanent Outdoor Decals</strong><span>High-durability weather-resistant window stickers, vehicle glass graphics, and commercial storefront labels.</span></li></ul></details>
         </div>
         <div class="cta-row"><a href="#inquiry">&uarr; START A PROJECT INQUIRY</a></div>
     </section>
@@ -818,6 +814,13 @@
             <button type="button" class="btn" style="margin-top: 0;" onclick="closeModal()">CLOSE RECEIPT</button>
         </div>
     </div>
+
+    <!-- Small machines notice at the very bottom (filled from catalog.js) -->
+    <section class="machines-notice" id="equip-card" style="display:none;">
+        <p class="machines-intro">Our items are made on these machines. Curious? Take a look.</p>
+        <div class="equip-list" id="equip-list"></div>
+        <p class="affiliate-note" id="equip-note" style="display:none;"></p>
+    </section>
 
     <footer>
         WolfTechLabs // Precision Digital Fabrication &amp; Engineering // Baltimore, MD
@@ -935,12 +938,12 @@
         function equipHtml(e, long) {
             const label = esc(long ? e.name : (e.short || e.name));
             const url = safeUrl(e.url);
-            return url ? `<a href="${esc(url)}" target="_blank" rel="sponsored noopener noreferrer">${label}</a>` : label;
+            return url ? `<a class="equip-btn" href="${esc(url)}" target="_blank" rel="sponsored noopener noreferrer">${label} <span class="sr-only">(opens in a new tab)</span></a>` : `<span class="equip-btn plain">${label}</span>`;
         }
         function renderEquipment() {
             const cat = window.WTL_CATALOG;
             if (!cat || !Array.isArray(cat.equipment) || !cat.equipment.length) return;
-            document.getElementById('equip-list').innerHTML = cat.equipment.map(e => `<li>${equipHtml(e, true)}</li>`).join('');
+            document.getElementById('equip-list').innerHTML = cat.equipment.map(e => equipHtml(e, false)).join('');
             document.getElementById('equip-card').style.display = '';
             const any = cat.equipment.some(e => safeUrl(e.url));
             const note = document.getElementById('equip-note');
@@ -952,8 +955,8 @@
             const cat = window.WTL_CATALOG;
             const m = cat && Array.isArray(cat.machines) ? cat.machines.find(x => x.id === catKey) : null;
             const e = m && m.equipment && Array.isArray(cat.equipment) ? cat.equipment.find(x => x.id === m.equipment) : null;
-            line.innerHTML = e ? 'MADE ON: ' + equipHtml(e, false) : '';
-            if (e && safeUrl(e.url) && cat.affiliateNote) {
+            line.innerHTML = '';
+            if (false) {
                 const n = document.createElement('div'); n.className = 'affiliate-note'; n.textContent = cat.affiliateNote; line.appendChild(n);
             }
         }

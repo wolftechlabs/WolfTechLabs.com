@@ -341,7 +341,7 @@ window.WTL_CATALOG = {
      below is filled in. Edit the words here if you want to change them. */
   affiliateNote: 'Some machine links are affiliate links. If you buy through them, WolfTechLabs may earn a commission at no extra cost to you.',
 
-  /* YOUR MACHINES. Shown on the form ("Made on ..." and the equipment list).
+  /* YOUR MACHINES. Shown only in the small notice at the very bottom of the page (names plain, or as buttons once a link is added).
      To add an affiliate link: paste it between the quotes in  url: ''
      Leave  url: ''  empty and the name shows as plain text (no link).
      To add a new machine: copy one block, change id and name.
@@ -359,7 +359,7 @@ window.WTL_CATALOG = {
     {
       id: "xtool-flatbed",
       equipment: "xtool-m2",
-      name: "xTool M2 20W: Flatbed Laser Cut & Engrave",
+      name: "Laser Cut & Engrave",
       active: true,
       palette: "laserMaterials",
       namedPalette: "specialtyMaterials",
@@ -469,7 +469,7 @@ window.WTL_CATALOG = {
     {
       id: "xtool-rotary",
       equipment: "xtool-m2",
-      name: "xTool M2 Rotary: Drinkware & Round Items (360\u00b0 Etch)",
+      name: "Drinkware & Round Items (360\u00b0 Etch)",
       active: true,
       palette: ["drinkware", "drinkwareColors"],
       namedPalette: "specialtyMaterials",
@@ -520,7 +520,7 @@ window.WTL_CATALOG = {
     {
       id: "xtool-print-cut",
       equipment: "xtool-m2",
-      name: "xTool M2 Inline Print & Cut: Stickers, Cards & Transfers",
+      name: "Stickers, Cards & Transfers (Print & Cut)",
       active: true,
       palette: "printAndCut",
       namedPalette: "feltLeather",
@@ -568,14 +568,14 @@ window.WTL_CATALOG = {
     {
       id: "snapmaker-u1",
       equipment: "snapmaker-u1",
-      name: "Snapmaker U1: Multi-Color & Multi-Material 3D Printing",
+      name: "Multi-Color & Multi-Material 3D Printing",
       active: true,
       palette: "filaments",
       groups: [
         {
           label: "Gaming & Hobby",
           items: [
-          "Snapmaker Multi-Color Tabletop Gaming Terrain",
+          "Multi-Color Tabletop Gaming Terrain",
           "Custom Multi-Color Miniatures",
           "Dice Towers, Trays & Vaults",
           "Cosplay Props & Accessories",
@@ -632,7 +632,7 @@ window.WTL_CATALOG = {
     {
       id: "prusa-mk4s",
       equipment: "prusa-mk4s",
-      name: "Prusa MK4S (MMU3): Technical, Abrasive & Multi-Color Prints",
+      name: "Technical, Abrasive & Multi-Color 3D Prints",
       active: true,
       palette: "filaments",
       groups: [
@@ -652,7 +652,7 @@ window.WTL_CATALOG = {
           items: [
           "Aesthetic Desk Sculpture",
           "Glow-in-the-Dark or Metallic Display Piece",
-          "Multi-Color Logo or Name Sign (MMU3)",
+          "Multi-Color Logo or Name Sign",
           "Vases, Planters & Home Decor",
           "Wall Art & Hooks"
           ]
@@ -680,7 +680,7 @@ window.WTL_CATALOG = {
     {
       id: "cricut",
       equipment: "cricut",
-      name: "Cricut & Heat Press: Apparel, Vinyl, Stencils & Paper",
+      name: "Apparel, Vinyl, Stencils & Paper (Heat Press)",
       active: true,
       palette: "vinylAndFabric",
       namedPalette: ["specialtyMaterials", "feltLeather"],
@@ -696,7 +696,7 @@ window.WTL_CATALOG = {
           "Hats & Caps (Heat-Press Vinyl)",
           "Aprons & Kitchen Towels",
           "Printable Iron-On Full-Color Decals",
-          "Infusible Ink Shirts, Totes & Coasters"
+          "Full-Color Transfer Shirts, Totes & Coasters"
           ]
         },
         {
