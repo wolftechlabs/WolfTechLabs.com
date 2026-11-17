@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | WolfTechLabs</title>
+    <title>WolfTechLabs | Project Inquiry & Order Intake</title>
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -21,6 +21,12 @@
             --highlight: #b666d2; 
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -30,114 +36,1114 @@
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
+            position: relative;
+            min-height: 100vh;
         }
 
+        /* Splash Screen Banner */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            cursor: pointer;
+        }
+
+        #splash-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px var(--wolf-glow);
+        }
+
+        .splash-title span {
+            color: var(--highlight);
+        }
+
+        .splash-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            color: var(--text-color);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Top Corner Controls */
+        .top-bar-controls {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .audio-pill {
+            font-size: 0.75rem;
+            color: var(--text-color);
+            background: rgba(57, 0, 57, 0.2);
+            padding: 6px 12px;
+            border: 1px solid var(--wolf-purple);
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .audio-pill:hover {
+            border-color: var(--highlight);
+            color: #ffffff;
+            box-shadow: 0 0 10px var(--wolf-glow);
+        }
+
+        .audio-led {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 6px #10B981;
+        }
+
+        .audio-led.off {
+            background: #6B7280;
+            box-shadow: none;
+        }
+
+        .nav-back-link {
+            font-size: 0.75rem;
+            color: var(--text-color);
+            background: rgba(57, 0, 57, 0.2);
+            padding: 6px 12px;
+            border: 1px solid var(--wolf-purple);
+            border-radius: 4px;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.2s;
+        }
+
+        .nav-back-link:hover {
+            border-color: var(--highlight);
+            color: #ffffff;
+            box-shadow: 0 0 10px var(--wolf-glow);
+        }
+
+        /* Logo & Header */
         .logo-container img {
             width: 100%;
-            max-width: 180px;
+            max-width: 220px;
             height: auto;
-            filter: drop-shadow(0 0 10px var(--wolf-glow));
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            display: block;
+            filter: drop-shadow(0 0 15px var(--wolf-glow));
+            margin-bottom: 15px;
         }
 
-        .logo-container img:hover {
-            transform: scale(1.05);
-        }
-
-        h1 { 
-            font-family: 'Orbitron', sans-serif;
+        h1, h2, h3 { 
+            font-family: 'Orbitron', sans-serif !important;
             color: #ffffff; 
-            margin-bottom: 30px; 
+            margin-bottom: 10px; 
             letter-spacing: 2px;
-            font-size: 2rem;
+            text-align: center;
         }
 
+        h1 { font-size: 2.2rem; }
+        
+        .tagline { 
+            font-family: 'Orbitron', sans-serif;
+            color: var(--highlight); 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            margin-bottom: 35px; 
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        /* Form Container & Cards */
         .form-container {
+            max-width: 860px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
             background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 550px;
-            border: 2px solid var(--wolf-purple);
-            box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            margin: 12px 0;
-            background: var(--bg-color);
+            padding: 25px;
+            border-radius: 12px;
             border: 1px solid #30363d;
-            color: white;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
+            transition: all 0.3s ease;
         }
 
-        input:focus, textarea:focus {
+        .card:hover {
+            border-color: var(--highlight);
+            box-shadow: 0 0 15px var(--wolf-glow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--wolf-purple);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            color: var(--highlight);
+            font-size: 1.1rem;
+            margin: 0;
+            text-align: left;
+        }
+
+        .chip {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: #ffffff;
+            background: rgba(57, 0, 57, 0.4);
+            border: 1px solid var(--highlight);
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* Inputs & Controls */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-color);
+            letter-spacing: 1px;
+        }
+
+        .custom-select, .custom-input, .custom-textarea {
+            background: #020203;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            color: #ffffff;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .custom-select:focus, .custom-input:focus, .custom-textarea:focus {
             border-color: var(--highlight);
             box-shadow: 0 0 8px var(--wolf-glow);
         }
 
-        button {
-            width: 100%;
-            padding: 18px;
-            background-color: var(--wolf-purple);
-            color: white;
-            border: 1px solid var(--highlight);
-            border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
+        /* Single-Row Compact Swatch Ribbon */
+        .swatch-ribbon {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .swatch-chip {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            border: 1px solid #30363d;
             cursor: pointer;
-            transition: 0.2s;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .swatch-chip:hover {
+            transform: scale(1.15);
+            border-color: var(--highlight);
+            box-shadow: 0 0 8px var(--highlight);
+        }
+
+        .swatch-chip.active {
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 10px var(--highlight);
+            transform: scale(1.1);
+        }
+
+
+        .machine-line { grid-column: 1 / -1; font-size: 0.95rem; letter-spacing: 0.04em; margin-top: -4px; }
+        .machine-line a, .equip-list a { color: var(--highlight); text-decoration: underline; }
+        .machine-line a:hover, .equip-list a:hover { color: #ffffff; }
+        .affiliate-note { font-size: 0.8rem; opacity: 0.75; margin-top: 8px; letter-spacing: 0.02em; }
+        .equip-list { list-style: none; display: grid; gap: 8px; padding: 0; margin: 0; }
+        .equip-list li { border-left: 3px solid var(--highlight); padding: 4px 10px; }
+        .swatch-chip { position: relative; }
+        .swatch-ribbon.labeled { gap: 8px 26px; padding-bottom: 20px; }
+        .swatch-chip .lbl { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; letter-spacing: 0.04em; white-space: nowrap; color: var(--text-color); pointer-events: none; }
+        .sel-tag { display: inline-flex; align-items: center; gap: 6px; background: #020203; border: 1px solid var(--highlight); border-radius: 14px; padding: 3px 4px 3px 8px; margin: 2px 6px 2px 0; font-size: 0.9rem; color: var(--text-color); }
+        .sel-tag i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid #30363d; display: inline-block; }
+        .sel-tag button { background: none; border: 0; color: var(--highlight); font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 6px; }
+        .sel-tag button:hover, .sel-tag button:focus-visible { color: #fff; }
+        .swatch-chip.has-options { position: relative; }
+        .swatch-chip.has-options::after { content: '\25BE'; position: absolute; right: 1px; bottom: -1px; font-size: 11px; line-height: 1; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+        .swatch-pop { position: absolute; z-index: 50; width: 250px; max-width: calc(100vw - 60px); background: #0d1117; border: 1px solid var(--highlight); border-radius: 6px; padding: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.7), 0 0 12px rgba(182,102,210,0.35); }
+        .swatch-pop-title { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--highlight); margin-bottom: 8px; }
+        .swatch-pop-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .swatch-opt { width: 30px; height: 30px; border-radius: 4px; border: 1px solid #30363d; cursor: pointer; padding: 0; }
+        .swatch-opt:hover, .swatch-opt:focus-visible { border-color: #fff; box-shadow: 0 0 8px var(--highlight); outline: none; }
+        .swatch-opt.on { border: 2px solid #fff; }
+        .swatch-name-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--highlight);
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        /* Queue Table */
+        .table-wrapper {
+            background: #020203;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            overflow-x: auto;
             margin-top: 10px;
         }
 
-        button:hover { 
-            background-color: var(--highlight); 
-            transform: translateY(-2px);
+        .queue-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            text-align: left;
         }
 
-        .back-link {
-            margin-top: 40px;
+        .queue-table th {
+            background: rgba(57, 0, 57, 0.4);
             color: var(--highlight);
-            text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 1px;
-            transition: color 0.3s;
+            padding: 10px 14px;
+            border-bottom: 1px solid #30363d;
         }
-        
-        .back-link:hover { color: #ffffff; }
+
+        .queue-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            color: var(--text-color);
+        }
+
+        .queue-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            background: transparent;
+            border: 1px solid #EF4444;
+            color: #EF4444;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .remove-btn:hover {
+            background: #EF4444;
+            color: #ffffff;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: 'Orbitron', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background-color: var(--wolf-purple);
+            color: white;
+            text-decoration: none;
+            border: 1px solid var(--highlight);
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            transition: 0.2s;
+            cursor: pointer;
+            user-select: none;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn:hover { 
+            background-color: var(--highlight); 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 12px var(--wolf-glow);
+        }
+
+        .btn-submit {
+            padding: 16px 30px;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        .scope-notice {
+            padding: 14px;
+            background: rgba(57, 0, 57, 0.25);
+            border-left: 4px solid var(--highlight);
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* Order Confirmation Popup */
+        #confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(2, 2, 3, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--highlight);
+            border-radius: 12px;
+            max-width: 540px;
+            width: 100%;
+            padding: 25px;
+            box-shadow: 0 0 25px var(--wolf-glow);
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-align: center;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--wolf-purple);
+            padding-top: 20px;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .form-msg {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-left: 4px solid #EF4444;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+        .swatch-chip:focus-visible, .btn:focus-visible, .audio-pill:focus-visible, .nav-back-link:focus-visible {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+        @media (max-width: 600px) {
+            body { padding: 24px 14px; }
+            .top-bar-controls { position: static; width: 100%; justify-content: space-between; margin-bottom: 18px; }
+            h1 { font-size: 1.6rem; }
+            .card { padding: 18px; }
+        }
+        @media (max-width: 600px) {
+            .queue-table thead { display: none; }
+            .queue-table, .queue-table tbody, .queue-table tr, .queue-table td { display: block; width: 100%; }
+            .queue-table tr { padding: 10px 0; border-bottom: 1px solid rgba(48, 54, 61, 0.8); }
+            .queue-table td { border: none; padding: 4px 14px; }
+            .queue-table td:nth-child(2)::before { content: "Color: "; color: #c9d1d9; }
+            .queue-table td:nth-child(3)::before { content: "Qty: "; color: #c9d1d9; }
+            .queue-table td:nth-child(4)::before { content: "Sourcing: "; color: #c9d1d9; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #splash-screen { transition: none; }
+            .card, .btn, .swatch-chip { transition: none; }
+        }
+        .construction-note {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: var(--text-color);
+            background: rgba(57, 0, 57, 0.2);
+            padding: 6px 12px;
+            border: 1px solid var(--wolf-purple);
+            border-radius: 4px;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            z-index: 50;
+        }
     </style>
 </head>
 <body>
+    <div class="construction-note">
+        UNDER CONSTRUCTION - SUBJECT TO CHANGE
+    </div>
+
+
+    <!-- Cyber Intro Splash Banner -->
+    <div id="splash-screen" onclick="dismissSplash()">
+        <div class="splash-title">WELCOME TO <span>WOLFTECHLABS</span></div>
+        <div class="splash-sub">Project Inquiry &amp; Order Intake</div>
+    </div>
+
+    <!-- Top Navigation & Audio Controls -->
+    <div class="top-bar-controls">
+        <a href="index.html" class="nav-back-link">← BACK TO HOME</a>
+        <div class="audio-pill" onclick="toggleAudio()" title="Toggle Interface Audio">
+            <span class="audio-led" id="audio-led"></span>
+            <span id="audio-label">AUDIO: ON</span>
+        </div>
+    </div>
 
     <div class="logo-container">
-        <a href="index.html"><img src="logo.svg" alt="WolfTechLabs Logo"></a>
+        <img src="logo.svg" alt="WolfTechLabs Logo">
     </div>
 
-    <h1>Project Inquiry</h1>
+    <h1>Project Inquiry Portal</h1>
+    <div class="tagline">Engineering | Artistry | Accessibility</div>
 
     <div class="form-container">
-        <form action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="c0c6138a-e33b-46d5-bc5d-37b34c79f907">
-            
-            <input type="text" name="name" placeholder="Full Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            <textarea name="message" rows="8" placeholder="Tell us about your project requirements (Materials, quantities, or links to STL files)..." required></textarea>
-            
-            <button type="submit">Submit Inquiry</button>
-        </form>
+
+        <!-- Step 1: Item Spec Builder -->
+        <div class="card">
+            <div class="card-header">
+                <h3>STEP 1 // CONFIGURE ITEM</h3>
+                <span class="chip">14-DAY LEAD</span>
+            </div>
+
+            <div class="input-grid">
+                <!-- Category Select -->
+                <div class="field-group">
+                    <label class="field-label" for="sel-category">CRAFT / DISCIPLINE</label>
+                    <select id="sel-category" class="custom-select" onchange="onCategorySelect()">
+                        <!-- Filled from catalog.js -->
+                    </select>
+                </div>
+
+                <div class="machine-line" id="machine-line" aria-live="polite"></div>
+
+                <!-- Dynamic Item Select -->
+                <div class="field-group">
+                    <label class="field-label" for="sel-item">ITEM SPECIFICATION</label>
+                    <select id="sel-item" class="custom-select" onchange="onItemSelect()">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Color Spec Ribbon -->
+                <div class="field-group" style="grid-column: 1 / -1;">
+                    <label class="field-label">COLOR / MATERIAL SPECIFICATION</label>
+                    <div class="swatch-ribbon" id="swatch-ribbon"></div>
+                    <div class="swatch-name-display" id="swatch-name-display" aria-live="polite"></div>
+                    <div class="swatch-name-display" id="combo-note" style="color:#b8c4d0;font-size:0.85rem;"></div>
+                    <div class="swatch-name-display" id="color-msg" role="alert" style="color:#f0a0a0;min-height:1em;"></div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="field-group">
+                    <label class="field-label" for="inp-qty">QUANTITY / UNITS</label>
+                    <input type="number" id="inp-qty" class="custom-input" min="1" max="500" value="1">
+                </div>
+
+                <!-- Material Sourcing -->
+                <div class="field-group">
+                    <label class="field-label" for="sel-sourcing">MATERIAL SOURCING</label>
+                    <select id="sel-sourcing" class="custom-select">
+                        <option value="In-House Stock">In-House Stock (Basswood / Core Filaments)</option>
+                        <option value="Sourced to Order">Sourced to Order (Shop Supplied)</option>
+                        <option value="Client Supplied">Client-Supplied Blank (Shipped or Dropped Off)</option>
+                    </select>
+                </div>
+
+                <!-- Item Specific Notes -->
+                <div class="field-group" style="grid-column: 1 / -1;">
+                    <label class="field-label" for="inp-item-notes">DIMENSIONS OR BUILD NOTES (OPTIONAL)</label>
+                    <input type="text" id="inp-item-notes" class="custom-input" placeholder="e.g. 16oz cup wrap, monogram lettering, specific hex code...">
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="addItemToQueue()">
+                + ADD ITEM TO INQUIRY BUNDLE
+            </button>
+        </div>
+
+        <!-- Step 2: Multi-Item Queue Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3>STEP 2 // ACTIVE INQUIRY BUNDLE</h3>
+                <span class="chip" id="bundle-count-chip">0 ITEMS</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>ITEM SPEC</th>
+                            <th>COLOR / MATERIAL</th>
+                            <th>QTY</th>
+                            <th>SOURCING</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="queue-tbody">
+                        <tr id="empty-queue-row">
+                            <td colspan="5" style="text-align: center; color: var(--text-color); padding: 18px; opacity: 0.6;">
+                                No items added yet. Select options above and click "+ Add Item to Inquiry Bundle".
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Step 3: Client Details & Submission -->
+        <div class="card">
+            <div class="card-header">
+                <h3>STEP 3 // CLIENT CONTACT &amp; SUBMISSION</h3>
+                <span class="chip">PARTS-ONLY SCOPE</span>
+            </div>
+
+            <form id="inquiry-form" onsubmit="submitInquiry(event)">
+                <div class="input-grid">
+                    <div class="field-group">
+                        <label class="field-label" for="cust-name">YOUR FULL NAME</label>
+                        <input type="text" id="cust-name" class="custom-input" placeholder="Your Name" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="cust-email">CONTACT EMAIL</label>
+                        <input type="email" id="cust-email" class="custom-input" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="field-group" style="grid-column: 1 / -1;">
+                        <label class="field-label" for="cust-notes">PROJECT OVERVIEW / DELIVERY DETAILS (OPTIONAL)</label>
+                        <textarea id="cust-notes" class="custom-textarea" rows="2" placeholder="Tell us about your target date, event details, or specific file requirements..."></textarea>
+                    </div>
+                </div>
+
+                <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+                <div class="scope-notice">
+                    <strong style="color: #ffffff;">Fabrication Scope:</strong> All hybrid and multi-material projects are supplied as precision-cut parts kits [<span style="color: var(--highlight);">PARTS KIT — UNASSEMBLED</span>]. Final adhesive bonding or assembly is performed by client.
+                </div>
+
+                <div id="form-msg" class="form-msg" role="alert"></div>
+
+                <button type="submit" id="submit-btn" class="btn btn-submit">
+                    TRANSMIT PROJECT INQUIRY →
+                </button>
+            </form>
+        </div>
+
+        <!-- Equipment list (filled from catalog.js) -->
+        <div class="card" id="equip-card" style="display:none;">
+            <div class="card-header"><h3>OUR EQUIPMENT</h3></div>
+            <ul class="equip-list" id="equip-list"></ul>
+            <p class="affiliate-note" id="equip-note" style="display:none;"></p>
+        </div>
+
     </div>
 
-    <a href="index.html" class="back-link">← BACK TO HOMEPAGE</a>
+    <!-- Confirmation Modal Receipt -->
+    <div id="confirmation-modal">
+        <div class="modal-card">
+            <div class="card-header">
+                <h3>INQUIRY TRANSMITTED</h3>
+                <span class="chip" id="modal-order-id">ORD-0000</span>
+            </div>
+            <p style="font-size: 1.05rem; line-height: 1.4; margin-bottom: 15px;">
+                Your project inquiry was sent to WolfTechLabs. We will reply by email.
+            </p>
+            <div id="modal-summary" style="background: #020203; border: 1px solid #30363d; border-radius: 6px; padding: 14px; font-size: 0.95rem; margin-bottom: 20px;"></div>
+            <button type="button" class="btn" style="margin-top: 0;" onclick="closeModal()">CLOSE RECEIPT</button>
+        </div>
+    </div>
 
+    <footer>
+        WolfTechLabs // Precision Digital Fabrication &amp; Engineering // Baltimore, MD
+    </footer>
+
+    <script src="catalog.js"></script>
+    <script>
+        /* 1. Splash Screen Fade */
+        function dismissSplash() {
+            const s = document.getElementById('splash-screen');
+            s.classList.add('fade-out');
+            unlockAudio();
+            playThump();
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(dismissSplash, 1600);
+        });
+
+        /* 2. Web Audio Synthesizer */
+        let audioCtx = null;
+        let audioActive = localStorage.getItem('wtl_audio') !== 'false';
+
+        function unlockAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+        window.addEventListener('pointerdown', unlockAudio, { once: true });
+        window.addEventListener('mousemove', unlockAudio, { once: true });
+
+        function playPip() {
+            if (!audioActive) return;
+            try {
+                unlockAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(280, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch(e) {}
+        }
+
+        function playThump() {
+            if (!audioActive) return;
+            try {
+                unlockAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
+        function toggleAudio() {
+            audioActive = !audioActive;
+            localStorage.setItem('wtl_audio', audioActive);
+            document.getElementById('audio-led').className = audioActive ? 'audio-led' : 'audio-led off';
+            document.getElementById('audio-label').innerText = audioActive ? 'AUDIO: ON' : 'AUDIO: OFF';
+            if (audioActive) playThump();
+        }
+
+        /* 3. Catalog Data & Swatch Ribbon */
+        /* Catalog comes from catalog.js (edit that file, not this one). */
+        const craftCatalog = {};
+        let catalogOk = false;
+        /* A machine may list plain "items" or sectioned "groups". Both work. */
+        /* "palette" can be one name or a list of names; lists are joined together. */
+        function colorsFor(m, cat) {
+            const names = [].concat(m.palette || []);
+            const list = names.reduce((all, k) => all.concat((cat.palettes && cat.palettes[k]) || []), []);
+            return list.length ? list : [{ name: 'Custom Specified Material', hex: '#390039' }];
+        }
+        function groupsOf(m) {
+            if (Array.isArray(m.groups)) return m.groups.filter(g => g && Array.isArray(g.items));
+            if (Array.isArray(m.items)) return [{ label: '', items: m.items }];
+            return [];
+        }
+        (function loadCatalog() {
+            const cat = window.WTL_CATALOG;
+            const sel = document.getElementById('sel-category');
+            if (!cat || !Array.isArray(cat.machines)) {
+                sel.innerHTML = '<option value="">Catalog not loaded</option>';
+                showFormMsg('The product list could not load. Please describe your project in the notes field.');
+                return;
+            }
+            cat.machines.filter(m => m && m.active !== false && groupsOf(m).some(g => g.items.length)).forEach(m => {
+                craftCatalog[m.id] = { name: m.name, groups: groupsOf(m), items: groupsOf(m).flatMap(g => g.items), colors: colorsFor(m, cat) };
+            });
+            sel.innerHTML = Object.keys(craftCatalog).map(k => `<option value="${esc(k)}">${esc(craftCatalog[k].name)}</option>`).join('');
+            catalogOk = Object.keys(craftCatalog).length > 0;
+        })();
+
+        /* Equipment names and optional affiliate links (from catalog.js) */
+        function safeUrl(u) { return /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : ''; }
+        function equipHtml(e, long) {
+            const label = esc(long ? e.name : (e.short || e.name));
+            const url = safeUrl(e.url);
+            return url ? `<a href="${esc(url)}" target="_blank" rel="sponsored noopener noreferrer">${label}</a>` : label;
+        }
+        function renderEquipment() {
+            const cat = window.WTL_CATALOG;
+            if (!cat || !Array.isArray(cat.equipment) || !cat.equipment.length) return;
+            document.getElementById('equip-list').innerHTML = cat.equipment.map(e => `<li>${equipHtml(e, true)}</li>`).join('');
+            document.getElementById('equip-card').style.display = '';
+            const any = cat.equipment.some(e => safeUrl(e.url));
+            const note = document.getElementById('equip-note');
+            note.textContent = any && cat.affiliateNote ? cat.affiliateNote : '';
+            note.style.display = note.textContent ? '' : 'none';
+        }
+        function renderMachineLine(catKey) {
+            const line = document.getElementById('machine-line');
+            const cat = window.WTL_CATALOG;
+            const m = cat && Array.isArray(cat.machines) ? cat.machines.find(x => x.id === catKey) : null;
+            const e = m && m.equipment && Array.isArray(cat.equipment) ? cat.equipment.find(x => x.id === m.equipment) : null;
+            line.innerHTML = e ? 'MADE ON: ' + equipHtml(e, false) : '';
+            if (e && safeUrl(e.url) && cat.affiliateNote) {
+                const n = document.createElement('div'); n.className = 'affiliate-note'; n.textContent = cat.affiliateNote; line.appendChild(n);
+            }
+        }
+
+        
+
+        function onCategorySelect() {
+            const catKey = document.getElementById('sel-category').value;
+            const data = craftCatalog[catKey];
+            if (!data) return;
+            renderMachineLine(catKey);
+            const itemSelect = document.getElementById('sel-item');
+
+            itemSelect.innerHTML = data.groups.map(g => {
+                const opts = g.items.map(it => `<option value="${esc(it)}">${esc(it)}</option>`).join('');
+                return g.label ? `<optgroup label="${esc(g.label)}">${opts}</optgroup>` : opts;
+            }).join('');
+
+            const ribbon = document.getElementById('swatch-ribbon');
+            ribbon.innerHTML = '';
+            closeSwatchPop();
+            selectedColors = [];
+            const colors = data.colors.map(c => Object.assign({}, c, c.options ? { options: c.options.filter(o => o.available !== false) } : {}))
+                                       .filter(c => c.available !== false && (!c.options || c.options.length));
+            if (!colors.length) colors.push({ name: 'Custom Specified Material', hex: '#390039' });
+            const labeled = colors.some(c => c.options);
+
+            colors.forEach((c) => {
+                const chip = document.createElement('div');
+                chip.className = 'swatch-chip' + (c.options ? ' has-options' : '');
+                chip.dataset.key = c.name;
+                chip.style.background = c.options ? c.options[0].hex : c.hex;
+                chip.title = c.options ? c.name + ' (choose colors)' : c.name;
+                chip.setAttribute('role', 'button');
+                chip.setAttribute('aria-label', c.options ? c.name + ', choose colors' : c.name);
+                if (c.options) chip.setAttribute('aria-haspopup', 'true');
+                chip.tabIndex = 0;
+                chip.onkeydown = (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); chip.click(); } };
+                chip.onclick = (ev) => {
+                    ev.stopPropagation();
+                    if (c.options) openSwatchPop(chip, c);
+                    else { closeSwatchPop(); toggleColor(c.name, c.hex); }
+                    playPip();
+                };
+                if (labeled) { const l = document.createElement('span'); l.className = 'lbl'; l.textContent = c.label || c.name.replace(/ \(.*\)/, ''); chip.appendChild(l); }
+                ribbon.appendChild(chip);
+            });
+            ribbon.classList.toggle('labeled', labeled);
+            renderSelected();
+            playPip();
+        }
+
+        /* Several colors / materials can be chosen for one item. */
+        let selectedColors = [];
+        const MAX_COLORS = 8;
+        function setColorMsg(t) { const el = document.getElementById('color-msg'); if (el) el.textContent = t || ''; }
+        function colorString() { return selectedColors.map(c => c.name).join(' + '); }
+        function toggleColor(name, hex) {
+            const i = selectedColors.findIndex(c => c.name === name);
+            if (i >= 0) selectedColors.splice(i, 1);
+            else if (selectedColors.length >= MAX_COLORS) { setColorMsg('You can pick up to ' + MAX_COLORS + ' colors or materials per item.'); return false; }
+            else selectedColors.push({ name, hex });
+            setColorMsg('');
+            renderSelected();
+            return true;
+        }
+        function kindOf(name) {
+            const key = String(name).split(': ')[0];
+            const cat = window.WTL_CATALOG || {};
+            for (const p of Object.values(cat.palettes || {})) {
+                const e = (p || []).find(x => x && x.name === key);
+                if (e) return e.kind || '';
+            }
+            return '';
+        }
+        function renderComboNotes() {
+            const el = document.getElementById('combo-note'); if (!el) return;
+            const kinds = new Set(selectedColors.map(c => kindOf(c.name)).filter(Boolean));
+            const rules = (window.WTL_CATALOG && window.WTL_CATALOG.combineNotes) || [];
+            const notes = [];
+            rules.forEach(r => {
+                if (!r || !Array.isArray(r.a) || !Array.isArray(r.b) || !r.note) return;
+                const hasA = r.a.filter(k => kinds.has(k)), hasB = r.b.filter(k => kinds.has(k));
+                const ok = hasA.length && hasB.length && hasA.some(a => hasB.some(b => a !== b));
+                if (ok && notes.indexOf(r.note) < 0) notes.push(r.note);
+            });
+            el.textContent = notes.join(' ');
+        }
+        function renderSelected() {
+            const box = document.getElementById('swatch-name-display');
+            box.innerHTML = '';
+            if (!selectedColors.length) { box.textContent = 'Nothing picked yet. Tap a color or material.'; }
+            selectedColors.forEach(c => {
+                const tag = document.createElement('span');
+                tag.className = 'sel-tag';
+                const dot = document.createElement('i'); dot.style.background = c.hex;
+                const txt = document.createElement('span'); txt.textContent = c.name;
+                const x = document.createElement('button'); x.type = 'button'; x.textContent = '\u00D7';
+                x.setAttribute('aria-label', 'Remove ' + c.name);
+                x.onclick = (ev) => { ev.stopPropagation(); toggleColor(c.name, c.hex); closeSwatchPop(); playPip(); };
+                tag.appendChild(dot); tag.appendChild(txt); tag.appendChild(x);
+                box.appendChild(tag);
+            });
+            renderComboNotes();
+            document.querySelectorAll('#swatch-ribbon .swatch-chip').forEach(ch => {
+                const k = ch.dataset.key;
+                const on = selectedColors.some(c => c.name === k || c.name.indexOf(k + ': ') === 0);
+                ch.classList.toggle('active', on);
+            });
+        }
+
+        /* Fly-out color picker for materials that have many colors (felt, acrylic, wood, leather) */
+        function closeSwatchPop() {
+            const old = document.getElementById('swatch-pop');
+            if (old) old.remove();
+        }
+        function openSwatchPop(chip, c) {
+            closeSwatchPop();
+            const pop = document.createElement('div');
+            pop.id = 'swatch-pop';
+            pop.className = 'swatch-pop';
+            pop.setAttribute('role', 'group');
+            pop.setAttribute('aria-label', c.name + ' colors');
+            pop.onclick = (ev) => ev.stopPropagation();
+            pop.innerHTML = '<div class="swatch-pop-title">' + esc(c.name.toUpperCase()) + ': PICK ONE OR MORE</div><div class="swatch-pop-grid"></div>';
+            const grid = pop.querySelector('.swatch-pop-grid');
+            c.options.forEach(o => {
+                const full = c.name + ': ' + o.name;
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'swatch-opt' + (selectedColors.some(s => s.name === full) ? ' on' : '');
+                b.style.background = o.hex;
+                b.title = o.name;
+                b.setAttribute('aria-label', o.name);
+                b.onclick = () => {
+                    if (toggleColor(full, o.hex)) b.classList.toggle('on');
+                    playPip();
+                };
+                grid.appendChild(b);
+            });
+            const host = document.getElementById('swatch-ribbon').parentNode;
+            host.style.position = 'relative';
+            host.appendChild(pop);
+            pop.style.left = Math.max(0, Math.min(chip.offsetLeft, host.clientWidth - 260)) + 'px';
+            pop.style.top = (chip.offsetTop + chip.offsetHeight + 8) + 'px';
+            const f = pop.querySelector('.swatch-opt'); if (f) f.focus();
+        }
+        document.addEventListener('click', closeSwatchPop);
+        document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeSwatchPop(); });
+
+        renderEquipment();
+
+        function onItemSelect() {
+            playPip();
+        }
+
+        /* 4. Multi-Item Order Queue */
+        let bundleQueue = [];
+
+        function esc(v) {
+            return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function addItemToQueue() {
+            playThump();
+            const item = document.getElementById('sel-item').value;
+            const qty = parseInt(document.getElementById('inp-qty').value) || 1;
+            const sourcing = document.getElementById('sel-sourcing').value;
+            const notes = document.getElementById('inp-item-notes').value.trim();
+            if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); return; }
+
+            bundleQueue.push({
+                id: Date.now(),
+                item,
+                color: colorString(),
+                qty,
+                sourcing,
+                notes: notes || 'None'
+            });
+
+            document.getElementById('inp-item-notes').value = '';
+            renderQueue();
+        }
+
+        function removeItemFromQueue(id) {
+            playPip();
+            bundleQueue = bundleQueue.filter(i => i.id !== id);
+            renderQueue();
+        }
+
+        function renderQueue() {
+            const tbody = document.getElementById('queue-tbody');
+            const chip = document.getElementById('bundle-count-chip');
+            chip.innerText = `${bundleQueue.length} ITEM${bundleQueue.length === 1 ? '' : 'S'}`;
+
+            if (bundleQueue.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="empty-queue-row">
+                        <td colspan="5" style="text-align: center; color: var(--text-color); padding: 18px; opacity: 0.6;">
+                            No items added yet. Select options above and click "+ Add Item to Inquiry Bundle".
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = bundleQueue.map(i => `
+                <tr>
+                    <td><strong>${i.item}</strong>${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
+                    <td>${i.qty}</td>
+                    <td>${i.sourcing}</td>
+                    <td><button type="button" class="remove-btn" onclick="removeItemFromQueue(${i.id})">✕ REMOVE</button></td>
+                </tr>
+            `).join('');
+        }
+
+        /* 5. Final Submission (sends through Web3Forms, same service as the live site) */
+        const WEB3FORMS_KEY = 'c0c6138a-e33b-46d5-bc5d-37b34c79f907';
+
+        function showFormMsg(text) {
+            const m = document.getElementById('form-msg');
+            m.textContent = text;
+            m.style.display = text ? 'block' : 'none';
+        }
+
+        async function submitInquiry(e) {
+            e.preventDefault();
+            showFormMsg('');
+            if (document.getElementById('botcheck').checked) return;
+            if (bundleQueue.length === 0) {
+                showFormMsg('Please add at least one item to your inquiry bundle before sending.');
+                return;
+            }
+
+            playThump();
+            const orderId = 'WFL-' + Date.now().toString().slice(-6);
+            const name = document.getElementById('cust-name').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const notes = document.getElementById('cust-notes').value || 'None';
+
+            const manifest =
+`================================================================================
+WOLFTECHLABS // PROJECT INQUIRY ${orderId}
+CLIENT: ${name} (${email})
+TARGET DELIVERY BUFFER: 14 DAYS
+SCOPE: STRICT PARTS FABRICATION ONLY [PARTS KIT — UNASSEMBLED]
+================================================================================
+INQUIRY ITEMS:
+${bundleQueue.map((item, idx) => `
+[ITEM ${idx + 1}]
+- Spec: ${item.item}
+- Color/Material: ${item.color}
+- Quantity: ${item.qty}
+- Sourcing: ${item.sourcing}
+- Notes: ${item.notes}
+`).join('')}
+================================================================================
+OVERALL CLIENT NOTES:
+${notes}
+================================================================================`;
+
+            const btn = document.getElementById('submit-btn');
+            const btnLabel = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'SENDING...';
+
+            try {
+                const res = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        access_key: WEB3FORMS_KEY,
+                        subject: `[NEW INQUIRY] ${orderId} - ${name} (${bundleQueue.length} Items)`,
+                        from_name: 'WolfTechLabs Inquiry Form',
+                        name: name,
+                        email: email,
+                        message: manifest
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.message || 'Send failed');
+
+                document.getElementById('modal-order-id').innerText = orderId;
+                document.getElementById('modal-summary').innerHTML = `
+                    <strong>CONTACT:</strong> ${esc(name)} (${esc(email)})<br>
+                    <strong>ITEMS IN BUNDLE:</strong> ${bundleQueue.length}<br>
+                    <strong>LEAD TIME:</strong> Flat 14 Days<br><br>
+                    ${bundleQueue.map(i => `• ${i.qty}x ${esc(i.item)} [${esc(i.color)}]`).join('<br>')}
+                `;
+                document.getElementById('confirmation-modal').style.display = 'flex';
+            } catch (err) {
+                showFormMsg('Your inquiry could not be sent. Please check your connection and try again.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = btnLabel;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('confirmation-modal').style.display = 'none';
+            bundleQueue = [];
+            renderQueue();
+            document.getElementById('inquiry-form').reset();
+        }
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            onCategorySelect();
+            document.querySelectorAll('.btn, .custom-select, .custom-input, .custom-textarea, .audio-pill, .nav-back-link').forEach(el => {
+                el.addEventListener('mouseenter', playPip);
+            });
+        });
+    </script>
 </body>
 </html>
