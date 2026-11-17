@@ -720,8 +720,9 @@
                     </select>
                 </div>
                 <div class="field-group" id="grp-shirt-color" style="display:none;">
-                    <label class="field-label" for="inp-shirt-color">SHIRT COLOR (THE SHIRT ITSELF, NOT THE VINYL)</label>
-                    <input type="text" id="inp-shirt-color" class="custom-input" maxlength="40" placeholder="e.g. black, heather gray">
+                    <label class="field-label" id="lbl-shirt-color">SHIRT COLOR (THE SHIRT ITSELF, NOT THE VINYL)</label>
+                    <div class="swatch-ribbon" id="shirt-swatches" role="group" aria-labelledby="lbl-shirt-color"></div>
+                    <div class="swatch-name-display" id="shirt-color-name" aria-live="polite"></div>
                 </div>
 
                 <!-- Optional design file (saved to the owner's private Google Drive) -->
@@ -1247,6 +1248,80 @@
 
         renderEquipment();
 
+        /* Shirt color: one pick from the most common, easy-to-order shirt colors (same round buttons as the other colors) */
+        const SHIRT_COLORS = [
+            { name: 'White', hex: '#F5F5F5' }, { name: 'Black', hex: '#111111' }, { name: 'Navy', hex: '#1F2A44' },
+            { name: 'Royal Blue', hex: '#2B50AA' }, { name: 'Red', hex: '#B32025' }, { name: 'Forest Green', hex: '#1E4D2B' },
+            { name: 'Purple', hex: '#6A2C91' }, { name: 'Heather Gray', hex: '#A7A9AC' }
+        ];
+        const SHIRT_DEFAULT = 'Black';
+        let shirtColorPick = SHIRT_DEFAULT;
+        function pickShirtColor(name) { shirtColorPick = name; renderShirtColor(); }
+        function resetShirtColor() { shirtColorPick = SHIRT_DEFAULT; renderShirtColor(); }
+        function renderShirtColor() {
+            const hit = SHIRT_COLORS.find(c => c.name === shirtColorPick);
+            const chip = document.querySelector('#shirt-swatches .swatch-chip');
+            if (chip) { chip.style.background = (hit || SHIRT_COLORS[0]).hex; chip.classList.toggle('active', !!hit); }
+            const box = document.getElementById('shirt-color-name'); if (!box) return;
+            box.innerHTML = '';
+            if (!hit) { box.textContent = 'Nothing picked yet. Tap the box above. Not listed? Tell us in the notes.'; return; }
+            const tag = document.createElement('span'); tag.className = 'sel-tag';
+            const dot = document.createElement('i'); dot.style.background = hit.hex;
+            const txt = document.createElement('span'); txt.textContent = hit.name;
+            const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + hit.name);
+            x.onclick = (ev) => { ev.stopPropagation(); closeSwatchPop(); shirtColorPick = ''; renderShirtColor(); playPip(); };
+            tag.appendChild(dot); tag.appendChild(txt); tag.appendChild(x); box.appendChild(tag);
+        }
+        /* Same drop-out panel as the wood and leather colors, but only one shirt color can be picked */
+        function openShirtPop(chip) {
+            closeSwatchPop();
+            const pop = document.createElement('div');
+            pop.id = 'swatch-pop'; pop.className = 'swatch-pop';
+            pop.setAttribute('role', 'group'); pop.setAttribute('aria-label', 'Shirt colors');
+            pop.onclick = (ev) => ev.stopPropagation();
+            pop.innerHTML = '<div class="swatch-pop-title">SHIRT COLOR: PICK ONE</div><div class="swatch-pop-grid"></div>';
+            const grid = pop.querySelector('.swatch-pop-grid');
+            SHIRT_COLORS.forEach(o => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'swatch-opt' + (shirtColorPick === o.name ? ' on' : '');
+                b.style.background = o.hex; b.title = o.name; b.setAttribute('aria-label', o.name);
+                b.onclick = () => { pickShirtColor(o.name); closeSwatchPop(); playPip(); };
+                grid.appendChild(b);
+            });
+            const nt = document.createElement('div');
+            nt.className = 'swatch-pop-note';
+            nt.style.cssText = 'margin-top:10px;font-size:0.85rem;line-height:1.3;color:#b8c4d0;';
+            nt.textContent = 'Not listed? Tell us in the notes.';
+            pop.appendChild(nt);
+            const done = document.createElement('button'); done.type = 'button'; done.className = 'swatch-pop-done'; done.textContent = 'DONE';
+            done.onclick = () => { closeSwatchPop(); playPip(); };
+            pop.appendChild(done);
+            document.body.appendChild(pop);
+            if (window.innerWidth > 600) {
+                const r = chip.getBoundingClientRect();
+                const w = pop.offsetWidth || 250;
+                pop.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 8)) + 'px';
+                pop.style.top = (r.bottom + window.scrollY + 8) + 'px';
+            }
+            pop._chip = chip;
+            pop.addEventListener('focusout', (ev) => { if (ev.relatedTarget && !pop.contains(ev.relatedTarget)) closeSwatchPop(); });
+            const f = pop.querySelector('.swatch-opt'); if (f) f.focus();
+        }
+        (function buildShirtSwatches() {
+            const wrap = document.getElementById('shirt-swatches'); if (!wrap) return;
+            wrap.classList.add('labeled');
+            const chip = document.createElement('div');
+            chip.className = 'swatch-chip has-options'; chip.dataset.key = 'Shirt Color';
+            chip.title = 'Shirt color (choose a color)'; chip.setAttribute('role', 'button'); chip.setAttribute('aria-label', 'Shirt color, choose a color');
+            chip.setAttribute('aria-haspopup', 'true'); chip.tabIndex = 0;
+            chip.onkeydown = (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); chip.click(); } };
+            chip.onclick = (ev) => { ev.stopPropagation(); openShirtPop(chip); playPip(); };
+            const l = document.createElement('span'); l.className = 'lbl'; l.textContent = 'Shirt color'; chip.appendChild(l);
+            wrap.appendChild(chip);
+            renderShirtColor();
+        })();
+
         /* Shirt size and shirt color only show for shirts and clothing */
         const SHIRT_WORDS = ['shirt', 'hoodie', 'onesie'];
         function isShirtItem() { return wordHit((document.getElementById('sel-item') || {}).value, SHIRT_WORDS); }
@@ -1258,7 +1333,7 @@
             if (!show) {
                 const sz = document.getElementById('sel-shirt-size');
                 sz.value = ''; try { sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
-                document.getElementById('inp-shirt-color').value = '';
+                resetShirtColor();
             }
             return show;
         }
@@ -1322,7 +1397,7 @@
             const notes = document.getElementById('inp-item-notes').value.trim();
             const shirtShown = updateShirtFields();
             const shirtSize = shirtShown ? document.getElementById('sel-shirt-size').value : '';
-            const shirtColor = shirtShown ? document.getElementById('inp-shirt-color').value.replace(/[\r\n\t]+/g, ' ').trim() : '';
+            const shirtColor = shirtShown ? shirtColorPick : '';
             if (shirtShown && !shirtSize) { setQtyMsg('Please choose a shirt size first.'); try { document.querySelector('#grp-shirt-size .dd-btn').focus(); } catch (e) {} return; }
             if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); try { document.getElementById('swatch-ribbon').scrollIntoView({ block: 'center' }); } catch (e) {} return; }
 
@@ -1358,7 +1433,7 @@
             });
 
             document.getElementById('inp-item-notes').value = '';
-            document.getElementById('inp-shirt-color').value = '';
+            resetShirtColor();
             fileEl.value = '';
             try { const sz = document.getElementById('sel-shirt-size'); sz.value = ''; sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
             /* Clear the choices so the next item starts fresh (nothing carries over by accident) */
