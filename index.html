@@ -318,6 +318,9 @@
         .sel-tag button { background: none; border: 0; color: var(--highlight); font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 6px; }
         .sel-tag button:hover, .sel-tag button:focus-visible { color: #fff; }
         .swatch-chip.has-options { position: relative; }
+        /* Vinyl colors too close to the chosen shirt color are greyed out and crossed out */
+        .swatch-chip.clash { opacity: 0.3; cursor: not-allowed; }
+        .swatch-chip.clash::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, transparent 45%, #fff 46%, #fff 54%, transparent 55%); }
         .swatch-chip.has-options::after { content: '\25BE'; position: absolute; right: 1px; bottom: -1px; font-size: 11px; line-height: 1; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
         .swatch-pop { position: absolute; z-index: 50; width: 250px; max-width: calc(100vw - 60px); background: #0d1117; border: 1px solid var(--highlight); border-radius: 6px; padding: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.7), 0 0 12px rgba(182,102,210,0.35); }
         .swatch-pop-title { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--highlight); margin-bottom: 8px; }
@@ -1035,6 +1038,7 @@
                 const chip = document.createElement('div');
                 chip.className = 'swatch-chip' + (c.options ? ' has-options' : '');
                 chip.dataset.key = c.name;
+                if (!c.options) chip.dataset.hex = c.hex;
                 chip.style.background = c.options ? c.options[0].hex : c.hex;
                 chip.title = c.options ? c.name + ' (choose colors)' : c.name;
                 chip.setAttribute('role', 'button');
@@ -1084,6 +1088,7 @@
             const i = selectedColors.findIndex(c => c.name === name);
             if (i >= 0) selectedColors.splice(i, 1);
             else if (selectedColors.length >= MAX_COLORS) { setColorMsg('You can pick up to ' + MAX_COLORS + ' colors or materials per item.'); return false; }
+            else if (clashesWithShirt(hex)) { setColorMsg(CLASH_NOTE); return false; }
             else selectedColors.push({ name, hex });
             setColorMsg('');
             renderSelected();
@@ -1131,6 +1136,11 @@
                 const k = ch.dataset.key;
                 const on = selectedColors.some(c => c.name === k || c.name.indexOf(k + ': ') === 0);
                 ch.classList.toggle('active', on);
+                const bad = !!ch.dataset.hex && clashesWithShirt(ch.dataset.hex);
+                ch.classList.toggle('clash', bad);
+                if (bad) ch.setAttribute('aria-disabled', 'true'); else ch.removeAttribute('aria-disabled');
+                const base = ch.dataset.key || '';
+                ch.title = bad ? base + ': ' + CLASH_NOTE : base;
             });
         }
 
@@ -1256,8 +1266,34 @@
         ];
         const SHIRT_DEFAULT = 'Black';
         let shirtColorPick = SHIRT_DEFAULT;
-        function pickShirtColor(name) { shirtColorPick = name; renderShirtColor(); }
-        function resetShirtColor() { shirtColorPick = SHIRT_DEFAULT; renderShirtColor(); }
+        /* Vinyl that is too close to the shirt color is blocked. Light on dark and dark on light still pass. */
+        const CLASH_RATIO = 1.6;
+        const CLASH_NOTE = 'Too close to the shirt color. Pick a lighter or darker one.';
+        function lumOf(hex) {
+            const m = /^#([0-9a-f]{6})$/i.exec(String(hex || '').trim()); if (!m) return null;
+            const n = parseInt(m[1], 16);
+            const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+            return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+        }
+        function clashesWithShirt(hex) {
+            try {
+                if (!isShirtItem()) return false;
+                const sh = SHIRT_COLORS.find(c => c.name === shirtColorPick); if (!sh) return false;
+                const a = lumOf(sh.hex), b = lumOf(hex); if (a === null || b === null) return false;
+                return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) < CLASH_RATIO;
+            } catch (e) { return false; }
+        }
+        /* When the shirt color changes, take off any vinyl pick that now clashes and say so. */
+        function dropClashingVinyl() {
+            const gone = selectedColors.filter(c => clashesWithShirt(c.hex));
+            if (gone.length) {
+                selectedColors = selectedColors.filter(c => gone.indexOf(c) < 0);
+                setColorMsg(gone.map(c => c.name).join(', ') + ' removed. ' + CLASH_NOTE);
+            } else setColorMsg('');
+            renderSelected();
+        }
+        function pickShirtColor(name) { shirtColorPick = name; renderShirtColor(); dropClashingVinyl(); }
+        function resetShirtColor() { shirtColorPick = SHIRT_DEFAULT; renderShirtColor(); dropClashingVinyl(); }
         function renderShirtColor() {
             const hit = SHIRT_COLORS.find(c => c.name === shirtColorPick);
             const chip = document.querySelector('#shirt-swatches .swatch-chip');
@@ -1269,7 +1305,7 @@
             const dot = document.createElement('i'); dot.style.background = hit.hex;
             const txt = document.createElement('span'); txt.textContent = hit.name;
             const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + hit.name);
-            x.onclick = (ev) => { ev.stopPropagation(); closeSwatchPop(); shirtColorPick = ''; renderShirtColor(); playPip(); };
+            x.onclick = (ev) => { ev.stopPropagation(); closeSwatchPop(); shirtColorPick = ''; renderShirtColor(); dropClashingVinyl(); playPip(); };
             tag.appendChild(dot); tag.appendChild(txt); tag.appendChild(x); box.appendChild(tag);
         }
         /* Same drop-out panel as the wood and leather colors, but only one shirt color can be picked */
