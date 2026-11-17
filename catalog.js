@@ -159,6 +159,8 @@ window.WTL_CATALOG = {
       { name: 'Navy Blue',               hex: '#1B2A4A', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Cardinal Red',            hex: '#991B1B', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Forest Green',            hex: '#14532D', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Purple',                  hex: '#6B21A8', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Lavender',                hex: '#C4B5FD', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Full Color Print',        hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Paper / Cardstock (color in notes)', hex: '#F3E8D0', kind: 'paper', match: ['paper','card','invitation','topper','banner','garland','gift box','treat bag','luminar','lantern'] }
     ],
@@ -171,6 +173,7 @@ window.WTL_CATALOG = {
       { name: 'Matte Black',             hex: '#1E1E1E', match: ['tumbler','bottle','cooler'] },
       { name: 'Gloss White',             hex: '#FFFFFF', match: ['tumbler','bottle','cooler'] },
       { name: 'Lavender Violet',         hex: '#A78BFA', match: ['tumbler','bottle','cooler'] },
+      { name: 'Deep Purple',             hex: '#5B21B6', match: ['tumbler','bottle','cooler'] },
       { name: 'Sage Green',              hex: '#6EE7B7', match: ['tumbler','bottle','cooler'] }
     ],
     printAndCut: [

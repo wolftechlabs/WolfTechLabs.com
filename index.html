@@ -96,6 +96,8 @@
         }
 
         .audio-pill {
+            min-height: 44px;
+            font: inherit;
             font-size: 0.75rem;
             color: var(--text-color);
             background: rgba(57, 0, 57, 0.2);
@@ -459,12 +461,14 @@
             backdrop-filter: blur(4px);
             z-index: 10000;
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             padding: 20px;
+            overflow-y: auto;
         }
 
         .modal-card {
+            margin: auto;
             background-color: var(--card-bg);
             border: 1px solid var(--highlight);
             border-radius: 12px;
@@ -517,8 +521,18 @@
         }
         @media (prefers-reduced-motion: reduce) {
             #splash-screen { transition: none; }
-            .card, .btn, .swatch-chip { transition: none; }
+            *, *::before, *::after { transition: none !important; animation: none !important; }
+            .btn:hover, .swatch-chip:hover { transform: none !important; }
         }
+        /* Bigger tap targets and clearer keyboard focus */
+        .remove-btn { min-height: 44px; padding: 10px 14px; }
+        .custom-input, .btn { min-height: 44px; }
+        .nav-back-link { display: inline-flex; align-items: center; min-height: 44px; }
+        .cta-row a { display: inline-block; padding: 13px 8px; }
+        .custom-select:focus-visible, .custom-input:focus-visible, .custom-textarea:focus-visible, .dd-btn:focus-visible, .dd-opt:focus-visible {
+            outline: 2px solid #ffffff; outline-offset: 2px;
+        }
+        @media (forced-colors: active) { .swatch-chip, .swatch-opt { border: 2px solid CanvasText; forced-color-adjust: none; } }
         .construction-note {
             position: absolute;
             top: 15px;
@@ -557,17 +571,25 @@
             content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
             background: #020203;
         }
+        /* The one and only logo: fixed in place with its glow. Page text scrolls past it. */
         body::after {
-            content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-            background: url('logo.svg') var(--bg-logo-left, 50%) var(--bg-logo-top, 40px) / var(--bg-logo-w, 220px) auto no-repeat;
-            opacity: 0.7; filter: drop-shadow(0 0 14px rgba(110, 20, 140, 1)) drop-shadow(0 0 28px rgba(57, 0, 57, 1));
+            content: ''; position: fixed; z-index: -1; pointer-events: none;
+            top: 40px; left: 0; right: 0; margin: 0 auto;
+            width: min(220px, calc(100% - 40px)); aspect-ratio: 207.4668 / 238.75806;
+            background: url('logo.svg') center / contain no-repeat;
+            opacity: 0.85; filter: drop-shadow(0 0 14px rgba(110, 20, 140, 1)) drop-shadow(0 0 28px rgba(57, 0, 57, 1));
         }
+        @media (max-width: 600px) { body::after { top: 86px; width: min(220px, calc(100% - 28px)); } .logo-container { width: min(220px, calc(100% - 0px)); } }
+        /* Empty slot that keeps the page text below the fixed logo */
+        .logo-container { width: min(220px, 100%); aspect-ratio: 207.4668 / 238.75806; margin-bottom: 15px; }
         .card, .modal-card {
             background: rgba(110, 40, 170, 0.14);
         }
+        /* Drop-outs (dropdown lists, color pop-ups, receipt): dark and nearly solid so the words are easy to read */
         .swatch-pop, .dd-list {
-            background: rgba(60, 15, 100, 0.26);
+            background: rgba(6, 4, 12, 0.93);
         }
+        .modal-card { background: rgba(8, 6, 14, 0.95); }
         .card, .modal-card, .swatch-pop, .dd-list {
             -webkit-backdrop-filter: blur(7px) saturate(140%);
             backdrop-filter: blur(7px) saturate(140%);
@@ -575,15 +597,13 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
         .card:hover { border-color: rgba(182, 102, 210, 0.7); box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 18px rgba(182,102,210,0.35), inset 0 1px 0 rgba(255,255,255,0.22); }
-        .dd-group { background: rgba(10, 13, 18, 0.7); }
+        .dd-group { background: rgba(10, 8, 18, 0.97); }
         @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
             .card, .modal-card, .swatch-pop, .dd-list { background: rgba(13, 17, 23, 0.94); }
         }
         @media (prefers-reduced-transparency: reduce) {
             .card, .modal-card, .swatch-pop, .dd-list { background: rgba(13, 17, 23, 0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
         }
-                /* the fixed background logo carries the glow; the header logo copy has none */
-        .logo-container img { filter: none !important; }
         /* ===== END GLASS ===== */
     </style>
 </head>
@@ -591,7 +611,7 @@
 
 
     <!-- Cyber Intro Splash Banner -->
-    <div id="splash-screen" onclick="dismissSplash()">
+    <div id="splash-screen" onclick="dismissSplash()" aria-hidden="true">
         <div class="splash-title">WELCOME TO <span>WOLFTECHLABS</span></div>
         <div class="splash-sub">Custom Fabrication &amp; Project Inquiry</div>
     </div>
@@ -599,15 +619,13 @@
     <!-- Top Navigation & Audio Controls -->
     <div class="top-bar-controls">
         <a href="#what-we-make" class="nav-back-link">WHAT WE MAKE ↓</a>
-        <div class="audio-pill" onclick="toggleAudio()" title="Toggle Interface Audio">
+        <button type="button" class="audio-pill" id="audio-pill" aria-pressed="true" onclick="toggleAudio()" title="Toggle Interface Audio">
             <span class="audio-led" id="audio-led"></span>
             <span id="audio-label">AUDIO: ON</span>
-        </div>
+        </button>
     </div>
 
-    <div class="logo-container">
-        <img src="logo.svg" alt="WolfTechLabs Logo">
-    </div>
+    <div class="logo-container" aria-hidden="true"></div>
 
     <h1>WolfTechLabs</h1>
     <div class="tagline">Engineering | Artistry | Accessibility</div>
@@ -678,7 +696,7 @@
                 <!-- Item Specific Notes -->
                 <div class="field-group" style="grid-column: 1 / -1;">
                     <label class="field-label" for="inp-item-notes">DIMENSIONS OR BUILD NOTES (OPTIONAL)</label>
-                    <input type="text" id="inp-item-notes" class="custom-input" placeholder="e.g. 16oz cup wrap, monogram lettering, specific hex code...">
+                    <input type="text" id="inp-item-notes" class="custom-input" maxlength="200" placeholder="e.g. 16oz cup wrap, monogram lettering, specific hex code...">
                 </div>
             </div>
 
@@ -691,7 +709,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>STEP 2 // ACTIVE INQUIRY BUNDLE</h3>
-                <span class="chip" id="bundle-count-chip">0 ITEMS</span>
+                <span class="chip" id="bundle-count-chip" role="status" aria-live="polite">0 ITEMS</span>
             </div>
 
             <div class="table-wrapper">
@@ -727,21 +745,21 @@
                 <div class="input-grid">
                     <div class="field-group">
                         <label class="field-label" for="cust-name">YOUR FULL NAME</label>
-                        <input type="text" id="cust-name" class="custom-input" placeholder="Your Name" required>
+                        <input type="text" id="cust-name" class="custom-input" placeholder="Your Name" required maxlength="80" autocomplete="name">
                     </div>
 
                     <div class="field-group">
                         <label class="field-label" for="cust-email">CONTACT EMAIL</label>
-                        <input type="email" id="cust-email" class="custom-input" placeholder="you@example.com" required>
+                        <input type="email" id="cust-email" class="custom-input" placeholder="you@example.com" required maxlength="120" autocomplete="email">
                     </div>
 
                     <div class="field-group" style="grid-column: 1 / -1;">
                         <label class="field-label" for="cust-notes">PROJECT OVERVIEW / DELIVERY DETAILS (OPTIONAL)</label>
-                        <textarea id="cust-notes" class="custom-textarea" rows="2" placeholder="Tell us about your target date, event details, or specific file requirements..."></textarea>
+                        <textarea id="cust-notes" class="custom-textarea" rows="2" maxlength="1000" placeholder="Tell us about your target date, event details, or specific file requirements..."></textarea>
                     </div>
                 </div>
 
-                <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+                <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1">
 
                 <div class="scope-notice">
                     <strong style="color: #ffffff;">Fabrication Scope:</strong> All hybrid and multi-material projects are supplied as precision-cut parts kits [<span style="color: var(--highlight);">PARTS KIT — UNASSEMBLED</span>]. Final adhesive bonding or assembly is performed by client.
@@ -787,10 +805,10 @@
     </section>
 
     <!-- Confirmation Modal Receipt -->
-    <div id="confirmation-modal">
+    <div id="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-card">
             <div class="card-header">
-                <h3>INQUIRY TRANSMITTED</h3>
+                <h3 id="modal-title">INQUIRY TRANSMITTED</h3>
                 <span class="chip" id="modal-order-id">ORD-0000</span>
             </div>
             <p style="font-size: 1.05rem; line-height: 1.4; margin-bottom: 15px;">
@@ -820,7 +838,7 @@
 
         /* 2. Web Audio Synthesizer */
         let audioCtx = null;
-        let audioActive = localStorage.getItem('wtl_audio') !== 'false';
+        let audioActive = true; try { audioActive = localStorage.getItem('wtl_audio') !== 'false'; } catch (e) {}
 
         function unlockAudio() {
             if (!audioCtx) {
@@ -874,7 +892,8 @@
 
         function toggleAudio() {
             audioActive = !audioActive;
-            localStorage.setItem('wtl_audio', audioActive);
+            try { localStorage.setItem('wtl_audio', audioActive); } catch (e) {}
+            const pill = document.getElementById('audio-pill'); if (pill) pill.setAttribute('aria-pressed', String(audioActive));
             document.getElementById('audio-led').className = audioActive ? 'audio-led' : 'audio-led off';
             document.getElementById('audio-label').innerText = audioActive ? 'AUDIO: ON' : 'AUDIO: OFF';
             if (audioActive) playThump();
@@ -1195,7 +1214,8 @@
         function addItemToQueue() {
             playThump();
             const item = document.getElementById('sel-item').value;
-            const qty = parseInt(document.getElementById('inp-qty').value) || 1;
+            const qty = Math.min(500, Math.max(1, parseInt(document.getElementById('inp-qty').value) || 1));
+            if (bundleQueue.length >= 25) { setColorMsg('That is the most items one inquiry can hold (25). Please send this one first, then start another.'); return; }
             const sourcing = document.getElementById('sel-sourcing').value;
             const build = document.getElementById('sel-build').value;
             const notes = document.getElementById('inp-item-notes').value.trim();
@@ -1239,10 +1259,10 @@
 
             tbody.innerHTML = bundleQueue.map(i => `
                 <tr>
-                    <td><strong>${i.item}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
                     <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
-                    <td>${i.qty}</td>
-                    <td>${i.sourcing}</td>
+                    <td>${esc(String(i.qty))}</td>
+                    <td>${esc(i.sourcing)}</td>
                     <td><button type="button" class="remove-btn" onclick="removeItemFromQueue(${i.id})">✕ REMOVE</button></td>
                 </tr>
             `).join('');
@@ -1268,7 +1288,7 @@
 
             playThump();
             const orderId = 'WFL-' + Date.now().toString().slice(-6);
-            const name = document.getElementById('cust-name').value.trim();
+            const name = document.getElementById('cust-name').value.replace(/[\r\n\t]+/g, ' ').trim();
             const email = document.getElementById('cust-email').value.trim();
             const notes = document.getElementById('cust-notes').value || 'None';
 
@@ -1277,7 +1297,7 @@
 WOLFTECHLABS // PROJECT INQUIRY ${orderId}
 CLIENT: ${name} (${email})
 TARGET DELIVERY BUFFER: 14 DAYS
-SCOPE: STRICT PARTS FABRICATION ONLY [PARTS KIT — UNASSEMBLED]
+SCOPE: SEE BUILD FORMAT ON EACH ITEM
 ================================================================================
 INQUIRY ITEMS:
 ${bundleQueue.map((item, idx) => `
@@ -1320,9 +1340,10 @@ ${notes}
                     <strong>CONTACT:</strong> ${esc(name)} (${esc(email)})<br>
                     <strong>ITEMS IN BUNDLE:</strong> ${bundleQueue.length}<br>
                     <strong>LEAD TIME:</strong> Flat 14 Days<br><br>
-                    ${bundleQueue.map(i => `• ${i.qty}x ${esc(i.item)} [${esc(i.color)}]`).join('<br>')}
+                    ${bundleQueue.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] (${esc(i.build)})`).join('<br>')}
                 `;
                 document.getElementById('confirmation-modal').style.display = 'flex';
+                try { document.querySelector('#confirmation-modal .btn').focus(); } catch (e) {}
             } catch (err) {
                 showFormMsg('Your inquiry could not be sent. Please check your connection and try again.');
             } finally {
@@ -1331,8 +1352,11 @@ ${notes}
             }
         }
 
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.getElementById('confirmation-modal').style.display === 'flex') closeModal(); });
+
         function closeModal() {
             document.getElementById('confirmation-modal').style.display = 'none';
+            try { document.getElementById('submit-btn').focus(); } catch (e) {}
             bundleQueue = [];
             renderQueue();
             document.getElementById('inquiry-form').reset();
@@ -1349,23 +1373,16 @@ ${notes}
     <script>
         /* Glass test: the fixed background logo sits exactly behind the header logo (same size and spot). */
         (function () {
-            function place() {
-                var img = document.querySelector('.logo-container img');
-                if (!img) return;
-                var r = img.getBoundingClientRect();
-                if (!r.height) return;
-                var s = document.documentElement.style;
-                s.setProperty('--bg-logo-top', Math.round(r.top + window.scrollY) + 'px');
-                s.setProperty('--bg-logo-left', Math.round(r.left) + 'px');
-                s.setProperty('--bg-logo-w', Math.round(r.width) + 'px');
+            /* Always open at the very top so the fixed background logo sits exactly behind the header logo. */
+            try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+            function toTop() {
+                if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+                window.scrollTo(0, 0);
             }
-            window.addEventListener('load', place);
-            window.addEventListener('resize', place);
-            var im = document.querySelector('.logo-container img');
-            if (im) im.addEventListener('load', place);
-            if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
-            if (window.ResizeObserver) new ResizeObserver(place).observe(document.body);
-            place();
+            toTop();
+            document.addEventListener('DOMContentLoaded', toTop);
+            window.addEventListener('load', function () { toTop(); setTimeout(toTop, 150); });
+            window.addEventListener('pageshow', function (e) { if (e.persisted) toTop(); });
         })();
     </script>
 </body>
