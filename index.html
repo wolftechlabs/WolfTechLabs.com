@@ -530,7 +530,7 @@
             .queue-table td { border: none; padding: 4px 14px; }
             .queue-table td:nth-child(2)::before { content: "Color: "; color: #c9d1d9; }
             .queue-table td:nth-child(3)::before { content: "Qty: "; color: #c9d1d9; }
-            .queue-table td:nth-child(4)::before { content: "Sourcing: "; color: #c9d1d9; }
+            .queue-table td:nth-child(4)::before { content: "Materials: "; color: #c9d1d9; }
         }
         @media (prefers-reduced-motion: reduce) {
             #splash-screen { transition: none; }
@@ -692,11 +692,10 @@
 
                 <!-- Material Sourcing -->
                 <div class="field-group">
-                    <label class="field-label" for="sel-sourcing">MATERIAL SOURCING</label>
+                    <label class="field-label" for="sel-sourcing">WHO SUPPLIES THE MATERIALS?</label>
                     <select id="sel-sourcing" class="custom-select">
-                        <option value="In-House Stock">In-House Stock (Basswood / Core Filaments)</option>
-                        <option value="Sourced to Order">Sourced to Order (Shop Supplied)</option>
-                        <option value="Client Supplied">Client-Supplied Blank (Shipped or Dropped Off)</option>
+                        <option value="WolfTechLabs Supplied">WolfTechLabs supplies the materials</option>
+                        <option value="Client Supplied">I will supply my own (shipped or dropped off)</option>
                     </select>
                 </div>
 
@@ -761,7 +760,7 @@
                             <th>ITEM SPEC</th>
                             <th>COLOR / MATERIAL</th>
                             <th>QTY</th>
-                            <th>SOURCING</th>
+                            <th>MATERIALS BY</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -933,6 +932,43 @@
             } catch(e) {}
         }
 
+        /* Soft extra sounds: very short and quiet. Mouse hover only (phones get click sounds only). */
+        let lastTickAt = 0;
+        function blip(f1, f2, start, dur, vol, type) {
+            const t = audioCtx.currentTime + start;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(f1, t);
+            osc.frequency.exponentialRampToValueAtTime(f2, t + dur);
+            gain.gain.setValueAtTime(0.0001, t);
+            gain.gain.exponentialRampToValueAtTime(vol, t + 0.004);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t);
+            osc.stop(t + dur + 0.01);
+        }
+        function playTick() {
+            if (!audioActive) return;
+            const now = Date.now();
+            if (now - lastTickAt < 70) return;
+            lastTickAt = now;
+            try { unlockAudio(); if (!audioCtx || audioCtx.state !== 'running') return; blip(1250, 1700, 0, 0.03, 0.014, 'triangle'); } catch (e) {}
+        }
+        function playOpen() {
+            if (!audioActive) return;
+            try { unlockAudio(); if (!audioCtx || audioCtx.state !== 'running') return; blip(520, 780, 0, 0.07, 0.03, 'sine'); blip(780, 1170, 0.06, 0.08, 0.026, 'triangle'); } catch (e) {}
+        }
+        function playClose() {
+            if (!audioActive) return;
+            try { unlockAudio(); if (!audioCtx || audioCtx.state !== 'running') return; blip(900, 600, 0, 0.06, 0.026, 'triangle'); blip(600, 380, 0.05, 0.08, 0.026, 'sine'); } catch (e) {}
+        }
+        function playDeny() {
+            if (!audioActive) return;
+            try { unlockAudio(); if (!audioCtx || audioCtx.state !== 'running') return; blip(210, 150, 0, 0.09, 0.03, 'square'); } catch (e) {}
+        }
+
         function toggleAudio() {
             audioActive = !audioActive;
             try { localStorage.setItem('wtl_audio', audioActive); } catch (e) {}
@@ -1088,7 +1124,7 @@
             const i = selectedColors.findIndex(c => c.name === name);
             if (i >= 0) selectedColors.splice(i, 1);
             else if (selectedColors.length >= MAX_COLORS) { setColorMsg('You can pick up to ' + MAX_COLORS + ' colors or materials per item.'); return false; }
-            else if (clashesWithShirt(hex)) { setColorMsg(CLASH_NOTE); return false; }
+            else if (clashesWithShirt(hex)) { setColorMsg(CLASH_NOTE); playDeny(); return false; }
             else selectedColors.push({ name, hex });
             setColorMsg('');
             renderSelected();
@@ -1237,7 +1273,7 @@
                 closeAllDd(wrap); closeSwatchPop(); build(); wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true');
                 const cur = list.querySelector('[aria-selected="true"]'); if (cur) cur.scrollIntoView({ block: 'nearest' });
             }
-            btn.onclick = (ev) => { ev.stopPropagation(); wrap.classList.contains('open') ? close() : open(); };
+            btn.onclick = (ev) => { ev.stopPropagation(); if (wrap.classList.contains('open')) { close(); playClose(); } else { open(); playOpen(); } };
             list.onclick = (ev) => ev.stopPropagation();
             wrap.addEventListener('keydown', (ev) => {
                 const opts = Array.from(list.querySelectorAll('.dd-opt'));
@@ -1569,7 +1605,7 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - ${item.shirtSize ? 'Vinyl color(s) (the design on top)' : 'Color/Material'}: ${item.color}
 - Colors/materials to swap: ${String(item.color).split(' + ').filter(Boolean).length}
 - Quantity: ${item.qty}
-- Sourcing: ${item.sourcing}
+- Materials supplied by: ${item.sourcing}
 - Build format: ${item.build}${item.shirtSize ? `
 - Shirt size: ${item.shirtSize}
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
@@ -1661,6 +1697,23 @@ ${notes}
             document.querySelectorAll('.btn, .custom-select, .custom-input, .custom-textarea, .audio-pill, .nav-back-link').forEach(el => {
                 el.addEventListener('mouseenter', playPip);
             });
+            /* Extra hover ticks. One listener covers items built later (color chips, dropdown lists). */
+            const TICK_SEL = '.make-list summary, .make-list li, .home-section .card, .swatch-chip:not(.clash), .swatch-opt, .dd-btn, .dd-opt, .equip-btn, .cta-row a, .sel-tag button';
+            let lastTick = null;
+            document.addEventListener('pointerover', (ev) => {
+                if (ev.pointerType !== 'mouse') return;
+                const t = ev.target && ev.target.closest ? ev.target.closest(TICK_SEL) : null;
+                if (!t) { lastTick = null; return; }
+                if (t === lastTick) return;
+                lastTick = t;
+                playTick();
+            });
+            /* Open / close sound for the What We Make pop-outs. "toggle" does not bubble, so listen on capture. */
+            document.addEventListener('toggle', (ev) => {
+                const d = ev.target;
+                if (!d || !d.matches || !d.matches('.make-list details')) return;
+                if (d.open) playOpen(); else playClose();
+            }, true);
         });
     </script>
     <script>
