@@ -615,6 +615,9 @@
             .card, .modal-card, .swatch-pop, .dd-list { background: rgba(13, 17, 23, 0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
         }
         /* ===== END GLASS ===== */
+        input[type=file].custom-input { padding: 9px 12px; cursor: pointer; }
+        input[type=file].custom-input::file-selector-button { margin-right: 12px; padding: 7px 14px; background: #3d0a4f; color: #fff; border: 1px solid #a855f7; border-radius: 6px; cursor: pointer; font: inherit; }
+        .file-hint { margin-top: 6px; font-size: 0.8rem; opacity: 0.75; }
     </style>
 </head>
 <body>
@@ -721,6 +724,13 @@
                     <input type="text" id="inp-shirt-color" class="custom-input" maxlength="40" placeholder="e.g. black, heather gray">
                 </div>
 
+                <!-- Optional design file (saved to the owner's private Google Drive) -->
+                <div class="field-group" style="grid-column: 1 / -1;">
+                    <label class="field-label" for="inp-design-file">DESIGN FILE (OPTIONAL)</label>
+                    <input type="file" id="inp-design-file" class="custom-input" accept=".svg,.png,.jpg,.jpeg,.pdf,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
+                    <div class="file-hint" id="file-hint">SVG, PNG, JPG, PDF, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
+                </div>
+
                 <!-- Item Specific Notes -->
                 <div class="field-group" style="grid-column: 1 / -1;">
                     <label class="field-label" for="inp-item-notes">DIMENSIONS OR BUILD NOTES (OPTIONAL)</label>
@@ -798,7 +808,7 @@
                 <button type="submit" id="submit-btn" class="btn btn-submit">
                     TRANSMIT PROJECT INQUIRY →
                 </button>
-                <p class="privacy-note" style="margin:12px 0 0;font-size:0.8rem;line-height:1.4;opacity:0.75;text-align:center;">We use your name, email and project details only to reply to your inquiry. They go to our private Google account and are never sold.</p>
+                <p class="privacy-note" style="margin:12px 0 0;font-size:0.8rem;line-height:1.4;opacity:0.75;text-align:center;">We use your name, email, project details and any design file only to reply to your inquiry. They go to our private Google account and are never sold.</p>
             </form>
         </div>
 
@@ -1256,6 +1266,32 @@
 
         /* 4. Multi-Item Order Queue */
         let bundleQueue = [];
+
+        /* Optional design file: checked here, saved to the owner's private Google Drive by the form receiver */
+        const DESIGN_EXTS = ['svg', 'png', 'jpg', 'jpeg', 'pdf', 'stl', '3mf', 'step', 'stp', 'obj', 'dxf'];
+        const DESIGN_MAX = 30 * 1024 * 1024;
+        const DESIGN_TOTAL_MAX = 30 * 1024 * 1024;
+        let addBusy = false;
+        function checkDesignFile(file) {
+            if (!file) return '';
+            const ext = (file.name.split('.').pop() || '').toLowerCase();
+            if (DESIGN_EXTS.indexOf(ext) < 0) return 'That file type is not allowed. Please use SVG, PNG, JPG, PDF, STL, 3MF, STEP, OBJ or DXF.';
+            if (file.size > DESIGN_MAX) return 'That file is too big. The limit is 30 MB.';
+            return '';
+        }
+        function onDesignFileChange() {
+            const el = document.getElementById('inp-design-file');
+            const err = checkDesignFile(el.files && el.files[0]);
+            if (err) { el.value = ''; setQtyMsg(err); } else { setQtyMsg(''); }
+        }
+        function readFileB64(file) {
+            return new Promise((resolve, reject) => {
+                const fr = new FileReader();
+                fr.onload = () => resolve(String(fr.result).split(',')[1] || '');
+                fr.onerror = () => reject(fr.error);
+                fr.readAsDataURL(file);
+            });
+        }
         let queueIdCounter = 0;
         function setQtyMsg(t) { const el = document.getElementById('qty-msg'); if (el) el.textContent = t || ''; }
 
@@ -1263,7 +1299,7 @@
             return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        function addItemToQueue() {
+        async function addItemToQueue() {
             playThump();
             const item = document.getElementById('sel-item').value;
             const qtyEl = document.getElementById('inp-qty');
@@ -1286,6 +1322,22 @@
             if (shirtShown && !shirtSize) { setQtyMsg('Please choose a shirt size first.'); try { document.querySelector('#grp-shirt-size .dd-btn').focus(); } catch (e) {} return; }
             if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); try { document.getElementById('swatch-ribbon').scrollIntoView({ block: 'center' }); } catch (e) {} return; }
 
+            const fileEl = document.getElementById('inp-design-file');
+            const designFile = fileEl.files && fileEl.files[0] ? fileEl.files[0] : null;
+            let fileName = '', fileData = '', fileSize = 0;
+            if (designFile) {
+                const ferr = checkDesignFile(designFile);
+                if (ferr) { fileEl.value = ''; setQtyMsg(ferr); return; }
+                const used = bundleQueue.reduce((n, q) => n + (q.fileSize || 0), 0);
+                if (used + designFile.size > DESIGN_TOTAL_MAX) { setQtyMsg('That is the most file data one inquiry can hold (30 MB in total). Please send this one first, then start another.'); return; }
+                if (addBusy) return;
+                addBusy = true;
+                try { fileData = await readFileB64(designFile); }
+                catch (e) { setQtyMsg('That file could not be read. Please try another file.'); return; }
+                finally { addBusy = false; }
+                fileName = designFile.name; fileSize = designFile.size;
+            }
+
             bundleQueue.push({
                 id: ++queueIdCounter,
                 item,
@@ -1295,11 +1347,15 @@
                 build,
                 shirtSize,
                 shirtColor,
+                fileName,
+                fileData,
+                fileSize,
                 notes: notes || 'None'
             });
 
             document.getElementById('inp-item-notes').value = '';
             document.getElementById('inp-shirt-color').value = '';
+            fileEl.value = '';
             try { const sz = document.getElementById('sel-shirt-size'); sz.value = ''; sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
             /* Clear the choices so the next item starts fresh (nothing carries over by accident) */
             selectedColors = [];
@@ -1340,7 +1396,7 @@
 
             tbody.innerHTML = bundleQueue.map(i => `
                 <tr>
-                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.fileName ? `<br><span style="opacity:0.75; font-size:0.85rem;">Design file: ${esc(i.fileName)}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
                     <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
                     <td>${esc(String(i.qty))}</td>
                     <td>${esc(i.sourcing)}</td>
@@ -1401,7 +1457,7 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Build format: ${item.build}${item.shirtSize ? `
 - Shirt size: ${item.shirtSize}
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
-- Notes: ${item.notes}
+${item.fileName ? '- Design file: ' + item.fileName + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
 `).join('')}
 ================================================================================
 OVERALL CLIENT NOTES:
@@ -1424,7 +1480,7 @@ ${notes}
                 let res, data;
                 if (GOOGLE_SCRIPT_URL) {
                     /* text/plain keeps this a simple request (no browser pre-check needed) */
-                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ files: bundleQueue.map((q, n) => q.fileData ? { item: n + 1, name: q.fileName, data: q.fileData } : null).filter(Boolean) }, payload)) });
                     data = await res.json();
                     if (!res.ok || !data.ok) throw new Error('Send failed');
                 } else {
@@ -1444,7 +1500,7 @@ ${notes}
                     <strong>CONTACT:</strong> ${esc(name)} (${esc(email)})<br>
                     <strong>ITEMS IN BUNDLE:</strong> ${sent.length}<br>
                     <strong>LEAD TIME:</strong> About 14 days after we confirm your quote. Special-order colors may take longer.<br><br>
-                    ${sent.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] - ${esc(i.build)}${i.shirtSize ? ' - Shirt size ' + esc(i.shirtSize) + (i.shirtColor ? ', shirt color ' + esc(i.shirtColor) : '') : ''}`).join('<br>')}
+                    ${sent.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] - ${esc(i.build)}${i.shirtSize ? ' - Shirt size ' + esc(i.shirtSize) + (i.shirtColor ? ', shirt color ' + esc(i.shirtColor) : '') : ''}${i.fileName ? ' - File ' + esc(i.fileName) : ''}`).join('<br>')}
                 `;
                 /* Clear the form right away so nothing can be sent twice while the receipt is open */
                 bundleQueue = [];
