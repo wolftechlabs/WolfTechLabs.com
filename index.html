@@ -727,8 +727,8 @@
                 <!-- Optional design file (saved to the owner's private Google Drive) -->
                 <div class="field-group" style="grid-column: 1 / -1;">
                     <label class="field-label" for="inp-design-file">DESIGN FILE (OPTIONAL)</label>
-                    <input type="file" id="inp-design-file" class="custom-input" accept=".svg,.png,.jpg,.jpeg,.pdf,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
-                    <div class="file-hint" id="file-hint">SVG, PNG, JPG, PDF, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
+                    <input type="file" id="inp-design-file" class="custom-input" accept=".svg,.png,.jpg,.jpeg,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
+                    <div class="file-hint" id="file-hint">SVG, PNG, JPG, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
                 </div>
 
                 <!-- Item Specific Notes -->
@@ -1268,14 +1268,14 @@
         let bundleQueue = [];
 
         /* Optional design file: checked here, saved to the owner's private Google Drive by the form receiver */
-        const DESIGN_EXTS = ['svg', 'png', 'jpg', 'jpeg', 'pdf', 'stl', '3mf', 'step', 'stp', 'obj', 'dxf'];
+        const DESIGN_EXTS = ['svg', 'png', 'jpg', 'jpeg', 'stl', '3mf', 'step', 'stp', 'obj', 'dxf'];
         const DESIGN_MAX = 30 * 1024 * 1024;
         const DESIGN_TOTAL_MAX = 30 * 1024 * 1024;
         let addBusy = false;
         function checkDesignFile(file) {
             if (!file) return '';
             const ext = (file.name.split('.').pop() || '').toLowerCase();
-            if (DESIGN_EXTS.indexOf(ext) < 0) return 'That file type is not allowed. Please use SVG, PNG, JPG, PDF, STL, 3MF, STEP, OBJ or DXF.';
+            if (DESIGN_EXTS.indexOf(ext) < 0) return 'That file type is not allowed. Please use SVG, PNG, JPG, STL, 3MF, STEP, OBJ or DXF.';
             if (file.size > DESIGN_MAX) return 'That file is too big. The limit is 30 MB.';
             return '';
         }
