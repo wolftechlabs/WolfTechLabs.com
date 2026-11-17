@@ -781,6 +781,7 @@
                 <button type="submit" id="submit-btn" class="btn btn-submit">
                     TRANSMIT PROJECT INQUIRY →
                 </button>
+                <p class="privacy-note" style="margin:12px 0 0;font-size:0.8rem;line-height:1.4;opacity:0.75;text-align:center;">We use your name, email and project details only to reply to your inquiry. They go to our private Google account and are never sold.</p>
             </form>
         </div>
 
@@ -1310,6 +1311,8 @@
 
         /* 5. Final Submission (sends through Web3Forms, same service as the live site) */
         const WEB3FORMS_KEY = 'c0c6138a-e33b-46d5-bc5d-37b34c79f907';
+        /* When this is filled in, inquiries go to the owner's own Google account instead of Web3Forms. */
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwuoA80ydsduhFYHnGgGV8MzUux_k7eEH_u9C0qAJ_L524eQiGKDIjrwDJnCPQ5JeUY/exec';
 
         function showFormMsg(text) {
             const m = document.getElementById('form-msg');
@@ -1369,20 +1372,28 @@ ${notes}
             btn.textContent = 'SENDING...';
 
             try {
-                const res = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        access_key: WEB3FORMS_KEY,
-                        subject: `[NEW INQUIRY] ${orderId} - ${name} (${bundleQueue.length} Items)`,
-                        from_name: 'WolfTechLabs Inquiry Form',
-                        name: name,
-                        email: email,
-                        message: manifest
-                    })
-                });
-                const data = await res.json();
-                if (!res.ok || !data.success) throw new Error(data.message || 'Send failed');
+                const payload = {
+                    subject: `[NEW INQUIRY] ${orderId} - ${name} (${bundleQueue.length} Items)`,
+                    from_name: 'WolfTechLabs Inquiry Form',
+                    name: name,
+                    email: email,
+                    message: manifest
+                };
+                let res, data;
+                if (GOOGLE_SCRIPT_URL) {
+                    /* text/plain keeps this a simple request (no browser pre-check needed) */
+                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                    data = await res.json();
+                    if (!res.ok || !data.ok) throw new Error('Send failed');
+                } else {
+                    res = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(Object.assign({ access_key: WEB3FORMS_KEY }, payload))
+                    });
+                    data = await res.json();
+                    if (!res.ok || !data.success) throw new Error(data.message || 'Send failed');
+                }
 
                 const sent = bundleQueue.slice();
                 document.getElementById('modal-order-id').innerText = orderId;
