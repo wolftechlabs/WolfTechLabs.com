@@ -15,6 +15,9 @@
                              (use this while a machine is down for repair).
    HOW TO ADD AN AFFILIATE LINK -> paste it into  url: ''  in the "equipment" list.
    MIXED PROJECTS -> a machine can use several color lists:  palette: ['laserMaterials', 'filaments']
+   ITEM-SPECIFIC COLORS -> a color with  match: ['word']  only shows for items whose name has that word.
+                           Specific materials (anodized aluminum, glass, cork) live in 'specialtyMaterials';
+                           a machine turns them on with  namedPalette: 'specialtyMaterials'.
    HOW TO ADD A COLOR     -> add a line in "palettes" (name + hex code).
    ========================================================================== */
 
@@ -26,7 +29,7 @@ window.WTL_CATALOG = {
        available: false  hides a choice (e.g. things your laser cannot cut yet).
        Change false to true when you get a laser that can cut them. */
     laserMaterials: [
-      { name: 'Wood', kind: 'wood', hex: '#D2B48C', options: [
+      { name: 'Wood', kind: 'wood', match: ['wood','plywood','basswood'], hex: '#D2B48C', options: [
         { name: 'Basswood', hex: '#D2B48C' },
         { name: 'Birch Plywood', hex: '#E3C9A0' },
         { name: 'Maple', hex: '#E8D3A9' },
@@ -35,8 +38,8 @@ window.WTL_CATALOG = {
         { name: 'Walnut', hex: '#5C4033' },
         { name: 'Bamboo', hex: '#D9C27F' }
       ] },
-      { name: 'Slate (Natural Black)', kind: 'stone', hex: '#1C1C1E' },
-      { name: 'Leather (Genuine)', kind: 'leather', hex: '#C19A6B', options: [
+      { name: 'Slate (Natural Black)', kind: 'stone', match: ['slate'], hex: '#1C1C1E' },
+      { name: 'Leather (Genuine)', kind: 'leather', match: ['leather'], hex: '#C19A6B', options: [
         { name: 'Veg-Tan Natural', hex: '#C19A6B' },
         { name: 'Veg-Tan Dark Brown', hex: '#4B2E1E' },
         { name: 'Chrome-Tan Tan', hex: '#C68E5A' },
@@ -47,7 +50,7 @@ window.WTL_CATALOG = {
         { name: 'Chrome-Tan Navy', hex: '#1E2A47' },
         { name: 'Chrome-Tan Gray', hex: '#6B7280' }
       ] },
-      { name: 'Opaque Acrylic', kind: 'acrylic', label: 'Acrylic', hex: '#0F0F10', options: [
+      { name: 'Opaque Acrylic', kind: 'acrylic', match: ['acrylic'], label: 'Acrylic', hex: '#0F0F10', options: [
         { name: 'Black', hex: '#0F0F10' },
         { name: 'Red', hex: '#B91C1C' },
         { name: 'Orange', hex: '#EA580C' },
@@ -59,7 +62,7 @@ window.WTL_CATALOG = {
         { name: 'Clear',      hex: '#CFE8F3', available: false },
         { name: 'Light Blue', hex: '#93C5FD', available: false }
       ] },
-      { name: 'Felt', kind: 'felt', hex: '#C0392B', options: [
+      { name: 'Felt', kind: 'felt', match: ['felt'], hex: '#C0392B', options: [
         { name: 'Red', hex: '#C0392B' },
         { name: 'Burgundy', hex: '#7B1E3A' },
         { name: 'Pink', hex: '#EC8CB0' },
@@ -85,7 +88,7 @@ window.WTL_CATALOG = {
        Move a color between the two lists as your racks change.
        "PETG" = the bin of PETG rolls (colors from your list). */
     filaments: [
-      { name: 'PLA In Stock', kind: 'pla', label: 'PLA', hex: '#1FA64A', options: [
+      { name: 'PLA In Stock', kind: 'pla', match: ['pla'], label: 'PLA', hex: '#1FA64A', options: [
         { name: 'White', hex: '#F3F4F6' },
         { name: 'Cream / Natural', hex: '#EFE6D0' },
         { name: 'Light Gray', hex: '#C9CDD3' },
@@ -118,7 +121,7 @@ window.WTL_CATALOG = {
         { name: 'Dark Purple', hex: '#3B1A6B' },
         { name: 'Translucent Clear', hex: '#D9E6EE' }
       ] },
-      { name: 'PETG In Stock', kind: 'petg', label: 'PETG', hex: '#2F7FE0', options: [
+      { name: 'PETG In Stock', kind: 'petg', match: ['petg'], label: 'PETG', hex: '#2F7FE0', options: [
         { name: 'Black', hex: '#15171A' },
         { name: 'Blue', hex: '#2F7FE0' },
         { name: 'Yellow', hex: '#F7DC30' },
@@ -129,7 +132,7 @@ window.WTL_CATALOG = {
         { name: 'Red', hex: '#D62828' },
         { name: 'Silver Gray', hex: '#A3A9B2' }
       ] },
-      { name: 'New Roll', kind: 'filament', label: 'New Roll', hex: '#6B4226', options: [
+      { name: 'New Roll', kind: 'filament', match: ['tpu','asa','abs','carbon','glow','metallic','overmolded'], label: 'New Roll', hex: '#6B4226', options: [
         { name: 'Brown', hex: '#6B4226' },
         { name: 'Lime Green', hex: '#A3E635' },
         { name: 'Carbon Fiber Black', hex: '#0B0B0C' },
@@ -139,27 +142,175 @@ window.WTL_CATALOG = {
       ] },
       { name: 'Multi-Color (see notes)', label: 'Multi', hex: 'linear-gradient(90deg,#B666D2,#D97706,#6EE7B7)' }
     ],
+    /* Cricut colors. Each color has "match" words: when an item name has one of these
+       words, ONLY the matching colors show for that item (paper crafts get paper,
+       shirts get vinyl colors). Items with no match words show all of them. */
     vinylAndFabric: [
-      { name: 'Pitch Black',             hex: '#111111' },
-      { name: 'Pure White',              hex: '#F8F9FA' },
-      { name: 'Navy Blue',               hex: '#1B2A4A' },
-      { name: 'Cardinal Red',            hex: '#991B1B' },
-      { name: 'Forest Green',            hex: '#14532D' },
-      { name: 'Full Color Print',        hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)' }
+      { name: 'Pitch Black',             hex: '#111111', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Pure White',              hex: '#F8F9FA', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Navy Blue',               hex: '#1B2A4A', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Cardinal Red',            hex: '#991B1B', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Forest Green',            hex: '#14532D', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Full Color Print',        hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      { name: 'Paper / Cardstock (color in notes)', hex: '#F3E8D0', kind: 'paper', match: ['paper','card','invitation','topper','banner','garland','gift box','treat bag','luminar','lantern'] }
     ],
+    /* Rotary: the vessel is usually supplied by the customer. These powder-coat colors
+       only show for tumblers, bottles and can coolers. */
     drinkware: [
-      { name: 'Matte Black',             hex: '#1E1E1E' },
-      { name: 'Gloss White',             hex: '#FFFFFF' },
-      { name: 'Lavender Violet',         hex: '#A78BFA' },
-      { name: 'Sage Green',              hex: '#6EE7B7' },
       { name: 'Client Supplied Vessel',  hex: 'repeating-linear-gradient(45deg, #222, #222 4px, #444 4px, #444 8px)' }
     ],
+    drinkwareColors: [
+      { name: 'Matte Black',             hex: '#1E1E1E', match: ['tumbler','bottle','cooler'] },
+      { name: 'Gloss White',             hex: '#FFFFFF', match: ['tumbler','bottle','cooler'] },
+      { name: 'Lavender Violet',         hex: '#A78BFA', match: ['tumbler','bottle','cooler'] },
+      { name: 'Sage Green',              hex: '#6EE7B7', match: ['tumbler','bottle','cooler'] }
+    ],
     printAndCut: [
-      { name: 'Gloss Vinyl Sticker',     hex: '#E5E7EB' },
-      { name: 'Matte Vinyl Sticker',     hex: '#9CA3AF' },
-      { name: 'Clear Vinyl Sticker',     hex: '#CFE8F3' },
-      { name: 'Paper / Cardstock',       hex: '#F3E8D0' },
-      { name: 'Transfer / Tattoo Paper', hex: '#F9A8D4' }
+      { name: 'Gloss Vinyl Sticker',     hex: '#E5E7EB', match: ['sticker','label','decal'] },
+      { name: 'Matte Vinyl Sticker',     hex: '#9CA3AF', match: ['sticker','label','decal'] },
+      { name: 'Clear Vinyl Sticker',     hex: '#CFE8F3', match: ['sticker','label','decal'] },
+      { name: 'Paper / Cardstock',       hex: '#F3E8D0', match: ['card','paper','bookmark','banner','topper','tag','insert','invitation','photo print'] },
+      { name: 'Transfer / Tattoo Paper', hex: '#F9A8D4', match: ['tattoo'] }
+    ],
+    /* Felt and leather for Cricut / print-and-cut items (shows only when the item name says felt or leather). */
+    feltLeather: [
+      {
+        "name": "Leather (Genuine)",
+        "kind": "leather",
+        "match": [
+          "leather"
+        ],
+        "hex": "#C19A6B",
+        "options": [
+          {
+            "name": "Veg-Tan Natural",
+            "hex": "#C19A6B"
+          },
+          {
+            "name": "Veg-Tan Dark Brown",
+            "hex": "#4B2E1E"
+          },
+          {
+            "name": "Chrome-Tan Tan",
+            "hex": "#C68E5A"
+          },
+          {
+            "name": "Chrome-Tan Brown",
+            "hex": "#6B4423"
+          },
+          {
+            "name": "Chrome-Tan Black",
+            "hex": "#141414"
+          },
+          {
+            "name": "Chrome-Tan Burgundy",
+            "hex": "#6D1F2C"
+          },
+          {
+            "name": "Chrome-Tan Red",
+            "hex": "#A4262C"
+          },
+          {
+            "name": "Chrome-Tan Navy",
+            "hex": "#1E2A47"
+          },
+          {
+            "name": "Chrome-Tan Gray",
+            "hex": "#6B7280"
+          }
+        ]
+      },
+      {
+        "name": "Felt",
+        "kind": "felt",
+        "match": [
+          "felt"
+        ],
+        "hex": "#C0392B",
+        "options": [
+          {
+            "name": "Red",
+            "hex": "#C0392B"
+          },
+          {
+            "name": "Burgundy",
+            "hex": "#7B1E3A"
+          },
+          {
+            "name": "Pink",
+            "hex": "#EC8CB0"
+          },
+          {
+            "name": "Orange",
+            "hex": "#F08A24"
+          },
+          {
+            "name": "Yellow",
+            "hex": "#F4D03F"
+          },
+          {
+            "name": "Lime Green",
+            "hex": "#8BC34A"
+          },
+          {
+            "name": "Forest Green",
+            "hex": "#1E6B3A"
+          },
+          {
+            "name": "Teal",
+            "hex": "#1B9AAA"
+          },
+          {
+            "name": "Royal Blue",
+            "hex": "#2552C4"
+          },
+          {
+            "name": "Navy",
+            "hex": "#1B2A4A"
+          },
+          {
+            "name": "Purple",
+            "hex": "#7E3FA8"
+          },
+          {
+            "name": "Black",
+            "hex": "#111111"
+          },
+          {
+            "name": "White",
+            "hex": "#F5F5F5"
+          },
+          {
+            "name": "Gray",
+            "hex": "#8A8F98"
+          },
+          {
+            "name": "Cream",
+            "hex": "#F2E8CF"
+          },
+          {
+            "name": "Tan",
+            "hex": "#C9A66B"
+          },
+          {
+            "name": "Brown",
+            "hex": "#6B4226"
+          }
+        ]
+      }
+    ],
+    /* SPECIFIC MATERIALS. These only show when the item name has the match word
+       (an anodized aluminum tag gets aluminum colors and nothing else).
+       A machine lists these under "namedPalette". Add a material = add a block here. */
+    specialtyMaterials: [
+      { name: 'Anodized Aluminum', kind: 'metal', match: ['anodized aluminum','aluminum'], options: [
+        { name: 'Black', hex: '#1C1C1E' }, { name: 'Silver', hex: '#C0C4CC' }, { name: 'Gold', hex: '#D4AF37' },
+        { name: 'Rose Gold', hex: '#B76E79' }, { name: 'Blue', hex: '#2563EB' }, { name: 'Red', hex: '#B91C1C' },
+        { name: 'Green', hex: '#15803D' }, { name: 'Purple', hex: '#7E22CE' }, { name: 'Orange', hex: '#EA580C' }
+      ] },
+      { name: 'Cork', kind: 'cork', match: ['cork'], hex: '#C8A27A' },
+      { name: 'Glass (Frosted Etch)', kind: 'glass', match: ['glass','flute','pint','vase'], hex: 'linear-gradient(135deg,#E0F2FE,#BAE6FD)' },
+      { name: 'Chipboard', kind: 'paper', match: ['chipboard'], hex: '#9A8A78' }
     ]
   },
 
@@ -200,6 +351,7 @@ window.WTL_CATALOG = {
       name: "xTool M2 20W: Flatbed Laser Cut & Engrave",
       active: true,
       palette: "laserMaterials",
+      namedPalette: "specialtyMaterials",
       groups: [
         {
           label: "Wood Signs & Wall Art",
@@ -308,7 +460,8 @@ window.WTL_CATALOG = {
       equipment: "xtool-m2",
       name: "xTool M2 Rotary: Drinkware & Round Items (360\u00b0 Etch)",
       active: true,
-      palette: "drinkware",
+      palette: ["drinkware", "drinkwareColors"],
+      namedPalette: "specialtyMaterials",
       groups: [
         {
           label: "Tumblers & Bottles",
@@ -359,6 +512,7 @@ window.WTL_CATALOG = {
       name: "xTool M2 Inline Print & Cut: Stickers, Cards & Transfers",
       active: true,
       palette: "printAndCut",
+      namedPalette: "feltLeather",
       groups: [
         {
           label: "Stickers & Labels",
@@ -518,6 +672,7 @@ window.WTL_CATALOG = {
       name: "Cricut & Heat Press: Apparel, Vinyl, Stencils & Paper",
       active: true,
       palette: "vinylAndFabric",
+      namedPalette: ["specialtyMaterials", "feltLeather"],
       groups: [
         {
           label: "Apparel & Fabric (Heat Press)",
@@ -581,6 +736,7 @@ window.WTL_CATALOG = {
       name: "Custom Hybrid Fabrication (Mixed Machines)",
       active: true,
       palette: ["laserMaterials", "filaments"],
+      namedPalette: "specialtyMaterials",
       groups: [
         {
           label: "Hybrid Projects",
