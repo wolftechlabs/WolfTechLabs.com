@@ -50,7 +50,7 @@ window.WTL_CATALOG = {
         { name: 'Chrome-Tan Navy', hex: '#1E2A47' },
         { name: 'Chrome-Tan Gray', hex: '#6B7280' }
       ] },
-      { name: 'Opaque Acrylic', kind: 'acrylic', match: ['acrylic'], label: 'Acrylic', hex: '#0F0F10', options: [
+      { name: 'Opaque Acrylic', kind: 'acrylic', match: ['acrylic'], label: 'Acrylic', hex: '#0F0F10', note: 'Need a different acrylic color? Pick "Other" and tell us in the notes. We order it in, so allow extra lead time (about 14 days).', options: [
         { name: 'Black', hex: '#0F0F10' },
         { name: 'Red', hex: '#B91C1C' },
         { name: 'Orange', hex: '#EA580C' },
@@ -58,6 +58,14 @@ window.WTL_CATALOG = {
         { name: 'Dark Blue', hex: '#1D4ED8' },
         { name: 'Purple', hex: '#7E22CE' },
         { name: 'Gray', hex: '#6B7280' },
+        { name: 'Pink', hex: '#EC4899' },
+        { name: 'Yellow', hex: '#FACC15' },
+        { name: 'Teal', hex: '#0D9488' },
+        { name: 'Brown', hex: '#78350F' },
+        { name: 'Lime Green', hex: '#84CC16' },
+        { name: 'Gold', hex: '#CA8A04' },
+        { name: 'Silver', hex: '#9CA3AF' },
+        { name: 'Other (tell us in notes)', hex: 'linear-gradient(135deg,#B666D2,#EC4899,#FACC15,#0D9488)' },
         { name: 'White',      hex: '#F9FAFB', available: false },
         { name: 'Clear',      hex: '#CFE8F3', available: false },
         { name: 'Light Blue', hex: '#93C5FD', available: false }
