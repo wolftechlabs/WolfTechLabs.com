@@ -646,7 +646,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>STEP 1 // CONFIGURE ITEM</h3>
-                <span class="chip">14-DAY LEAD</span>
+                <span class="chip">ABOUT 14 DAYS</span>
             </div>
 
             <div class="input-grid">
@@ -702,6 +702,23 @@
                         <option value="Parts Kit (Unassembled)">Parts kit, unassembled (may cost less)</option>
                         <option value="Gift Kit (Unassembled)">Gift / build-it-yourself kit (may cost less)</option>
                     </select>
+                </div>
+
+                <!-- Shirt fields: shown only for shirts and clothing -->
+                <div class="field-group" id="grp-shirt-size" style="display:none;">
+                    <label class="field-label" for="sel-shirt-size">SHIRT SIZE</label>
+                    <select id="sel-shirt-size" class="custom-select">
+                        <option value="">Choose a size...</option>
+                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option>
+                        <option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option><option value="3XL">3XL</option>
+                        <option value="Kids XS">Kids XS</option><option value="Kids S">Kids S</option><option value="Kids M">Kids M</option>
+                        <option value="Kids L">Kids L</option><option value="Kids XL">Kids XL</option>
+                        <option value="Other (see notes)">Other (tell us in the notes)</option>
+                    </select>
+                </div>
+                <div class="field-group" id="grp-shirt-color" style="display:none;">
+                    <label class="field-label" for="inp-shirt-color">SHIRT COLOR (THE SHIRT ITSELF, NOT THE VINYL)</label>
+                    <input type="text" id="inp-shirt-color" class="custom-input" maxlength="40" placeholder="e.g. black, heather gray">
                 </div>
 
                 <!-- Item Specific Notes -->
@@ -773,7 +790,7 @@
                 <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1">
 
                 <div class="scope-notice">
-                    <strong style="color: #ffffff;">Fabrication Scope:</strong> All hybrid and multi-material projects are supplied as precision-cut parts kits [<span style="color: var(--highlight);">PARTS KIT — UNASSEMBLED</span>]. Final adhesive bonding or assembly is performed by client.
+                    <strong style="color: #ffffff;">Fabrication Scope:</strong> Some mixed-material projects (like wood with acrylic) may only be offered as a parts kit. If yours is, we will tell you in our reply.
                 </div>
 
                 <div id="form-msg" class="form-msg" role="alert"></div>
@@ -1041,6 +1058,7 @@
 
             selectedColors = [];
             rebuildRibbon();
+            updateShirtFields();
             playPip();
         }
 
@@ -1217,9 +1235,23 @@
 
         renderEquipment();
 
+        /* Shirt size and shirt color only show for shirts and clothing */
+        function updateShirtFields() {
+            const item = document.getElementById('sel-item').value;
+            const show = wordHit(item, ['shirt', 'hoodie', 'onesie']);
+            document.getElementById('grp-shirt-size').style.display = show ? '' : 'none';
+            document.getElementById('grp-shirt-color').style.display = show ? '' : 'none';
+            if (!show) {
+                const sz = document.getElementById('sel-shirt-size');
+                sz.value = ''; try { sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+                document.getElementById('inp-shirt-color').value = '';
+            }
+            return show;
+        }
         function onItemSelect() {
             playPip();
             rebuildRibbon();
+            updateShirtFields();
         }
 
         /* 4. Multi-Item Order Queue */
@@ -1248,6 +1280,10 @@
             const sourcing = document.getElementById('sel-sourcing').value;
             const build = document.getElementById('sel-build').value;
             const notes = document.getElementById('inp-item-notes').value.trim();
+            const shirtShown = updateShirtFields();
+            const shirtSize = shirtShown ? document.getElementById('sel-shirt-size').value : '';
+            const shirtColor = shirtShown ? document.getElementById('inp-shirt-color').value.replace(/[\r\n\t]+/g, ' ').trim() : '';
+            if (shirtShown && !shirtSize) { setQtyMsg('Please choose a shirt size first.'); try { document.querySelector('#grp-shirt-size .dd-btn').focus(); } catch (e) {} return; }
             if (!selectedColors.length) { setColorMsg('Please pick at least one color or material first.'); try { document.getElementById('swatch-ribbon').scrollIntoView({ block: 'center' }); } catch (e) {} return; }
 
             bundleQueue.push({
@@ -1257,10 +1293,14 @@
                 qty,
                 sourcing,
                 build,
+                shirtSize,
+                shirtColor,
                 notes: notes || 'None'
             });
 
             document.getElementById('inp-item-notes').value = '';
+            document.getElementById('inp-shirt-color').value = '';
+            try { const sz = document.getElementById('sel-shirt-size'); sz.value = ''; sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
             /* Clear the choices so the next item starts fresh (nothing carries over by accident) */
             selectedColors = [];
             renderSelected();
@@ -1300,7 +1340,7 @@
 
             tbody.innerHTML = bundleQueue.map(i => `
                 <tr>
-                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
                     <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
                     <td>${esc(String(i.qty))}</td>
                     <td>${esc(i.sourcing)}</td>
@@ -1348,7 +1388,7 @@
 `================================================================================
 WOLFTECHLABS // PROJECT INQUIRY ${orderId}
 CLIENT: ${name} (${email})
-TARGET DELIVERY BUFFER: 14 DAYS
+TARGET LEAD TIME: ABOUT 14 DAYS AFTER QUOTE IS CONFIRMED
 SCOPE: SEE BUILD FORMAT ON EACH ITEM
 ================================================================================
 INQUIRY ITEMS:
@@ -1358,7 +1398,9 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Color/Material: ${item.color}
 - Quantity: ${item.qty}
 - Sourcing: ${item.sourcing}
-- Build format: ${item.build}
+- Build format: ${item.build}${item.shirtSize ? `
+- Shirt size: ${item.shirtSize}
+- Shirt color: ${item.shirtColor || 'Not given'}` : ''}
 - Notes: ${item.notes}
 `).join('')}
 ================================================================================
@@ -1401,8 +1443,8 @@ ${notes}
                 document.getElementById('modal-summary').innerHTML = `
                     <strong>CONTACT:</strong> ${esc(name)} (${esc(email)})<br>
                     <strong>ITEMS IN BUNDLE:</strong> ${sent.length}<br>
-                    <strong>LEAD TIME:</strong> Flat 14 Days<br><br>
-                    ${sent.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] - ${esc(i.build)}`).join('<br>')}
+                    <strong>LEAD TIME:</strong> About 14 days after we confirm your quote. Special-order colors may take longer.<br><br>
+                    ${sent.map(i => `• ${esc(String(i.qty))}x ${esc(i.item)} [${esc(i.color)}] - ${esc(i.build)}${i.shirtSize ? ' - Shirt size ' + esc(i.shirtSize) + (i.shirtColor ? ', shirt color ' + esc(i.shirtColor) : '') : ''}`).join('<br>')}
                 `;
                 /* Clear the form right away so nothing can be sent twice while the receipt is open */
                 bundleQueue = [];
