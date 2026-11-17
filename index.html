@@ -673,7 +673,7 @@
 
                 <!-- Color Spec Ribbon -->
                 <div class="field-group" style="grid-column: 1 / -1;">
-                    <label class="field-label">COLOR / MATERIAL SPECIFICATION</label>
+                    <label class="field-label" id="ribbon-label">COLOR / MATERIAL SPECIFICATION</label>
                     <div class="swatch-ribbon" id="swatch-ribbon"></div>
                     <div class="swatch-name-display" id="swatch-name-display" aria-live="polite"></div>
                     <div class="swatch-name-display" id="combo-note" style="color:#b8c4d0;font-size:0.85rem;"></div>
@@ -1051,6 +1051,8 @@
                 ribbon.appendChild(chip);
             });
             ribbon.classList.toggle('labeled', labeled);
+            const rl = document.getElementById('ribbon-label');
+            if (rl) rl.textContent = isShirtItem() ? 'VINYL COLORS (THE DESIGN ON TOP, PICK AS MANY AS YOU NEED)' : 'COLOR / MATERIAL SPECIFICATION';
             renderSelected();
         }
 
@@ -1111,7 +1113,7 @@
         function renderSelected() {
             const box = document.getElementById('swatch-name-display');
             box.innerHTML = '';
-            if (!selectedColors.length) { box.textContent = 'Nothing picked yet. Tap a color or material.'; }
+            if (!selectedColors.length) { box.textContent = isShirtItem() ? 'Nothing picked yet. Tap a vinyl color.' : 'Nothing picked yet. Tap a color or material.'; }
             selectedColors.forEach(c => {
                 const tag = document.createElement('span');
                 tag.className = 'sel-tag';
@@ -1246,9 +1248,11 @@
         renderEquipment();
 
         /* Shirt size and shirt color only show for shirts and clothing */
+        const SHIRT_WORDS = ['shirt', 'hoodie', 'onesie'];
+        function isShirtItem() { return wordHit((document.getElementById('sel-item') || {}).value, SHIRT_WORDS); }
         function updateShirtFields() {
             const item = document.getElementById('sel-item').value;
-            const show = wordHit(item, ['shirt', 'hoodie', 'onesie']);
+            const show = wordHit(item, SHIRT_WORDS);
             document.getElementById('grp-shirt-size').style.display = show ? '' : 'none';
             document.getElementById('grp-shirt-color').style.display = show ? '' : 'none';
             if (!show) {
@@ -1451,7 +1455,8 @@ INQUIRY ITEMS:
 ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes below)\n'}${bundleQueue.map((item, idx) => `
 [ITEM ${idx + 1}]
 - Spec: ${item.item}
-- Color/Material: ${item.color}
+- ${item.shirtSize ? 'Vinyl color(s) (the design on top)' : 'Color/Material'}: ${item.color}
+- Colors/materials to swap: ${String(item.color).split(' + ').filter(Boolean).length}
 - Quantity: ${item.qty}
 - Sourcing: ${item.sourcing}
 - Build format: ${item.build}${item.shirtSize ? `
@@ -1459,6 +1464,11 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
 ${item.fileName ? '- Design file: ' + item.fileName + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
 `).join('')}
+================================================================================
+QUOTE HELPER (counts only, no prices):
+- Items: ${bundleQueue.length}
+- Total pieces: ${bundleQueue.reduce((a, i) => a + (Number(i.qty) || 0), 0)}
+- Total color/material swaps: ${bundleQueue.reduce((a, i) => a + String(i.color).split(' + ').filter(Boolean).length, 0)}
 ================================================================================
 OVERALL CLIENT NOTES:
 ${notes}
