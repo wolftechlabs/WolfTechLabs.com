@@ -1492,6 +1492,7 @@
             bundleQueue.push({
                 id: ++queueIdCounter,
                 item,
+                machineKey: document.getElementById('sel-category').value,
                 color: colorString(),
                 qty,
                 sourcing,
@@ -1567,6 +1568,38 @@
             m.style.display = text ? 'block' : 'none';
         }
 
+
+        /* "HOW TO MAKE IT" guide for the order email (for the shop only, not shown to customers).
+           Machine and process come from catalog.js, so a new machine needs no change here. */
+        function machineOf(item) {
+            const cat = window.WTL_CATALOG || {};
+            const m = (cat.machines || []).find(x => x.id === item.machineKey);
+            const e = m && m.equipment && Array.isArray(cat.equipment) ? cat.equipment.find(x => x.id === m.equipment) : null;
+            return { machine: e ? (e.short || e.name) : 'Mixed machines', process: e && m ? m.name : 'see Spec and Notes' };
+        }
+        function howToMakeIt(item) {
+            const mp = machineOf(item), machine = mp.machine, process = mp.process;
+            const colors = String(item.color).split(' + ').filter(Boolean);
+            const shirt = !!item.shirtSize;
+            const kit = /kit/i.test(item.build);
+            const own = /^Client/i.test(item.sourcing);
+            const L = [];
+            L.push('  HOW TO MAKE IT');
+            L.push('  Machine: ' + machine + ' - ' + process);
+            L.push('  Materials and colors (' + colors.length + '): ' + colors.join(', '));
+            L.push('  Materials: ' + (own ? 'CLIENT SUPPLIES - confirm what arrives and when' : 'WolfTechLabs supplies - check stock, order any missing color'));
+            if (shirt) L.push('  Shirt: size ' + item.shirtSize + ', color ' + (item.shirtColor || 'not given') + ' (vinyl must not match the shirt color)');
+            L.push('  Design file: ' + (item.fileName ? item.fileName + ' (link at the bottom of this email)' : 'none attached - design from the notes'));
+            L.push('  Build: ' + item.build + (kit ? ' - do not assemble; bag and label the parts' : ''));
+            L.push('  Checklist:');
+            L.push('    [ ] Quote confirmed with client');
+            L.push('    [ ] ' + (own ? 'Client materials received' : 'Materials and colors in stock') + ' (' + item.qty + ' piece' + (Number(item.qty) === 1 ? '' : 's') + ')');
+            L.push('    [ ] ' + (item.fileName ? 'Design file opened and checked' : 'Design drawn and approved by client'));
+            L.push('    [ ] Test piece made' + (shirt ? ' (or test press)' : ''));
+            L.push('    [ ] Made, checked and ' + (kit ? 'bagged' : 'packed'));
+            return L.join('\n');
+        }
+
         let submitting = false;
         async function submitInquiry(e) {
             e.preventDefault();
@@ -1601,7 +1634,7 @@ SCOPE: SEE BUILD FORMAT ON EACH ITEM
 INQUIRY ITEMS:
 ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes below)\n'}${bundleQueue.map((item, idx) => `
 [ITEM ${idx + 1}]
-- Spec: ${item.item}
+- Spec: ${item.item}  [${machineOf(item).machine}${machineOf(item).process.indexOf('see ') === 0 ? '' : ' - ' + machineOf(item).process}]
 - ${item.shirtSize ? 'Vinyl color(s) (the design on top)' : 'Color/Material'}: ${item.color}
 - Colors/materials to swap: ${String(item.color).split(' + ').filter(Boolean).length}
 - Quantity: ${item.qty}
@@ -1610,6 +1643,8 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Shirt size: ${item.shirtSize}
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
 ${item.fileName ? '- Design file: ' + item.fileName + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
+
+${howToMakeIt(item)}
 `).join('')}
 ================================================================================
 QUOTE HELPER (counts only, no prices):
