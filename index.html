@@ -740,11 +740,26 @@
                     <div class="swatch-name-display" id="shirt-color-name" aria-live="polite"></div>
                 </div>
 
+                <!-- How many sides get the design -->
+                <div class="field-group" id="grp-sides">
+                    <label class="field-label" for="sel-sides">HOW MANY SIDES GET THE DESIGN?</label>
+                    <select id="sel-sides" class="custom-select" onchange="onSidesChange()">
+                        <option value="One side">One side</option>
+                        <option value="Two sides - a different picture on each side">Two sides, a different picture on each side</option>
+                        <option value="Two sides - the same picture on both sides">Two sides, the same picture on both sides</option>
+                    </select>
+                    <div class="file-hint" id="sides-hint" style="display:none;"><strong>Two-sided etching:</strong> if your shape is symmetrical, you can order any number. If it is not symmetrical, we cut pieces in pairs so we can flip them in our jig, so please order in even numbers (2, 4, 6 and so on).</div>
+                </div>
+
                 <!-- Optional design file (saved to the owner's private Google Drive) -->
                 <div class="field-group" style="grid-column: 1 / -1;">
-                    <label class="field-label" for="inp-design-file">DESIGN FILE OR PICTURE (OPTIONAL)</label>
+                    <label class="field-label" for="inp-design-file" id="lbl-file1">DESIGN FILE OR PICTURE (OPTIONAL)</label>
                     <input type="file" id="inp-design-file" class="custom-input" accept="image/*,.svg,.png,.jpg,.jpeg,.webp,.heic,.heif,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
                     <div class="file-hint" id="file-hint">Photos and pictures (JPG, PNG, WEBP, HEIC), or SVG, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
+                </div>
+                <div class="field-group" id="grp-file2" style="grid-column: 1 / -1; display:none;">
+                    <label class="field-label" for="inp-design-file2">SIDE 2: DESIGN FILE OR PICTURE (OPTIONAL)</label>
+                    <input type="file" id="inp-design-file2" class="custom-input" accept="image/*,.svg,.png,.jpg,.jpeg,.webp,.heic,.heif,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFile2Change()">
                 </div>
 
                 <!-- Item Specific Notes -->
@@ -1455,6 +1470,21 @@
             sel.dispatchEvent(new Event('change', { bubbles: true }));
             methodAuto = false;
         }
+        function isTwoDifferent() { const el = document.getElementById('sel-sides'); return !!el && /different/.test(el.value); }
+        function onSidesChange() {
+            const two = isTwoDifferent();
+            document.getElementById('sides-hint').style.display = /^Two sides/.test(document.getElementById('sel-sides').value) ? '' : 'none';
+            document.getElementById('grp-file2').style.display = two ? '' : 'none';
+            document.getElementById('lbl-file1').textContent = two ? 'SIDE 1: DESIGN FILE OR PICTURE (OPTIONAL)' : 'DESIGN FILE OR PICTURE (OPTIONAL)';
+            if (!two) document.getElementById('inp-design-file2').value = '';
+        }
+        function onDesignFile2Change() {
+            const el = document.getElementById('inp-design-file2');
+            const f = el.files && el.files[0];
+            const err = checkDesignFile(f);
+            if (err) { el.value = ''; setQtyMsg(err); return; }
+            setQtyMsg('');
+        }
         function onMethodChange() { if (!methodAuto) methodTouched = true; }
         function onDesignFileChange() {
             const el = document.getElementById('inp-design-file');
@@ -1508,18 +1538,37 @@
 
             const fileEl = document.getElementById('inp-design-file');
             const designFile = fileEl.files && fileEl.files[0] ? fileEl.files[0] : null;
-            let fileName = '', fileData = '', fileSize = 0;
+            const sides = document.getElementById('sel-sides').value;
+            const file2El = document.getElementById('inp-design-file2');
+            const designFile2 = isTwoDifferent() && file2El.files && file2El.files[0] ? file2El.files[0] : null;
+            let fileName = '', fileData = '', fileSize = 0, fileName2 = '', fileData2 = '', fileSize2 = 0;
+            if (designFile2) {
+                const ferr2 = checkDesignFile(designFile2);
+                if (ferr2) { file2El.value = ''; setQtyMsg(ferr2); return; }
+            }
             if (designFile) {
                 const ferr = checkDesignFile(designFile);
                 if (ferr) { fileEl.value = ''; setQtyMsg(ferr); return; }
-                const used = bundleQueue.reduce((n, q) => n + (q.fileSize || 0), 0);
-                if (used + designFile.size > DESIGN_TOTAL_MAX) { setQtyMsg('That is the most file data one inquiry can hold (30 MB in total). Please send this one first, then start another.'); return; }
+                const used = bundleQueue.reduce((n, q) => n + (q.fileSize || 0) + (q.fileSize2 || 0), 0);
+                if (used + designFile.size + (designFile2 ? designFile2.size : 0) > DESIGN_TOTAL_MAX) { setQtyMsg('That is the most file data one inquiry can hold (30 MB in total). Please send this one first, then start another.'); return; }
                 if (addBusy) return;
                 addBusy = true;
                 try { fileData = await readFileB64(designFile); }
                 catch (e) { setQtyMsg('That file could not be read. Please try another file.'); return; }
                 finally { addBusy = false; }
                 fileName = designFile.name; fileSize = designFile.size;
+            }
+            if (designFile2) {
+                if (!designFile) {
+                    const used2 = bundleQueue.reduce((n, q) => n + (q.fileSize || 0) + (q.fileSize2 || 0), 0);
+                    if (used2 + designFile2.size > DESIGN_TOTAL_MAX) { setQtyMsg('That is the most file data one inquiry can hold (30 MB in total). Please send this one first, then start another.'); return; }
+                }
+                if (addBusy) return;
+                addBusy = true;
+                try { fileData2 = await readFileB64(designFile2); }
+                catch (e) { setQtyMsg('The side 2 file could not be read. Please try another file.'); return; }
+                finally { addBusy = false; }
+                fileName2 = designFile2.name; fileSize2 = designFile2.size;
             }
 
             bundleQueue.push({
@@ -1533,15 +1582,22 @@
                 method: document.getElementById('sel-method').value,
                 shirtSize,
                 shirtColor,
+                sides,
                 fileName,
                 fileData,
                 fileSize,
+                fileName2,
+                fileData2,
+                fileSize2,
                 notes: notes || 'None'
             });
 
             document.getElementById('inp-item-notes').value = '';
             resetShirtColor();
             fileEl.value = '';
+            document.getElementById('sel-sides').value = 'One side';
+            try { document.getElementById('sel-sides').dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+            onSidesChange();
             try { const sz = document.getElementById('sel-shirt-size'); sz.value = ''; sz.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
             /* Clear the choices so the next item starts fresh (nothing carries over by accident) */
             selectedColors = [];
@@ -1583,7 +1639,7 @@
 
             tbody.innerHTML = bundleQueue.map(i => `
                 <tr>
-                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.method && i.method !== METHOD_DEFAULT ? `<br><span style="opacity:0.75; font-size:0.85rem;">Applied: ${esc(i.method)}</span>` : ''}${i.fileName ? `<br><span style="opacity:0.75; font-size:0.85rem;">Design file: ${esc(i.fileName)}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.sides && i.sides !== 'One side' ? `<br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.sides)}</span>` : ''}${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.method && i.method !== METHOD_DEFAULT ? `<br><span style="opacity:0.75; font-size:0.85rem;">Applied: ${esc(i.method)}</span>` : ''}${i.fileName ? `<br><span style="opacity:0.75; font-size:0.85rem;">Design file: ${esc(i.fileName)}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
                     <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
                     <td>${esc(String(i.qty))}</td>
                     <td>${esc(i.sourcing)}</td>
@@ -1625,12 +1681,17 @@
             L.push('  Materials: ' + (own ? 'CLIENT SUPPLIES - confirm what arrives and when' : 'WolfTechLabs supplies - check stock, order any missing color'));
             if (shirt) L.push('  Shirt: size ' + item.shirtSize + ', color ' + (item.shirtColor || 'not given') + ' (vinyl must not match the shirt color)');
             L.push('  Method: ' + (item.method || 'Not sure - decide at quote') + (/^Printed/.test(item.method || '') ? ' - print first' + (/then cut/.test(item.method) ? ', then cut or engrave' : '') : ''));
-            L.push('  Design file: ' + (item.fileName ? item.fileName + ' (link at the bottom of this email)' : 'none attached - design from the notes'));
+            const two = item.sides && item.sides !== 'One side';
+            if (two) L.push('  Sides: ' + item.sides);
+            L.push('  Design file' + (item.fileName2 ? ' (side 1)' : '') + ': ' + (item.fileName ? item.fileName + ' (link at the bottom of this email)' : 'none attached - design from the notes'));
+            if (item.fileName2) L.push('  Design file (side 2): ' + item.fileName2 + ' (link at the bottom of this email)');
             L.push('  Build: ' + item.build + (kit ? ' - do not assemble; bag and label the parts' : ''));
             L.push('  Checklist:');
             L.push('    [ ] Quote confirmed with client');
             L.push('    [ ] ' + (own ? 'Client materials received' : 'Materials and colors in stock') + ' (' + item.qty + ' piece' + (Number(item.qty) === 1 ? '' : 's') + ')');
             L.push('    [ ] ' + (item.fileName ? 'Design file or picture opened and checked' : 'Design drawn and approved by client'));
+            if (two) L.push('    [ ] Both sides lined up and the right picture on the right side');
+            if (two && !/^Printed/.test(item.method || '')) L.push('    [ ] Two-sided etching: if the shape is symmetrical, flip it. If not, cut at least 2 pieces so one can be reversed in the jig');
             if (/^Printed/.test(item.method || '')) L.push('    [ ] Print test done on a scrap');
             L.push('    [ ] Test piece made' + (shirt ? ' (or test press)' : ''));
             L.push('    [ ] Made, checked and ' + (kit ? 'bagged' : 'packed'));
@@ -1680,7 +1741,7 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Design applied by: ${item.method || 'Not sure - decide at quote'}${item.shirtSize ? `
 - Shirt size: ${item.shirtSize}
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
-${item.fileName ? '- Design file: ' + item.fileName + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
+${item.sides && item.sides !== 'One side' ? '- Sides: ' + item.sides + '\n' : ''}${item.fileName ? '- Design file' + (item.fileName2 ? ' (side 1)' : '') + ': ' + item.fileName + ' (link at the bottom of this email)\n' : ''}${item.fileName2 ? '- Design file (side 2): ' + item.fileName2 + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
 
 ${howToMakeIt(item)}
 `).join('')}
@@ -1710,7 +1771,7 @@ ${notes}
                 let res, data;
                 if (GOOGLE_SCRIPT_URL) {
                     /* text/plain keeps this a simple request (no browser pre-check needed) */
-                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ files: bundleQueue.map((q, n) => q.fileData ? { item: n + 1, name: q.fileName, data: q.fileData } : null).filter(Boolean) }, payload)) });
+                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ files: bundleQueue.reduce((a, q, n) => { if (q.fileData) a.push({ item: n + 1, name: (q.fileData2 ? 'SIDE 1 - ' : '') + q.fileName, data: q.fileData }); if (q.fileData2) a.push({ item: n + 1, name: 'SIDE 2 - ' + q.fileName2, data: q.fileData2 }); return a; }, []) }, payload)) });
                     data = await res.json();
                     if (!res.ok || !data.ok) throw new Error('Send failed');
                 } else {
