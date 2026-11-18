@@ -181,7 +181,17 @@ window.WTL_CATALOG = {
       { name: 'Matte Vinyl Sticker',     hex: '#9CA3AF', match: ['sticker','label','decal'] },
       { name: 'Clear Vinyl Sticker',     hex: '#CFE8F3', match: ['sticker','label','decal'] },
       { name: 'Paper / Cardstock',       hex: '#F3E8D0', match: ['card','paper','bookmark','banner','topper','tag','insert','invitation','photo print'] },
-      { name: 'Transfer / Tattoo Paper', hex: '#F9A8D4', match: ['tattoo'] }
+      { name: 'Transfer / Tattoo Paper', hex: '#F9A8D4', match: ['tattoo'] },
+      { name: 'Wood', kind: 'wood', match: ['wood','wooden','plywood','basswood'], hex: '#D2B48C', options: [
+        { name: 'Basswood', hex: '#D2B48C' },
+        { name: 'Birch Plywood', hex: '#E3C9A0' },
+        { name: 'Maple', hex: '#E8D3A9' },
+        { name: 'Cherry', hex: '#A0522D' },
+        { name: 'Oak', hex: '#B8895A' },
+        { name: 'Walnut', hex: '#5C4033' },
+        { name: 'Bamboo', hex: '#D9C27F' }
+      ] },
+      { name: 'Your Own Blank', hex: '#9CA3AF', match: ['blank'] }
     ],
     /* Felt and leather for Cricut / print-and-cut items (shows only when the item name says felt or leather). */
     feltLeather: [
@@ -340,6 +350,30 @@ window.WTL_CATALOG = {
   /* Approved note about affiliate links. It only shows when at least one link
      below is filled in. Edit the words here if you want to change them. */
   affiliateNote: 'Some machine links are affiliate links. If you buy through them, WolfTechLabs may earn a commission at no extra cost to you.',
+
+  /* PROCESSING RULES (shop only, never shown to customers).
+     When an order item matches a rule, its steps appear in the "HOW TO MAKE IT" guide in your order email
+     and as checklist lines. To add a rule: copy one block and change it.
+       name:    what the rule is called
+       printed: true = only when the design is printed (inkjet). Leave it out to ignore the method.
+       blank:   true = only when the customer supplies the material.
+       words:   the item or material must have one of these words (leave out to match any item)
+       before:  steps to do BEFORE the main work      after: steps to do AFTER */
+  processing: [
+    {
+      name: 'Printed on wood',
+      printed: true,
+      words: ['wood', 'plywood', 'basswood', 'birch', 'maple', 'cherry', 'oak', 'walnut', 'bamboo'],
+      before: ['Seal the wood with wood sealant first, so the inkjet ink does not bleed. Let it dry.'],
+      after:  ['Apply a protective clear coat after printing. Without it the print is not waterproof and the ink can bleed.']
+    },
+    {
+      name: 'Printed on a blank the customer supplies',
+      printed: true,
+      blank: true,
+      before: ['Spray the blank with fixative before printing.', 'Check the blank fits under the laser height limit.']
+    }
+  ],
 
   /* YOUR MACHINES. Shown only in the small notice at the very bottom of the page (names plain, or as buttons once a link is added).
      To add an affiliate link: paste it between the quotes in  url: ''
@@ -520,7 +554,7 @@ window.WTL_CATALOG = {
     {
       id: "xtool-print-cut",
       equipment: "xtool-m2",
-      name: "Stickers, Cards & Transfers (Print & Cut)",
+      name: "Stickers, Cards, Wood & Transfers (Print & Cut)",
       active: true,
       palette: "printAndCut",
       namedPalette: "feltLeather",
@@ -557,8 +591,21 @@ window.WTL_CATALOG = {
           ]
         },
         {
+          label: "Printed Wood Jewelry & Gifts",
+          items: [
+          "Printed Wood Earrings",
+          "Printed Wood Keychains",
+          "Printed Wood Ornaments",
+          "Printed Wood Magnets",
+          "Printed Wood Coasters",
+          "Printed Wood Pendants & Name Plates",
+          "Printed Wood Page Markers"
+          ]
+        },
+        {
           label: "Other",
           items: [
+          "Print on a Blank You Supply (Limited)",
           "Something Else (Describe in Notes)"
           ]
         }

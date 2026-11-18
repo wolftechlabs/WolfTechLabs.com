@@ -699,6 +699,18 @@
                     </select>
                 </div>
 
+                <!-- How the design is put on the item: printed, cut/engraved, or both (picked from the file, can be changed) -->
+                <div class="field-group" id="grp-method">
+                    <label class="field-label" for="sel-method">HOW IS THE DESIGN PUT ON IT?</label>
+                    <select id="sel-method" class="custom-select" onchange="onMethodChange()">
+                        <option value="Not sure - decide at quote">Not sure, decide at quote</option>
+                        <option value="Printed in full color (inkjet)">Printed in full color (inkjet)</option>
+                        <option value="Cut or engraved (laser)">Cut or engraved (laser)</option>
+                        <option value="Printed, then cut or engraved">Printed, then cut or engraved</option>
+                    </select>
+                    <div class="file-hint" id="method-hint">Pictures and photos are set to printed. SVG and DXF files are set to cut or engraved. You can change it.</div>
+                </div>
+
                 <!-- Build Format: assembled or unassembled kit -->
                 <div class="field-group">
                     <label class="field-label" for="sel-build">BUILD FORMAT</label>
@@ -729,9 +741,9 @@
 
                 <!-- Optional design file (saved to the owner's private Google Drive) -->
                 <div class="field-group" style="grid-column: 1 / -1;">
-                    <label class="field-label" for="inp-design-file">DESIGN FILE (OPTIONAL)</label>
-                    <input type="file" id="inp-design-file" class="custom-input" accept=".svg,.png,.jpg,.jpeg,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
-                    <div class="file-hint" id="file-hint">SVG, PNG, JPG, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
+                    <label class="field-label" for="inp-design-file">DESIGN FILE OR PICTURE (OPTIONAL)</label>
+                    <input type="file" id="inp-design-file" class="custom-input" accept="image/*,.svg,.png,.jpg,.jpeg,.webp,.heic,.heif,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFileChange()" aria-describedby="file-hint">
+                    <div class="file-hint" id="file-hint">Photos and pictures (JPG, PNG, WEBP, HEIC), or SVG, STL, 3MF, STEP, OBJ or DXF, up to 30 MB.</div>
                 </div>
 
                 <!-- Item Specific Notes -->
@@ -1419,21 +1431,41 @@
         let bundleQueue = [];
 
         /* Optional design file: checked here, saved to the owner's private Google Drive by the form receiver */
-        const DESIGN_EXTS = ['svg', 'png', 'jpg', 'jpeg', 'stl', '3mf', 'step', 'stp', 'obj', 'dxf'];
+        const DESIGN_EXTS = ['svg', 'png', 'jpg', 'jpeg', 'webp', 'heic', 'heif', 'stl', '3mf', 'step', 'stp', 'obj', 'dxf'];
         const DESIGN_MAX = 30 * 1024 * 1024;
         const DESIGN_TOTAL_MAX = 30 * 1024 * 1024;
         let addBusy = false;
         function checkDesignFile(file) {
             if (!file) return '';
             const ext = (file.name.split('.').pop() || '').toLowerCase();
-            if (DESIGN_EXTS.indexOf(ext) < 0) return 'That file type is not allowed. Please use SVG, PNG, JPG, STL, 3MF, STEP, OBJ or DXF.';
+            if (DESIGN_EXTS.indexOf(ext) < 0) return 'That file type is not allowed. Please use a photo or picture (JPG, PNG, WEBP, HEIC), or SVG, STL, 3MF, STEP, OBJ or DXF.';
             if (file.size > DESIGN_MAX) return 'That file is too big. The limit is 30 MB.';
             return '';
         }
+        const METHOD_DEFAULT = 'Not sure - decide at quote';
+        const PICTURE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'heic', 'heif'];
+        const CUTFILE_EXTS = ['svg', 'dxf'];
+        let methodTouched = false, methodAuto = false;
+        function setMethod(v) {
+            const sel = document.getElementById('sel-method');
+            if (!sel) return;
+            methodAuto = true;
+            sel.value = v;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            methodAuto = false;
+        }
+        function onMethodChange() { if (!methodAuto) methodTouched = true; }
         function onDesignFileChange() {
             const el = document.getElementById('inp-design-file');
-            const err = checkDesignFile(el.files && el.files[0]);
-            if (err) { el.value = ''; setQtyMsg(err); } else { setQtyMsg(''); }
+            const f = el.files && el.files[0];
+            const err = checkDesignFile(f);
+            if (err) { el.value = ''; setQtyMsg(err); return; }
+            setQtyMsg('');
+            if (methodTouched) return;
+            const ext = f ? (f.name.split('.').pop() || '').toLowerCase() : '';
+            if (PICTURE_EXTS.indexOf(ext) >= 0) setMethod('Printed in full color (inkjet)');
+            else if (CUTFILE_EXTS.indexOf(ext) >= 0) setMethod('Cut or engraved (laser)');
+            else setMethod(METHOD_DEFAULT);
         }
         function readFileB64(file) {
             return new Promise((resolve, reject) => {
@@ -1497,6 +1529,7 @@
                 qty,
                 sourcing,
                 build,
+                method: document.getElementById('sel-method').value,
                 shirtSize,
                 shirtColor,
                 fileName,
@@ -1513,6 +1546,7 @@
             selectedColors = [];
             renderSelected();
             qtyEl.value = 1;
+            methodTouched = false; setMethod(METHOD_DEFAULT);
             document.getElementById('sel-build').value = 'Assembled';
             try { document.getElementById('sel-build').dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
             setColorMsg('');
@@ -1548,7 +1582,7 @@
 
             tbody.innerHTML = bundleQueue.map(i => `
                 <tr>
-                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.fileName ? `<br><span style="opacity:0.75; font-size:0.85rem;">Design file: ${esc(i.fileName)}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
+                    <td><strong>${esc(i.item)}</strong><br><span style="opacity:0.75; font-size:0.85rem;">${esc(i.build)}</span>${i.shirtSize ? `<br><span style="opacity:0.75; font-size:0.85rem;">Shirt size: ${esc(i.shirtSize)}${i.shirtColor ? ' | Shirt color: ' + esc(i.shirtColor) : ''}</span>` : ''}${i.method && i.method !== METHOD_DEFAULT ? `<br><span style="opacity:0.75; font-size:0.85rem;">Applied: ${esc(i.method)}</span>` : ''}${i.fileName ? `<br><span style="opacity:0.75; font-size:0.85rem;">Design file: ${esc(i.fileName)}</span>` : ''}${i.notes !== 'None' ? `<br><span style="opacity:0.75; font-size:0.85rem;">Note: ${esc(i.notes)}</span>` : ''}</td>
                     <td><span style="color:var(--highlight);">${esc(i.color)}</span></td>
                     <td>${esc(String(i.qty))}</td>
                     <td>${esc(i.sourcing)}</td>
@@ -1589,12 +1623,14 @@
             L.push('  Materials and colors (' + colors.length + '): ' + colors.join(', '));
             L.push('  Materials: ' + (own ? 'CLIENT SUPPLIES - confirm what arrives and when' : 'WolfTechLabs supplies - check stock, order any missing color'));
             if (shirt) L.push('  Shirt: size ' + item.shirtSize + ', color ' + (item.shirtColor || 'not given') + ' (vinyl must not match the shirt color)');
+            L.push('  Method: ' + (item.method || 'Not sure - decide at quote') + (/^Printed/.test(item.method || '') ? ' - print first' + (/then cut/.test(item.method) ? ', then cut or engrave' : '') : ''));
             L.push('  Design file: ' + (item.fileName ? item.fileName + ' (link at the bottom of this email)' : 'none attached - design from the notes'));
             L.push('  Build: ' + item.build + (kit ? ' - do not assemble; bag and label the parts' : ''));
             L.push('  Checklist:');
             L.push('    [ ] Quote confirmed with client');
             L.push('    [ ] ' + (own ? 'Client materials received' : 'Materials and colors in stock') + ' (' + item.qty + ' piece' + (Number(item.qty) === 1 ? '' : 's') + ')');
-            L.push('    [ ] ' + (item.fileName ? 'Design file opened and checked' : 'Design drawn and approved by client'));
+            L.push('    [ ] ' + (item.fileName ? 'Design file or picture opened and checked' : 'Design drawn and approved by client'));
+            if (/^Printed/.test(item.method || '')) L.push('    [ ] Print test done on a scrap');
             L.push('    [ ] Test piece made' + (shirt ? ' (or test press)' : ''));
             L.push('    [ ] Made, checked and ' + (kit ? 'bagged' : 'packed'));
             return L.join('\n');
@@ -1639,7 +1675,8 @@ ${bundleQueue.length ? '' : '\n(Product list unavailable - see client notes belo
 - Colors/materials to swap: ${String(item.color).split(' + ').filter(Boolean).length}
 - Quantity: ${item.qty}
 - Materials supplied by: ${item.sourcing}
-- Build format: ${item.build}${item.shirtSize ? `
+- Build format: ${item.build}
+- Design applied by: ${item.method || 'Not sure - decide at quote'}${item.shirtSize ? `
 - Shirt size: ${item.shirtSize}
 - Shirt color: ${item.shirtColor || 'Not given'}` : ''}
 ${item.fileName ? '- Design file: ' + item.fileName + ' (link at the bottom of this email)\n' : ''}- Notes: ${item.notes}
