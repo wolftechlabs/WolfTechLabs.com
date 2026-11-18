@@ -591,12 +591,13 @@
             width: min(220px, calc(100% - 40px)); aspect-ratio: 207.4668 / 238.75806;
             background: url('logo.svg') center / contain no-repeat;
             opacity: 0.85; filter: drop-shadow(0 0 14px rgba(110, 20, 140, 1)) drop-shadow(0 0 28px rgba(57, 0, 57, 1));
+            transform: translateZ(0); will-change: transform; backface-visibility: hidden;
         }
         @media (max-width: 600px) { body::after { top: 86px; width: min(220px, calc(100% - 28px)); } .logo-container { width: min(220px, calc(100% - 0px)); } }
         /* Empty slot that keeps the page text below the fixed logo */
         .logo-container { width: min(220px, 100%); aspect-ratio: 207.4668 / 238.75806; margin-bottom: 15px; }
         .card, .modal-card {
-            background: rgba(110, 40, 170, 0.14);
+            background: rgba(28, 8, 46, 0.48);
         }
         /* Drop-outs (dropdown lists, color pop-ups, receipt): dark and nearly solid so the words are easy to read */
         .swatch-pop, .dd-list {
