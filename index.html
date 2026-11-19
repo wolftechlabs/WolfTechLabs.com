@@ -598,6 +598,11 @@
             transform: translateZ(0); will-change: transform; backface-visibility: hidden;
         }
         @media (max-width: 600px) { body::after { top: 86px; width: min(220px, calc(100% - 28px)); } .logo-container { width: min(220px, calc(100% - 0px)); } }
+        /* Words under the logo: fixed like the logo, so the cards slide over them (under the glass) */
+        .brand-words { position: fixed; z-index: -1; pointer-events: none; left: 0; right: 0; padding: 0 20px;
+            top: calc(40px + min(220px, 100vw - 40px) * 1.1508 + 15px); transform: translateZ(0); }
+        .brand-words-slot { visibility: hidden; width: 100%; }
+        @media (max-width: 600px) { .brand-words { top: calc(86px + min(220px, 100vw - 28px) * 1.1508 + 15px); } }
         /* Empty slot that keeps the page text below the fixed logo */
         .logo-container { width: min(220px, 100%); aspect-ratio: 207.4668 / 238.75806; margin-bottom: 15px; }
         .card, .modal-card {
@@ -648,8 +653,9 @@
 
     <div class="logo-container" aria-hidden="true"></div>
 
-    <h1>WolfTechLabs</h1>
-    <div class="tagline">Engineering | Artistry | Accessibility</div>
+    <!-- The words stay with the logo (fixed, under the glass). The hidden copy below only keeps the space. -->
+    <div class="brand-words"><h1>WolfTechLabs</h1><div class="tagline">Made to order, made by hand</div></div>
+    <div class="brand-words-slot" aria-hidden="true"><h1>WolfTechLabs</h1><div class="tagline">Made to order, made by hand</div></div>
 
     <div class="form-container" id="inquiry">
 
