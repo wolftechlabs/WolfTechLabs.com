@@ -162,6 +162,79 @@ window.WTL_CATALOG = {
       { name: 'Purple',                  hex: '#6B21A8', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Lavender',                hex: '#C4B5FD', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
       { name: 'Full Color Print',        hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket','iron-on','decal','vinyl','stencil','label','lettering'] },
+      /* Vinyl finishes (added 2026-11-18). Each chip opens a color pick list. */
+      { name: 'Puff (3D raised)', label: 'Puff', hex: '#EC4899', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Black', hex: '#111111' },
+        { name: 'White', hex: '#F8F9FA' },
+        { name: 'Red', hex: '#C62828' },
+        { name: 'Royal Blue', hex: '#1D4ED8' },
+        { name: 'Pink', hex: '#EC4899' },
+        { name: 'Yellow', hex: '#FACC15' },
+        { name: 'Green', hex: '#16A34A' },
+        { name: 'Purple', hex: '#7E22CE' }
+      ] },
+      { name: 'Glitter', label: 'Glitter', hex: '#D4AF37', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Gold', hex: '#D4AF37' },
+        { name: 'Silver', hex: '#C0C0C0' },
+        { name: 'Rose Gold', hex: '#E0A899' },
+        { name: 'Black', hex: '#1A1A1A' },
+        { name: 'Red', hex: '#C62828' },
+        { name: 'Royal Blue', hex: '#1D4ED8' },
+        { name: 'Pink', hex: '#EC4899' },
+        { name: 'Purple', hex: '#7E22CE' },
+        { name: 'Green', hex: '#16A34A' }
+      ] },
+      { name: 'Flock (velvet)', label: 'Flock', hex: '#1B2A4A', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Black', hex: '#111111' },
+        { name: 'White', hex: '#F8F9FA' },
+        { name: 'Red', hex: '#C62828' },
+        { name: 'Navy', hex: '#1B2A4A' },
+        { name: 'Pink', hex: '#EC4899' },
+        { name: 'Green', hex: '#166534' }
+      ] },
+      { name: 'Metallic', label: 'Metallic', hex: '#C0C0C0', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Gold', hex: '#D4AF37' },
+        { name: 'Silver', hex: '#C0C0C0' },
+        { name: 'Rose Gold', hex: '#E0A899' },
+        { name: 'Copper', hex: '#B87333' },
+        { name: 'Bronze', hex: '#8C6A3A' },
+        { name: 'Blue', hex: '#2563EB' },
+        { name: 'Red', hex: '#B91C1C' },
+        { name: 'Green', hex: '#15803D' }
+      ] },
+      { name: 'Holographic', label: 'Holo', hex: '#C0C0C0', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Silver', hex: '#C0C0C0' },
+        { name: 'Gold', hex: '#D4AF37' },
+        { name: 'Rainbow', hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)' },
+        { name: 'Pink', hex: '#F9A8D4' }
+      ] },
+      { name: 'Chameleon (color shift)', label: 'Shift', hex: '#7E22CE', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Purple to Blue', hex: 'linear-gradient(90deg,#7E22CE,#2563EB)' },
+        { name: 'Green to Gold', hex: 'linear-gradient(90deg,#16A34A,#D4AF37)' },
+        { name: 'Pink to Orange', hex: 'linear-gradient(90deg,#EC4899,#F97316)' }
+      ] },
+      { name: 'Glow-in-the-Dark', label: 'Glow', hex: '#A7F3D0', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Green Glow', hex: '#A7F3D0' },
+        { name: 'Blue Glow', hex: '#93C5FD' },
+        { name: 'Neon Pink', hex: '#FF4FA3' },
+        { name: 'Neon Yellow', hex: '#E5FF3A' }
+      ] },
+      { name: 'Reflective', label: 'Reflect', hex: '#B8BEC6', match: ['shirt','hoodie','tote','hat','apron','towel','onesie','blanket'], options: [
+        { name: 'Silver Gray', hex: '#B8BEC6' },
+        { name: 'Black', hex: '#1A1A1A' },
+        { name: 'Rainbow', hex: 'linear-gradient(90deg,#06B6D4,#EC4899,#FACC15)' }
+      ] },
+      { name: 'Permanent Vinyl (outdoor)', label: 'Perm.', hex: '#0A0A0A', match: ['outdoor','window','tumbler','mug','laptop','mailbox','stencil','label'], options: [
+        { name: 'Gloss Black', hex: '#0A0A0A' },
+        { name: 'Matte Black', hex: '#1F1F1F' },
+        { name: 'Gloss White', hex: '#FFFFFF' },
+        { name: 'Matte White', hex: '#F1F1EC' },
+        { name: 'Clear Gloss', hex: '#D9E6EE' }
+      ] },
+      { name: 'Removable Vinyl (walls, windows)', label: 'Remov.', hex: '#F1F1EC', match: ['outdoor','window','tumbler','mug','laptop','mailbox','stencil','label'], options: [
+        { name: 'Matte White', hex: '#F1F1EC' },
+        { name: 'Matte Black', hex: '#1F1F1F' }
+      ] },
       { name: 'Paper / Cardstock (color in notes)', hex: '#F3E8D0', kind: 'paper', match: ['paper','card','invitation','topper','banner','garland','gift box','treat bag','luminar','lantern'] }
     ],
     /* Rotary: the vessel is usually supplied by the customer. These powder-coat colors

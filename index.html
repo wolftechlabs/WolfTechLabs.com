@@ -357,6 +357,10 @@
             .swatch-pop .swatch-opt { width: 44px; height: 44px; }
             .swatch-pop-grid { gap: 10px; }
             .swatch-pop-done { display: block; }
+            .swatch-ribbon { gap: 12px; }
+            .swatch-chip { width: 40px; height: 40px; }
+            .swatch-chip .lbl { top: 44px; }
+            .swatch-ribbon.labeled { gap: 10px 22px; padding-bottom: 26px; }
         }
         .swatch-name-display {
             font-family: 'Orbitron', sans-serif;
@@ -629,7 +633,7 @@
 
     <!-- Cyber Intro Splash Banner -->
     <div id="splash-screen" onclick="dismissSplash()" aria-hidden="true">
-        <div class="splash-title">WELCOME TO <span>WOLFTECHLABS</span></div>
+        <div class="splash-title">WELCOME TO <span>WolfTechLabs</span></div>
         <div class="splash-sub">Custom Fabrication &amp; Project Inquiry</div>
     </div>
 
@@ -687,7 +691,7 @@
                 <!-- Quantity -->
                 <div class="field-group">
                     <label class="field-label" for="inp-qty">QUANTITY / UNITS</label>
-                    <input type="number" id="inp-qty" class="custom-input" min="1" max="500" step="1" value="1" onfocus="this.select()">
+                    <input type="number" id="inp-qty" class="custom-input" min="1" max="100000" step="1" value="1" onfocus="this.select()">
                     <div class="qty-msg" id="qty-msg" role="status" aria-live="polite"></div>
                 </div>
 
@@ -1519,14 +1523,14 @@
             const qtyEl = document.getElementById('inp-qty');
             const qtyRaw = Number(String(qtyEl.value).trim());
             setQtyMsg('');
-            if (!Number.isInteger(qtyRaw) || qtyRaw < 1 || qtyRaw > 500) {
-                qtyEl.value = (Number.isFinite(qtyRaw) && qtyRaw > 500) ? 500 : 1;
-                setQtyMsg('Quantity must be a whole number from 1 to 500. Need more than 500? Say so in the notes. We changed it to ' + qtyEl.value + ' - check it, then press Add again.');
+            if (!Number.isInteger(qtyRaw) || qtyRaw < 1 || qtyRaw > 100000) {
+                qtyEl.value = (Number.isFinite(qtyRaw) && qtyRaw > 100000) ? 100000 : 1;
+                setQtyMsg('Quantity must be a whole number from 1 to 100,000. Need more than that? Say so in the notes. We changed it to ' + qtyEl.value + ' - check it, then press Add again.');
                 qtyEl.focus();
                 return;
             }
             const qty = qtyRaw;
-            if (bundleQueue.length >= 25) { setQtyMsg('That is the most items one inquiry can hold (25). Please send this one first, then start another.'); return; }
+            if (bundleQueue.length >= 2500) { setQtyMsg('That is the most items one inquiry can hold (2,500). Please send this one first, then start another.'); return; }
             const sourcing = document.getElementById('sel-sourcing').value;
             const build = document.getElementById('sel-build').value;
             const notes = document.getElementById('inp-item-notes').value.trim();
@@ -1724,7 +1728,7 @@
 
             const manifest =
 `================================================================================
-WOLFTECHLABS // PROJECT INQUIRY ${orderId}
+WolfTechLabs // PROJECT INQUIRY ${orderId}
 CLIENT: ${name} (${email})
 TARGET LEAD TIME: ABOUT 14 DAYS AFTER QUOTE IS CONFIRMED
 SCOPE: SEE BUILD FORMAT ON EACH ITEM
