@@ -679,43 +679,6 @@
                     </select>
                 </div>
 
-                <!-- Color Spec Ribbon -->
-                <div class="field-group" style="grid-column: 1 / -1;">
-                    <label class="field-label" id="ribbon-label">COLOR / MATERIAL SPECIFICATION</label>
-                    <div class="swatch-ribbon" id="swatch-ribbon"></div>
-                    <div class="swatch-name-display" id="swatch-name-display" aria-live="polite"></div>
-                    <div class="swatch-name-display" id="combo-note" style="color:#b8c4d0;font-size:0.85rem;"></div>
-                    <div class="swatch-name-display" id="color-msg" role="alert" style="color:#f0a0a0;min-height:1em;"></div>
-                </div>
-
-                <!-- Quantity -->
-                <div class="field-group">
-                    <label class="field-label" for="inp-qty">QUANTITY / UNITS</label>
-                    <input type="number" id="inp-qty" class="custom-input" min="1" max="100000" step="1" value="1" onfocus="this.select()">
-                    <div class="qty-msg" id="qty-msg" role="status" aria-live="polite"></div>
-                </div>
-
-                <!-- Material Sourcing -->
-                <div class="field-group">
-                    <label class="field-label" for="sel-sourcing">WHO SUPPLIES THE MATERIALS?</label>
-                    <select id="sel-sourcing" class="custom-select">
-                        <option value="WolfTechLabs Supplied">WolfTechLabs supplies the materials</option>
-                        <option value="Client Supplied">I will supply my own (shipped or dropped off)</option>
-                    </select>
-                </div>
-
-                <!-- How the design is put on the item: printed, cut/engraved, or both (picked from the file, can be changed) -->
-                <div class="field-group" id="grp-method">
-                    <label class="field-label" for="sel-method">HOW IS THE DESIGN PUT ON IT?</label>
-                    <select id="sel-method" class="custom-select" onchange="onMethodChange()">
-                        <option value="Not sure - decide at quote">Not sure, decide at quote</option>
-                        <option value="Printed in full color (inkjet)">Printed in full color (inkjet)</option>
-                        <option value="Cut or engraved (laser)">Cut or engraved (laser)</option>
-                        <option value="Printed, then cut or engraved">Printed, then cut or engraved</option>
-                    </select>
-                    <div class="file-hint" id="method-hint">Pictures and photos are set to printed. SVG and DXF files are set to cut or engraved. You can change it.</div>
-                </div>
-
                 <!-- Build Format: assembled or unassembled kit -->
                 <div class="field-group">
                     <label class="field-label" for="sel-build">BUILD FORMAT</label>
@@ -744,6 +707,31 @@
                     <div class="swatch-name-display" id="shirt-color-name" aria-live="polite"></div>
                 </div>
 
+                <!-- Color Spec Ribbon -->
+                <div class="field-group" style="grid-column: 1 / -1;">
+                    <label class="field-label" id="ribbon-label">COLOR / MATERIAL SPECIFICATION</label>
+                    <div class="swatch-ribbon" id="swatch-ribbon"></div>
+                    <div class="swatch-name-display" id="swatch-name-display" aria-live="polite"></div>
+                    <div class="swatch-name-display" id="combo-note" style="color:#b8c4d0;font-size:0.85rem;"></div>
+                    <div class="swatch-name-display" id="color-msg" role="alert" style="color:#f0a0a0;min-height:1em;"></div>
+                </div>
+
+                <!-- Material Sourcing -->
+                <div class="field-group">
+                    <label class="field-label" for="sel-sourcing">WHO SUPPLIES THE MATERIALS?</label>
+                    <select id="sel-sourcing" class="custom-select">
+                        <option value="WolfTechLabs Supplied">WolfTechLabs supplies the materials</option>
+                        <option value="Client Supplied">I will supply my own (shipped or dropped off)</option>
+                    </select>
+                </div>
+
+                <!-- Quantity -->
+                <div class="field-group">
+                    <label class="field-label" for="inp-qty">QUANTITY / UNITS</label>
+                    <input type="number" id="inp-qty" class="custom-input" min="1" max="100000" step="1" value="1" onfocus="this.select()">
+                    <div class="qty-msg" id="qty-msg" role="status" aria-live="polite"></div>
+                </div>
+
                 <!-- How many sides get the design -->
                 <div class="field-group" id="grp-sides">
                     <label class="field-label" for="sel-sides">HOW MANY SIDES GET THE DESIGN?</label>
@@ -764,6 +752,18 @@
                 <div class="field-group" id="grp-file2" style="grid-column: 1 / -1; display:none;">
                     <label class="field-label" for="inp-design-file2">SIDE 2: DESIGN FILE OR PICTURE (OPTIONAL)</label>
                     <input type="file" id="inp-design-file2" class="custom-input" accept="image/*,.svg,.png,.jpg,.jpeg,.webp,.heic,.heif,.stl,.3mf,.step,.stp,.obj,.dxf" onchange="onDesignFile2Change()">
+                </div>
+
+                <!-- How the design is put on the item: printed, cut/engraved, or both (picked from the file, can be changed) -->
+                <div class="field-group" id="grp-method">
+                    <label class="field-label" for="sel-method">HOW IS THE DESIGN PUT ON IT?</label>
+                    <select id="sel-method" class="custom-select" onchange="onMethodChange()">
+                        <option value="Not sure - decide at quote">Not sure, decide at quote</option>
+                        <option value="Printed in full color (inkjet)">Printed in full color (inkjet)</option>
+                        <option value="Cut or engraved (laser)">Cut or engraved (laser)</option>
+                        <option value="Printed, then cut or engraved">Printed, then cut or engraved</option>
+                    </select>
+                    <div class="file-hint" id="method-hint">Pictures and photos are set to printed. SVG and DXF files are set to cut or engraved. You can change it.</div>
                 </div>
 
                 <!-- Item Specific Notes -->
