@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfTechLabs | Custom Fabrication &amp; Project Inquiry</title>
+    <meta name="description" content="Custom laser-cut, engraved, 3D-printed, vinyl and heat-press items made to order. Pick what you want and send a project inquiry for a quote.">
+    <meta property="og:title" content="WolfTechLabs | Made to order, made by hand">
+    <meta property="og:description" content="Custom laser-cut, engraved, 3D-printed, vinyl and heat-press items made to order. Send a project inquiry for a quote.">
+    <meta property="og:type" content="website">
     
     <link rel="icon" type="image/svg+xml" href="logo.svg">
 
@@ -362,6 +366,11 @@
             .swatch-chip .lbl { top: 44px; }
             .swatch-ribbon.labeled { gap: 10px 22px; padding-bottom: 26px; }
         }
+        /* QA fix 2026-11-23: color names were running into each other. Each label gets its own 66px column and may wrap to two lines. */
+        .swatch-ribbon.labeled { column-gap: 40px; row-gap: 40px; padding-bottom: 36px; align-items: flex-start; }
+        .swatch-chip .lbl { width: 66px; white-space: normal; text-align: center; line-height: 1.15; }
+        .swatch-chip.clash { opacity: 0.5; }
+        @media (max-width: 600px) { .swatch-ribbon.labeled { column-gap: 26px; row-gap: 44px; padding-bottom: 40px; } }
         .swatch-name-display {
             font-family: 'Orbitron', sans-serif;
             font-size: 0.8rem;
@@ -775,7 +784,7 @@
                 <!-- Item Specific Notes -->
                 <div class="field-group" style="grid-column: 1 / -1;">
                     <label class="field-label" for="inp-item-notes">DIMENSIONS OR BUILD NOTES (OPTIONAL)</label>
-                    <input type="text" id="inp-item-notes" class="custom-input" maxlength="200" placeholder="e.g. 16oz cup wrap, monogram lettering, specific hex code...">
+                    <textarea id="inp-item-notes" class="custom-textarea" rows="3" maxlength="200" placeholder="e.g. 16oz cup wrap, monogram lettering, specific hex code..."></textarea>
                 </div>
             </div>
 
@@ -817,7 +826,6 @@
         <div class="card">
             <div class="card-header">
                 <h3>STEP 3 // CLIENT CONTACT &amp; SUBMISSION</h3>
-                <span class="chip">PARTS-ONLY SCOPE</span>
             </div>
 
             <form id="inquiry-form" onsubmit="submitInquiry(event)">
@@ -1193,7 +1201,7 @@
         function renderSelected() {
             const box = document.getElementById('swatch-name-display');
             box.innerHTML = '';
-            if (!selectedColors.length) { box.textContent = isShirtItem() ? 'Nothing picked yet. Tap a vinyl color.' : 'Nothing picked yet. Tap a color or material.'; }
+            if (!selectedColors.length) { box.textContent = isShirtItem() ? 'Nothing picked yet. Tap a vinyl color. A crossed-out color is too close to the shirt color.' : 'Nothing picked yet. Tap a color or material.'; }
             selectedColors.forEach(c => {
                 const tag = document.createElement('span');
                 tag.className = 'sel-tag';
@@ -1659,6 +1667,7 @@
         }
 
         /* 5. Final Submission (sends through Web3Forms, same service as the live site) */
+        const PAGE_OPENED = Date.now(); /* sent with the form so the receiver can tell people from bots */
         const WEB3FORMS_KEY = 'c0c6138a-e33b-46d5-bc5d-37b34c79f907';
         /* When this is filled in, inquiries go to the owner's own Google account instead of Web3Forms. */
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwuoA80ydsduhFYHnGgGV8MzUux_k7eEH_u9C0qAJ_L524eQiGKDIjrwDJnCPQ5JeUY/exec';
@@ -1727,7 +1736,7 @@
             submitting = true;
 
             playThump();
-            const orderId = 'WFL-' + Date.now().toString().slice(-6);
+            const orderId = 'WFL-' + Date.now().toString().slice(-6) + String(Math.floor(Math.random() * 100)).padStart(2, '0'); /* 2 random digits so two orders in the same 17 minutes never share a number */
             const name = document.getElementById('cust-name').value.replace(/[\r\n\t]+/g, ' ').trim();
             const email = document.getElementById('cust-email').value.trim();
             const notes = document.getElementById('cust-notes').value || 'None';
@@ -1781,7 +1790,7 @@ ${notes}
                 let res, data;
                 if (GOOGLE_SCRIPT_URL) {
                     /* text/plain keeps this a simple request (no browser pre-check needed) */
-                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ files: bundleQueue.reduce((a, q, n) => { if (q.fileData) a.push({ item: n + 1, name: (q.fileData2 ? 'SIDE 1 - ' : '') + q.fileName, data: q.fileData }); if (q.fileData2) a.push({ item: n + 1, name: 'SIDE 2 - ' + q.fileName2, data: q.fileData2 }); return a; }, []) }, payload)) });
+                    res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ fillMs: Date.now() - PAGE_OPENED, files: bundleQueue.reduce((a, q, n) => { if (q.fileData) a.push({ item: n + 1, name: (q.fileData2 ? 'SIDE 1 - ' : '') + q.fileName, data: q.fileData }); if (q.fileData2) a.push({ item: n + 1, name: 'SIDE 2 - ' + q.fileName2, data: q.fileData2 }); return a; }, []) }, payload)) });
                     data = await res.json();
                     if (!res.ok || !data.ok) throw new Error('Send failed');
                 } else {
