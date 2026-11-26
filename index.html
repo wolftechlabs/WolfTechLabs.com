@@ -590,7 +590,7 @@
         .make-list li { font-size: 0.98rem; line-height: 1.35; padding: 8px 12px; border-left: 2px solid var(--highlight); background: rgba(0,0,0,0.25); border-radius: 0 6px 6px 0; }
         .make-list li strong { display: block; color: #fff; font-weight: 600; }
         .make-list li span { color: #c9d1d9; }
-        .cta-row { text-align: center; margin-top: 30px; }
+        .cta-row { text-align: center; margin-top: 34px; }
         .cta-row a { color: var(--highlight); font-family: 'Orbitron', sans-serif; letter-spacing: 0.1em; font-size: 0.85rem; text-decoration: none; border-bottom: 1px solid var(--highlight); padding-bottom: 2px; }
         /* ===== GLASS LOOK (test) ===== */
         body::before {
@@ -599,7 +599,7 @@
         }
         /* The one and only logo: fixed in place with its glow. Page text scrolls past it. */
         body::after {
-            content: ''; position: fixed; z-index: -1; pointer-events: none;
+            content: ''; position: fixed; z-index: -2; pointer-events: none;
             top: 40px; left: 0; right: 0; margin: 0 auto;
             width: min(220px, calc(100% - 40px)); aspect-ratio: 207.4668 / 238.75806;
             background: url('logo.svg') center / contain no-repeat;
@@ -608,10 +608,21 @@
         }
         @media (max-width: 600px) { body::after { top: 86px; width: min(220px, calc(100% - 28px)); } .logo-container { width: min(220px, calc(100% - 0px)); } }
         /* Words under the logo: fixed like the logo, so the cards slide over them (under the glass) */
-        .brand-words { position: fixed; z-index: -1; pointer-events: none; left: 0; right: 0; padding: 0 20px;
+        .brand-words { position: fixed; z-index: -2; pointer-events: none; left: 0; right: 0; padding: 0 20px;
             top: calc(40px + min(220px, 100vw - 40px) * 1.1508 + 15px); transform: translateZ(0); }
         .brand-words-slot { visibility: hidden; width: 100%; }
         @media (max-width: 600px) { .brand-words { top: calc(86px + min(220px, 100vw - 28px) * 1.1508 + 15px); } }
+        /* Dark frosted glass PANEL behind the cards. Its edges sit just past the card edges so the cards look like they rest on it.
+           The logo + words are behind it. Above and below the panel (top of page, end of page) the logo is clear. */
+        #glass-sheet {
+            position: absolute; z-index: -1; pointer-events: none; top: 0; left: 0; width: 0; height: 0;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(48, 48, 54, 0.40), rgba(14, 14, 18, 0.46));
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 0 60px rgba(0, 0, 0, 0.25);
+            -webkit-backdrop-filter: blur(5px) saturate(110%); backdrop-filter: blur(5px) saturate(110%);
+        }
+        @media (prefers-reduced-transparency: reduce) { #glass-sheet { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(18, 18, 22, 0.85); } }
         /* Empty slot that keeps the page text below the fixed logo */
         .logo-container { width: min(220px, 100%); aspect-ratio: 207.4668 / 238.75806; margin-bottom: 15px; }
         .card, .modal-card {
@@ -686,6 +697,7 @@
     <!-- The words stay with the logo (fixed, under the glass). The hidden copy below only keeps the space. -->
     <div class="brand-words"><h1>WolfTechLabs</h1><div class="tagline">Made to order, made by hand</div></div>
     <div class="brand-words-slot" aria-hidden="true"><h1>WolfTechLabs</h1><div class="tagline">Made to order, made by hand</div></div>
+    <div id="glass-sheet" aria-hidden="true"></div>
 
     <div class="form-container" id="inquiry">
 
@@ -1981,6 +1993,24 @@ ${notes}
   document.querySelectorAll('.g-tile').forEach(b=>b.addEventListener('click',()=>{last=b;im.src=b.dataset.full;lb.classList.add('on');x.focus()}));
   lb.addEventListener('click',closeLb);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('on'))closeLb()});
+  /* glass panel: fits behind the cards (form card down to just above the START A PROJECT INQUIRY link), edges just past the card edges */
+  (function(){
+    const g=document.getElementById('glass-sheet'),first=document.getElementById('inquiry');
+    if(!g||!first)return;
+    let raf=0;
+    function fit(){
+      const last=document.querySelector('#what-we-make .cta-row')||first;
+      const b=document.body.getBoundingClientRect(),f=first.getBoundingClientRect(),l=last.getBoundingClientRect();
+      const pad=innerWidth<=600?12:24;
+      const bottom=(last===first)?l.bottom+pad:l.top-5; /* stops 5px above the START A PROJECT INQUIRY link */
+      g.style.top=(f.top-b.top-pad)+'px';g.style.height=(bottom-f.top+pad)+'px';
+      g.style.left=(f.left-b.left-pad)+'px';g.style.width=(f.width+2*pad)+'px';
+    }
+    function later(){cancelAnimationFrame(raf);raf=requestAnimationFrame(fit)}
+    addEventListener('resize',later);addEventListener('load',later);
+    if(window.ResizeObserver)new ResizeObserver(later).observe(document.body);
+    fit();
+  })();
   /* logo + words settle above the footer at the end of the page */
   (function(){
     const root=document.documentElement,spacer=document.getElementById('logo-rest'),words=document.querySelector('.brand-words');
